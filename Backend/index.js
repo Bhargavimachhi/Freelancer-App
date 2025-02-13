@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import { addUser, editUser, getUser } from './Controllers/User.js';
 
 const PORT = 3000;
 
@@ -21,3 +22,7 @@ app.listen(PORT, () => {
       });
   });
 
+
+app.post("/user/add", addUser);
+app.post("/user/edit", editUser);
+app.get("/user/:id", getUser);
