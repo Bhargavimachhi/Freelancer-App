@@ -1,4 +1,7 @@
 import mongoose from 'mongoose';
+import joi from 'joi';
+import JoiObjectId from "joi-objectid";
+const ObjectId = JoiObjectId(joi)
 
 let userSchema = new mongoose.Schema({
     email :{
@@ -92,6 +95,34 @@ let userSchema = new mongoose.Schema({
         ],
         default : []
     },
+});
+
+export const userSchemaValidation = joi.object({
+    email : joi.string().required(),
+    password : joi.string().required(),
+    name : joi.string().required(),
+    education: joi.object().keys({ 
+        school: joi.string().required(), 
+        degree: joi.string().required(), 
+        fieldOfStudy: joi.string().required(),
+        startDate: joi.string().required(),
+        endDate: joi.string().required()
+    }),
+    projects: joi.object().keys({ 
+        title: joi.string().required(), 
+        description: joi.string().required(),
+        startDate: joi.string().required(),
+        endDate: joi.string().required()
+    }),
+    links: joi.object().keys({ 
+        name: joi.string().required(), 
+        url: joi.string().required()
+    }),
+    reviews: joi.object().keys({ 
+        createdBy: ObjectId().required(), 
+        rating: joi.number().required(), 
+        description: joi.string().required()
+    }),
 });
 
 export const User = mongoose.model("User", userSchema);

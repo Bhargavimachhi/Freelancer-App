@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import joi from 'joi';
+import JoiObjectId from "joi-objectid";
+const ObjectId = JoiObjectId(joi);
 
 let projectSchema = new mongoose.Schema({
     title: {
@@ -31,7 +34,8 @@ let projectSchema = new mongoose.Schema({
     },
     experienceLevel : {
         type : String,
-        enum: ['basic', 'intermediate', 'expert']
+        enum: ['basic', 'intermediate', 'expert'],
+        required : true,
     },
     price : {
         type : Number,
@@ -49,6 +53,14 @@ let projectSchema = new mongoose.Schema({
         type : Boolean,
         default : false,
     }
+});
+
+export const projectSchemaValidation = joi.object({
+    title : joi.string().required(),
+    description : joi.string().required(),
+    createdBy : ObjectId().required(),
+    experienceLevel : joi.string().required(),
+    price : joi.number().required(),
 });
 
 export const Project = mongoose.model("Project", projectSchema);
