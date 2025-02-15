@@ -1,23 +1,21 @@
-import { useState } from 'react'
-import { Button } from './components/ui/button'
-import { CardWithForm } from './components/NameCard'
 
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LoginPage from './Pages/AuthenticationPages/LoginPage';
+import SignUpPage from './Pages/AuthenticationPages/SignUpPage';
 
 function App() {
   
 
   return (
     <>
-
-    <h1>This is an example componet</h1>
-    <CardWithForm/>
-
-    <h1> This is the button</h1>
-    <Button>Click me</Button>
-
-    <h1 className='bg-black text-white font-bold'>This is react stater template</h1>
-   
+    <BrowserRouter>
+    <header>
+      <Routes>
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+      </Routes>
+    </header>
+   </BrowserRouter>
     </>
   )
 }
