@@ -13,7 +13,7 @@ import {
   PopoverPanel,
 } from "@headlessui/react";
 import { useUser } from "@clerk/clerk-react";
-import { SignOutButton } from '@clerk/clerk-react'
+import { SignOutButton } from "@clerk/clerk-react";
 
 import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
@@ -57,9 +57,8 @@ const callsToAction = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const {isSignedIn} = useUser();
+  const { isSignedIn } = useUser();
   console.log(isSignedIn);
-  
 
   return (
     <header className="bg-white border-b-2 border-hr">
@@ -212,7 +211,7 @@ const Navbar = () => {
             What's new
           </Link>
         </PopoverGroup>
-        <div className="items-center hidden gap-3 lg:flex lg:flex-1 lg:justify-end">
+        <div className="items-center hidden gap-5 lg:flex lg:flex-1 lg:justify-end">
           {/* <Link
             to="/login"
             className="font-semibold text-black text-sm/6 hover:text-helper"
@@ -224,28 +223,26 @@ const Navbar = () => {
               Sign Up
             </button>
           </Link> */}
-           {isSignedIn ? (
-                  <>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                    >
-                      Dashboard
-                    </Link>
-                    <SignOutButton />
-                   
-                  </>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                  >
-                    Log in
-                  </Link>
-                )}
-          
+          {isSignedIn ? (
+            <>
+              <Link
+                to="/dashboard"
+                onClick={() => setMobileMenuOpen(false)}
+                className="-mx-3 block rounded-lg bg-btn px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover"
+              >
+                Dashboard
+              </Link>
+              <SignOutButton className="bg-btn px-3 py-2.5 text-white rounded-lg text-base/7 font-semibold hover:bg-btnhover" />
+            </>
+          ) : (
+            <Link
+              to="/login"
+              onClick={() => setMobileMenuOpen(false)}
+              className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
+            >
+              Log in
+            </Link>
+          )}
         </div>
       </nav>
 
@@ -341,21 +338,34 @@ const Navbar = () => {
                   What's new
                 </Link>
               </div>
-              <div className="py-6">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
-                >
-                  Log in
-                </Link>
+              <div className="flex flex-col gap-3 py-6">
+                {isSignedIn ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
+                    >
+                      Dashboard
+                    </Link>
+                    <SignOutButton className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn" />
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
+                  >
+                    Log in
+                  </Link>
+                )}
               </div>
             </div>
-            <div className="w-full py-4 rounded-lg bg-btn hover:bg-opacity-90">
+            {/* <div className="w-full py-4 rounded-lg bg-btn hover:bg-opacity-90">
               <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
                 <button className="w-full text-white">Sign Up Now</button>
               </Link>
-            </div>
+            </div> */}
           </div>
         </DialogPanel>
       </Dialog>

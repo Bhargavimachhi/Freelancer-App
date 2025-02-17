@@ -2,8 +2,6 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./helpers/theme";
 import { GlobalStyles } from "./GlobalStyles";
-import DashBoard from "./Pages/DashBoard";
-import OnBoarding from "./Pages/OnBoarding";
 //rrd
 import { BrowserRouter as Main, Route, Routes } from "react-router-dom";
 
@@ -11,6 +9,10 @@ import { BrowserRouter as Main, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import LoginPage from "./Pages/Authentication/Login";
 import SignUpPage from "./Pages/Authentication/SignUp";
+import NotFound from "./Pages/NotFound";
+import Hire from "./Pages/Hire";
+import DashBoard from "./Pages/DashBoard";
+import OnBoarding from "./Pages/OnBoarding";
 
 //components
 import Navbar from "./components/Navbar";
@@ -27,8 +29,10 @@ const App = () => {
             <Route exact path="/login" element={<LoginPage />} />
             <Route exact path="/signup" element={<SignUpPage />} />
             <Route exact path="/" element={<Home />} />
-            <Route path="/DashBoard" element={<DashBoard/>} />
+            <Route path="/DashBoard" element={<DashBoard />} />
             <Route path="/Onboarding" element={<OnBoarding />} />
+            <Route exact path="/hire" element={<Hire />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
         </Main>
