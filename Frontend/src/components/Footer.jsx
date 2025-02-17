@@ -144,7 +144,8 @@ export default function Footer() {
         </div>
         <div className="mb-2 text-center md:text-left">
           <p className="text-base text-white">
-            &copy; 2015 - {new Date().getFullYear()} Upwork&reg; Global Inc.
+            &copy; 2015 - {new Date().getFullYear()} Freelancer App&reg; Global
+            Inc.
           </p>
         </div>
         <div className="flex flex-col gap-2 md:items-start md:flex-row">

@@ -10,7 +10,10 @@ import {
   MoveRight,
   Phone,
   Search,
+  Shield,
+  Star,
   Twitter,
+  Users,
   X,
   Youtube,
 } from "lucide-react";
@@ -25,6 +28,9 @@ export const ICONS = {
   FINGERPRINT: Fingerprint,
   CIRCLE_PLAY: CirclePlay,
   SEARCH: Search,
+  STAR: Star,
+  SHIELD: Shield,
+  USERS: Users,
 
   //Social Icons
   FACEBOOK: Facebook,
