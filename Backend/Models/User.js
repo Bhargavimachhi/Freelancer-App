@@ -12,7 +12,7 @@ let userSchema = new mongoose.Schema({
     contact :{
         type: Number,
     },
-    password :{
+    Clerk_id :{
         type : String,
         required : true
     },
@@ -99,7 +99,7 @@ let userSchema = new mongoose.Schema({
 
 export const userSchemaValidation = joi.object({
     email : joi.string().required(),
-    password : joi.string().required(),
+    Clerk_id : joi.string().required(),
     name : joi.string().required(),
     education: joi.object().keys({ 
         school: joi.string().required(), 
