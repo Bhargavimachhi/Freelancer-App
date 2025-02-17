@@ -4,7 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ICONS } from "@/assets/icons/icons";
 import { Link } from "react-router-dom";
 
+import { useAuth, useUser } from "@clerk/clerk-react";
+
 const Home = () => {
+
+ 
+
+  
+
+
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}

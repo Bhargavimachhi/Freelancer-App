@@ -2,7 +2,8 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "./helpers/theme";
 import { GlobalStyles } from "./GlobalStyles";
-
+import DashBoard from "./Pages/DashBoard";
+import OnBoarding from "./Pages/OnBoarding";
 //rrd
 import { BrowserRouter as Main, Route, Routes } from "react-router-dom";
 
@@ -26,6 +27,8 @@ const App = () => {
             <Route exact path="/login" element={<LoginPage />} />
             <Route exact path="/signup" element={<SignUpPage />} />
             <Route exact path="/" element={<Home />} />
+            <Route path="/DashBoard" element={<DashBoard/>} />
+            <Route path="/Onboarding" element={<OnBoarding />} />
           </Routes>
           <Footer />
         </Main>

@@ -12,6 +12,8 @@ import {
   PopoverGroup,
   PopoverPanel,
 } from "@headlessui/react";
+import { useUser } from "@clerk/clerk-react";
+import { SignOutButton } from '@clerk/clerk-react'
 
 import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
@@ -55,6 +57,9 @@ const callsToAction = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const {isSignedIn} = useUser();
+  console.log(isSignedIn);
+  
 
   return (
     <header className="bg-white border-b-2 border-hr">
@@ -208,7 +213,7 @@ const Navbar = () => {
           </Link>
         </PopoverGroup>
         <div className="items-center hidden gap-3 lg:flex lg:flex-1 lg:justify-end">
-          <Link
+          {/* <Link
             to="/login"
             className="font-semibold text-black text-sm/6 hover:text-helper"
           >
@@ -218,7 +223,29 @@ const Navbar = () => {
             <button className="p-2 text-white rounded-lg bg-btn hover:bg-opacity-90">
               Sign Up
             </button>
-          </Link>
+          </Link> */}
+           {isSignedIn ? (
+                  <>
+                    <Link
+                      to="/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                    >
+                      Dashboard
+                    </Link>
+                    <SignOutButton />
+                   
+                  </>
+                ) : (
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50"
+                  >
+                    Log in
+                  </Link>
+                )}
+          
         </div>
       </nav>
 
