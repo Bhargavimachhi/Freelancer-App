@@ -13,6 +13,7 @@ import NotFound from "./Pages/NotFound";
 import Hire from "./Pages/Hire";
 import DashBoard from "./Pages/DashBoard";
 import OnBoarding from "./Pages/OnBoarding";
+import Chatpage from "./Pages/Chatpage";
 
 //components
 import Navbar from "./components/Navbar";
@@ -31,6 +32,7 @@ const App = () => {
             <Route exact path="/" element={<Home />} />
             <Route path="/DashBoard" element={<DashBoard />} />
             <Route exact path="/hire" element={<Hire />} />
+            <Route path="/chats" element={<Chatpage/>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           <Footer />
