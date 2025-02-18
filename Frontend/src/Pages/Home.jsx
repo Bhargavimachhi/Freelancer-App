@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import axios from "axios";
+import Footer from "@/components/Footer";
 
 const Home = () => {
 
@@ -31,6 +32,7 @@ const Home = () => {
   },[]);
 
   return (
+    <>
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="container relative px-4 pt-16 mx-auto text-center max-w-7xl">
@@ -299,6 +301,8 @@ const Home = () => {
         </div>
       </section>
     </div>
+    <Footer />
+    </>
   );
 };
 

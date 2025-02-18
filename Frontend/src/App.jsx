@@ -57,7 +57,6 @@ const App = () => {
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Footer />
         </Main>
       </ThemeProvider>
     </>
