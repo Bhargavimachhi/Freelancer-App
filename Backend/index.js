@@ -4,6 +4,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 import { addUser, editUser, getUser } from "./Controllers/User.js";
 import { User } from "./Models/User.js";
+import { getSkills } from "./Controllers/skills.js";
 
 const PORT = 3000;
 
@@ -25,6 +26,8 @@ app.listen(PORT, () => {
 app.post("/user/add", addUser);
 app.post("/user/edit", editUser);
 app.get("/user/:id", getUser);
+app.get("/skills", getSkills);
+
 app.post("/checkifuserexists", async (req, res) => {
   const email = req.body.email;
   console.log(email);
