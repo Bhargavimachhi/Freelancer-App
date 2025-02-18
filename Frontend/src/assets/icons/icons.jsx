@@ -1,4 +1,6 @@
 import {
+  Book,
+  BriefcaseBusiness,
   ChevronDownIcon,
   ChevronUp,
   CirclePlay,
@@ -7,6 +9,7 @@ import {
   Instagram,
   Linkedin,
   Menu,
+  MessageCircle,
   MoveRight,
   Phone,
   Search,
@@ -31,6 +34,9 @@ export const ICONS = {
   STAR: Star,
   SHIELD: Shield,
   USERS: Users,
+  BRIEFCASE: BriefcaseBusiness,
+  BOOK: Book,
+  MESSAGECIRCLE: MessageCircle,
 
   //Social Icons
   FACEBOOK: Facebook,

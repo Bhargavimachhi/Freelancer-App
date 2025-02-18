@@ -1,20 +1,24 @@
-
-
 import React, { useEffect, useState } from "react";
 import { StreamChat } from "stream-chat";
-import { Chat, Channel, ChannelHeader, MessageList, MessageInput, ChannelList } from "stream-chat-react";
+import {
+  Chat,
+  Channel,
+  ChannelHeader,
+  MessageList,
+  MessageInput,
+  ChannelList,
+} from "stream-chat-react";
 import axios from "axios";
-import { useUser } from '@clerk/clerk-react'
+import { useUser } from "@clerk/clerk-react";
 import "stream-chat-react/dist/css/v2/index.css";
 import CreateChat from "../components/CreateChatButton";
 
-
-const apiKey = "uu4gqeduxqn7";  
+const apiKey = "uu4gqeduxqn7";
 const chatClient = StreamChat.getInstance(apiKey);
 
 const Chatpage = () => {
   const [clientReady, setClientReady] = useState(false);
-  const { user,isLoaded } = useUser();
+  const { user, isLoaded } = useUser();
   const [userId, setUserId] = useState(null);
   const [username, setUsername] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -26,19 +30,18 @@ const Chatpage = () => {
     }
   }, [isLoaded, user]);
 
-  
   useEffect(() => {
     const connectUser = async () => {
       if (!userId || !username) return;
 
       const res = await axios.post("http://localhost:3000/getTokenbyClerkID", {
-      userId: userId,
+        userId: userId,
       });
       console.log(res.data);
 
       await chatClient.connectUser(
-        { id: userId, name: username }, 
-        res.data.token 
+        { id: userId, name: username },
+        res.data.token
       );
       setClientReady(true);
     };
@@ -48,13 +51,11 @@ const Chatpage = () => {
     // return () => chatClient.disconnectUser();
   }, [userId, username]);
 
-
-
   if (!clientReady) return <p>Loading chat...</p>;
 
   return (
     <>
-    {/* // <Chat client={chatClient}>
+      {/* // <Chat client={chatClient}>
     //   <ChannelList filters={{ members: { $in: [userId] } }} />
     //   <Channel>
     //     <ChannelHeader />
@@ -62,6 +63,7 @@ const Chatpage = () => {
     //     <MessageInput />
     //   </Channel>
     // </Chat> */}
+
     <Chat client={chatClient}>
     <div className="flex h-[70vh]">
       <div className="w-1/4 border-r border-gray-300">
@@ -96,7 +98,6 @@ const Chatpage = () => {
   
   </>
 
-  
   );
 };
 
