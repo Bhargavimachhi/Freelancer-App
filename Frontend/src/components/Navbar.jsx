@@ -18,6 +18,28 @@ import { SignOutButton } from "@clerk/clerk-react";
 import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
 
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
 const products = [
   {
     name: "Analytics",
@@ -57,8 +79,7 @@ const callsToAction = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isSignedIn } = useUser();
-  console.log(isSignedIn);
+  const { user, isSignedIn } = useUser();
 
   return (
     <header className="bg-white border-b-2 border-hr">
@@ -225,21 +246,25 @@ const Navbar = () => {
           </Link> */}
           {isSignedIn ? (
             <>
-              <Link
-                to="/chats"
-                className="p-2 text-white rounded-full hover:bg-btnhover bg-btn"
-              >
-                <ICONS.MESSAGECIRCLE className="w-6 h-6" />
-              </Link>
-              <Link
-                to="/dashboard"
-                onClick={() => setMobileMenuOpen(false)}
-                className="-mx-3 block rounded-lg bg-btn px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover"
-              >
-                Dashboard
-              </Link>
-
-              <SignOutButton className="bg-btn px-3 py-2.5 text-white rounded-lg text-base/7 font-semibold hover:bg-btnhover" />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Avatar className='cursor-pointer'>
+                      <AvatarImage src={user.hasImage ? user.imageUrl : "https://github.com/shadcn.png"} alt="@shadcn" />
+                      <AvatarFallback>USER</AvatarFallback>
+                    </Avatar>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56">
+                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuItem>
+                      Profile
+                    </DropdownMenuItem>
+                  </DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <SignOutButton />
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </>
           ) : (
             <Link
