@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@clerk/clerk-react": "^5.22.13",
     "body-parser": "^1.20.3",
     "cors": "^2.8.5",
     "express": "^4.21.2",

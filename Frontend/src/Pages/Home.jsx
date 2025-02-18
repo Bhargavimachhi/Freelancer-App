@@ -3,16 +3,32 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { ICONS } from "@/assets/icons/icons";
 import { Link } from "react-router-dom";
-
-import { useAuth, useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/clerk-react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Home = () => {
 
- 
+  const { user, isLoaded } = useUser();
 
+  useEffect(() => {
+    async function addUser() {
+      const userData = {
+        Clerk_id: user?.id,
+        name: user?.firstName,
+        email: user?.primaryEmailAddress.emailAddress,
+      };
   
+      try {
+        await axios.post("http://localhost:3000/user/add", userData);
 
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
+    addUser();
 
+  },[]);
 
   return (
     <div className="min-h-screen bg-white">
