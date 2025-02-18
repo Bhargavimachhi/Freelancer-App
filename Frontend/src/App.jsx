@@ -35,7 +35,6 @@ const App = () => {
             <Route path="/chats" element={<Chatpage/>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-          <Footer />
         </Main>
       </ThemeProvider>
     </>
