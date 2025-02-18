@@ -63,37 +63,41 @@ const Chatpage = () => {
     //     <MessageInput />
     //   </Channel>
     // </Chat> */}
-      <Chat client={chatClient}>
-        <div className="flex h-screen">
-          <div className="w-1/4 border-r border-gray-300">
-            <button
-              className="p-2 mt-4 text-white bg-blue-500 rounded"
-              onClick={() => setIsModalOpen(true)}
-            >
-              Create Chat
-            </button>
-            <ChannelList filters={{ members: { $in: [userId] } }} />
+
+    <Chat client={chatClient}>
+    <div className="flex h-[70vh]">
+      <div className="w-1/4 border-r border-gray-300">
+          <button 
+            className="mt-4 p-2 bg-blue-500 text-white rounded"
+            onClick={() => setIsModalOpen(true)}
+          >
+            Create Chat
+          </button>
+        <ChannelList filters={{ members: { $in: [userId] } }} />
+       
+      </div>
+      <div className="w-screen">
+        <Channel>
+          
+          <div className="p-4 border-t border-gray-300 w-full">
+            <ChannelHeader />
+            <MessageList className="p-4" />
+            <MessageInput className="w-full" />
+            <CreateChat 
+              chatClient={chatClient} 
+              userId={userId} 
+              isOpen={isModalOpen} 
+              onClose={() => setIsModalOpen(false)} 
+            />
           </div>
-          <div className="flex flex-col w-3/4">
-            <Channel>
-              <ChannelHeader />
-              <div className="flex-1 overflow-y-auto">
-                <MessageList className="p-4" />
-              </div>
-              <div className="p-4 border-t border-gray-300">
-                <MessageInput className="w-full" />
-              </div>
-            </Channel>
-          </div>
-        </div>
-      </Chat>
-      <CreateChat
-        chatClient={chatClient}
-        userId={userId}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-    </>
+          
+        </Channel>
+      </div>
+    </div>
+  </Chat>
+  
+  </>
+
   );
 };
 
