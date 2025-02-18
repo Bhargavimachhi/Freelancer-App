@@ -17,9 +17,6 @@ import { SignOutButton } from "@clerk/clerk-react";
 
 import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
-import { MessageCircle } from "lucide-react";
-
-
 
 const products = [
   {
@@ -229,18 +226,20 @@ const Navbar = () => {
           {isSignedIn ? (
             <>
               <Link
+                to="/chats"
+                className="p-2 text-white rounded-full hover:bg-btnhover bg-btn"
+              >
+                <ICONS.MESSAGECIRCLE className="w-6 h-6" />
+              </Link>
+              <Link
                 to="/dashboard"
                 onClick={() => setMobileMenuOpen(false)}
                 className="-mx-3 block rounded-lg bg-btn px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover"
               >
                 Dashboard
               </Link>
-              <Link to="/chats" className="text-gray-700 hover:text-gray-900">
-            <MessageCircle className="w-6 h-6" />
-          </Link>
-              
+
               <SignOutButton className="bg-btn px-3 py-2.5 text-white rounded-lg text-base/7 font-semibold hover:bg-btnhover" />
-             
             </>
           ) : (
             <Link
@@ -350,17 +349,20 @@ const Navbar = () => {
                 {isSignedIn ? (
                   <>
                     <Link
+                      to="/chats"
+                      className="-mx-3 px-3 py-2.5 text-white rounded-lg hover:bg-btnhover bg-btn"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <ICONS.MESSAGECIRCLE className="w-6 h-6" />
+                    </Link>
+                    <Link
                       to="/dashboard"
                       onClick={() => setMobileMenuOpen(false)}
                       className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
                     >
                       Dashboard
                     </Link>
-                    <Link to="/chats" className="text-gray-700 hover:text-gray-900">
-            <MessageCircle className="w-6 h-6" />
-          </Link>
                     <SignOutButton className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn" />
-
                   </>
                 ) : (
                   <Link

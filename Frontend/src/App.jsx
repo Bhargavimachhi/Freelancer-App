@@ -19,7 +19,11 @@ import HourlyRate from "./Pages/onboarding/HourlyRate";
 import DashBoard from "./Pages/DashBoard";
 import OnBoarding from "./Pages/OnBoarding";
 import Chatpage from "./Pages/Chatpage";
-import WorkSelection from "./Pages/onboarding/WorkSelection";
+import ResumeUploader from "./Pages/onboarding/ResumeUploader";
+import SkillSelector from "./Pages/onboarding/SkillSelector";
+import WorkExperience from "./Pages/onboarding/WorkExperience";
+import Education from "./Pages/onboarding/Education";
+import Categories from "./Pages/onboarding/Categories";
 
 //components
 import Navbar from "./components/Navbar";
@@ -36,24 +40,67 @@ const App = () => {
             {/* Authentication pages */}
             <Route exact path="/login" element={<LoginPage />} />
             <Route exact path="/signup" element={<SignUpPage />} />
+
             {/* home page */}
             <Route exact path="/" element={<Home />} />
-            <Route path="/DashBoard" element={<DashBoard />} />
 
             {/* Other pages */}
             <Route exact path="/hire" element={<Hire />} />
+            <Route path="/DashBoard" element={<DashBoard />} />
 
             {/* onboarding pages */}
+
+            {/*1 */}
             <Route exact path="/create-profile" element={<Welcome />} />
-            <Route exact path="/create-profile/work" element={<WorkSelection />} />
+            {/* 2 */}
+            <Route
+              exact
+              path="/create-profile/resume-upload"
+              element={<ResumeUploader />}
+            />
+            {/* 3 */}
+            <Route
+              exact
+              path="/create-profile/categories"
+              element={<Categories />}
+            />
+            {/* 4 */}
+            <Route
+              exact
+              path="/create-profile/skills"
+              element={<SkillSelector />}
+            />
+            {/* 5 */}
+            <Route
+              exact
+              path="/create-profile/language"
+              element={<Language />}
+            />
+            {/* 6 */}
             <Route exact path="/create-profile/role" element={<Role />} />
-            <Route exact path="/create-profile/language" element={<Language />} />
+            {/* 7 */}
+            <Route
+              exact
+              path="/create-profile/work-experience"
+              element={<WorkExperience />}
+            />
+            {/* 8 */}
+            <Route
+              exact
+              path="/create-profile/education"
+              element={<Education />}
+            />
+            {/* 9 */}
             <Route exact path="/create-profile/bio" element={<Bio />} />
-            <Route exact path="/create-profile/hourly-rate" element={<HourlyRate />} />
+            {/* 10 */}
+            <Route
+              exact
+              path="/create-profile/hourly-rate"
+              element={<HourlyRate />}
+            />
 
             {/* chat page */}
-            <Route path="/chats" element={<Chatpage/>} />
-
+            <Route path="/chats" element={<Chatpage />} />
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
           </Routes>
