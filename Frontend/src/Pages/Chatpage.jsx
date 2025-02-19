@@ -65,7 +65,7 @@ const Chatpage = () => {
     // </Chat> */}
 
     <Chat client={chatClient}>
-    <div className="flex h-[70vh]">
+    <div className="flex h-[60vh]">
       <div className="w-1/4 border-r border-gray-300">
           <button 
             className="mt-4 p-2 bg-blue-500 text-white rounded"
