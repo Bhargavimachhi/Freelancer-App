@@ -3,23 +3,18 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import { addUser, editUser, getUser } from "./Controllers/User.js";
-import { User } from "./Models/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
 
-import { StreamChat } from "stream-chat";
-import { Project } from "./Models/Project.js";
+import { addProposalToProject, getProposal } from "./Controllers/proposals.js";
+import { createProject, getAllProposalsOfProject, getProject } from "./Controllers/project.js";
+import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getTokenbyClerkID } from "./Controllers/authentication.js";
 
 const PORT = 3000;
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-
-const apiKey = "uu4gqeduxqn7";
-const apiSecret =
-  "xeqvkqqtzc27jy3e28vdhj7an64gpwwjrkpy5dhpqks6dkv3ud9sdhdj6wmtvbnc";
-const serverClient = StreamChat.getInstance(apiKey, apiSecret);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);
@@ -32,115 +27,33 @@ app.listen(PORT, () => {
     });
 });
 
+// User Routes
 app.post("/user/add", addUser);
 app.post("/user/edit", editUser);
 app.get("/user/:id", getUser);
+
+//Project Routes
+app.get("/project/:id", getProject);
+app.post("/project/add", createProject);
+app.post("/project/:id/add-proposal", addProposalToProject);
+app.get("/project/:id/proposals", getAllProposalsOfProject);
+
+//Proposal Routes
+app.get("/proposal/:id", getProposal);
+
+// Skills Routes 
 app.get("/skills", getSkills);
 
-app.post("/checkifuserexists", async (req, res) => {
-  const email = req.body.email;
-  console.log(email);
-
-  const user = await User.findOne({
-    email: email,
-  });
-
-  if (user) {
-    res.json({ message: "User exist in database" });
-  } else {
-    res.json({ message: "User does not exist in database" });
-  }
-});
+// Authentication Routes
+app.post("/checkifuserexists", checkIfUserExists);
 
 // It takes in the email and gives the token for chatting
-app.post("/getToken", async (req, res) => {
-  const { useremail } = req.body;
-
-  const requser = await User.findOne({ email: useremail });
-
-  console.log(useremail);
-
-  const token = serverClient.createToken(requser.Clerk_id);
-
-  await serverClient.upsertUser({
-    id: requser.Clerk_id,
-    name: requser.name,
-  });
-
-  res.json({ token, userId: requser.Clerk_id });
-});
+app.post("/getToken", getToken);
 
 // It takes in the Clerk_id and gives the token for chatting
-app.post("/getTokenbyClerkID", async (req, res) => {
-  const { userId } = req.body;
-
-  const requser = await User.findOne({
-    Clerk_id: userId,
-  });
-
-  const token = serverClient.createToken(userId);
-
-  await serverClient.upsertUser({
-    id: requser.Clerk_id,
-    name: requser.name,
-  });
-
-  res.json({ token, userId: requser.Clerk_id });
-});
-
-app.post("/CreateProject",async(req,res)=>{
-  const { title, description, experienceLevel, price, tags, questions,projectFile, Clerk_id } = req.body;
-  const requser = await User.findOne({
-    Clerk_id: Clerk_id,
-  });
-  const project = new Project({
-    title,
-    description,
-    experienceLevel,
-    price,
-    tags,
-    questions,
-    file: projectFile,
-    cretedBy: requser._id,
-  });
-  try {
-    const savedProject = await project.save();
-   
-    requser.createdProjects.push(savedProject._id);
-    await requser.save();
-    return res.json({ message: "Project Created", project: savedProject });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-
-
-})
+app.post("/getTokenbyClerkID", getTokenbyClerkID);
 
 // Thiss sget the projects by the clerk_id
-app.post("/getProjectsbyClerkID",async(req,res) =>{
-  const {Clerk_id} = req.body;
+app.post("/getProjectsbyClerkID", getProjectsbyClerkID);
 
-  const requser = await User.findOne({
-    Clerk_id: Clerk_id
-  });
-
-  const createdProjects = requser.createdProjects;
-
-  return res.json({
-    createdProjects
-  });
-
-
-});
-
-app.post("/getprojectByID",async(req,res)=>{
-  const {id} = req.body;
-  const reqproject = await Project.findById(
-    {
-      _id: id
-    }
-  );
-  return res.json({
-    reqproject
-  });
-})
+app.post("/getprojectByID", getprojectByID);

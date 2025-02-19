@@ -24,7 +24,7 @@ let projectSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         default : []
     }],
-    cretedBy : {
+    createdBy : {
         type : mongoose.Schema.Types.ObjectId,
         required : true
     },
@@ -59,7 +59,7 @@ export const projectSchemaValidation = joi.object({
     title : joi.string().required(),
     description : joi.string().required(),
     createdBy : ObjectId().required(),
-    experienceLevel : joi.string().required(),
+    experienceLevel : joi.string().required().valid('basic', 'intermediate', 'expert'),
     price : joi.number().required(),
 });
 
