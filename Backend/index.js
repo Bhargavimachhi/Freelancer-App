@@ -105,6 +105,7 @@ app.post("/CreateProject",async(req,res)=>{
   });
   try {
     const savedProject = await project.save();
+   
     requser.createdProjects.push(savedProject._id);
     await requser.save();
     return res.json({ message: "Project Created", project: savedProject });
