@@ -1,3 +1,4 @@
+import OnboardingNavigation from "@/components/OnboardingNavigation";
 import React, { useState } from "react";
 
 const Categories = () => {
@@ -95,63 +96,66 @@ const Categories = () => {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-6 mx-auto my-4 rounded-lg md:flex-row bg-bg max-w-7xl">
-      {/* Left Section */}
-      <div className="w-full p-6 border-b-2 md:w-1/3 border-text md:border-r-2 md:border-b-0">
-        <h1 className="mb-2 text-2xl font-semibold text-text">
-          Great, so what kind of work are you here to do?
-        </h1>
-        <p className="mb-4 text-text">
-          Don't worry, you can change these choices later on.
-        </p>
-        <h2 className="mb-2 text-lg font-medium text-text">
-          Select 1 category
-        </h2>
-        <ul>
-          {categories.map((category) => (
-            <li
-              key={category}
-              className={`cursor-pointer py-1 ${
-                selectedCategory === category
-                  ? "text-btn font-semibold"
-                  : "text-text"
-              }`}
-              onClick={() => {
-                setSelectedCategory(category);
-                setSelectedServices([]);
-              }}
-            >
-              {category}
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      {/* Right Section */}
-      <div className="w-full p-6 md:w-2/3">
-        <h2 className="mb-2 text-lg font-medium text-text">
-          Now, select 1 to 3 specialties
-        </h2>
-        <div className="space-y-2">
-          {categoryServices[selectedCategory]?.map((service) => (
-            <label key={service} className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                checked={selectedServices.includes(service)}
-                onChange={() => toggleService(service)}
-                className="w-4 h-4"
-              />
-              <span className="text-text">{service}</span>
-            </label>
-          ))}
-        </div>
-        {selectedServices.length === 0 && (
-          <p className="mt-2 text-sm text-red-600">
-            ⚠️ You must select at least one service.
+    <>
+      <div className="flex flex-col min-h-screen p-6 mx-auto my-4 rounded-lg md:flex-row bg-bg max-w-7xl">
+        {/* Left Section */}
+        <div className="w-full p-6 border-b-2 md:w-1/3 border-text md:border-r-2 md:border-b-0">
+          <h1 className="mb-2 text-2xl font-semibold text-text">
+            Great, so what kind of work are you here to do?
+          </h1>
+          <p className="mb-4 text-text">
+            Don't worry, you can change these choices later on.
           </p>
-        )}
+          <h2 className="mb-2 text-lg font-medium text-text">
+            Select 1 category
+          </h2>
+          <ul>
+            {categories.map((category) => (
+              <li
+                key={category}
+                className={`cursor-pointer py-1 ${
+                  selectedCategory === category
+                    ? "text-btn font-semibold"
+                    : "text-text"
+                }`}
+                onClick={() => {
+                  setSelectedCategory(category);
+                  setSelectedServices([]);
+                }}
+              >
+                {category}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Right Section */}
+        <div className="w-full p-6 md:w-2/3">
+          <h2 className="mb-2 text-lg font-medium text-text">
+            Now, select 1 to 3 specialties
+          </h2>
+          <div className="space-y-2">
+            {categoryServices[selectedCategory]?.map((service) => (
+              <label key={service} className="flex items-center space-x-3">
+                <input
+                  type="checkbox"
+                  checked={selectedServices.includes(service)}
+                  onChange={() => toggleService(service)}
+                  className="w-4 h-4"
+                />
+                <span className="text-text">{service}</span>
+              </label>
+            ))}
+          </div>
+          {selectedServices.length === 0 && (
+            <p className="mt-2 text-sm text-red-600">
+              ⚠️ You must select at least one service.
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+      <OnboardingNavigation />
+    </>
   );
 };
 
