@@ -28,6 +28,7 @@ import Categories from "./Pages/onboarding/Categories";
 //components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import Profile from "./Pages/Profile";
 
 const App = () => {
   return (
@@ -99,8 +100,12 @@ const App = () => {
               element={<HourlyRate />}
             />
 
+            {/* profile page */}
+            <Route path="/profile" element={<Profile />} />
+
             {/* chat page */}
             <Route path="/chats" element={<Chatpage />} />
+
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
           </Routes>

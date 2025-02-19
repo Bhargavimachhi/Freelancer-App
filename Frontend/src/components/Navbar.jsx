@@ -18,13 +18,9 @@ import { SignOutButton } from "@clerk/clerk-react";
 import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,7 +34,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 
 const products = [
   {
@@ -248,17 +244,22 @@ const Navbar = () => {
             <>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                    <Avatar className='cursor-pointer'>
-                      <AvatarImage src={user.hasImage ? user.imageUrl : "https://github.com/shadcn.png"} alt="@shadcn" />
-                      <AvatarFallback>USER</AvatarFallback>
-                    </Avatar>
+                  <Avatar className="cursor-pointer">
+                    <AvatarImage
+                      src={
+                        user.hasImage
+                          ? user.imageUrl
+                          : "https://github.com/shadcn.png"
+                      }
+                      alt="@shadcn"
+                    />
+                    <AvatarFallback>USER</AvatarFallback>
+                  </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="w-56">
                   <DropdownMenuLabel>My Account</DropdownMenuLabel>
                   <DropdownMenuGroup>
-                    <DropdownMenuItem>
-                      Profile
-                    </DropdownMenuItem>
+                    <DropdownMenuItem>Profile</DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuItem>
                     <SignOutButton />
