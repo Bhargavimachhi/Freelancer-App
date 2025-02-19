@@ -56,6 +56,10 @@ let userSchema = new mongoose.Schema({
         ],
         default: []
     },
+    createdProjects : [{
+        type : mongoose.Schema.Types.ObjectId,
+        default : []
+    }],
     rating : {
         type : Number,
         default : null,
