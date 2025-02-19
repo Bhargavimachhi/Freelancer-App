@@ -11,14 +11,14 @@ const llm = new ChatGoogleGenerativeAI({
 
   
 const promptTemplate = PromptTemplate.fromTemplate(
-    "You are an AI analyzer. I will provide you with one question and its answer. You have to analyze them and give me a score out of 100 based on the correctness of the answer. Do not return anything else except the score."
+    "You are an AI analyzer. I have given you array of questions and array of answers. Array of questions is : {questions} and array of answers is : {answers}. answer of question[x] is answer[x]. you have to analyze all the questions and answers and give score to each answer out of 100 on the basis of correctness, grammer, logic, relativity to question, and facts. and return final average of it. do not include anything else except final average."
 );
 
 export async function Chatbotfunction(questions, answers) {
     if(questions.length != answers.length) {
         return null;
     }
-    const message = await promptTemplate.invoke({ que: que });
+    const message = await promptTemplate.invoke({ questions, answers });
     const response = await llm.invoke(message.value);
 
     const ans = response.content;
