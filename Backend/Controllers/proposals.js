@@ -1,20 +1,30 @@
 import { Proposal } from '../Models/Proposal.js';
 import { proposalSchemaValidation } from '../Models/Proposal.js';
 import { Project } from '../Models/Project.js';
+import { User } from '../Models/User.js';
 
 export const addProposalToProject = async (req, res) => {
     const { id } = req.params; 
+    const {  Clerk_id,description,price,answers } = req.body;
     const project = await Project.findById(id);
+    const requser = await User.findOne({ Clerk_id: Clerk_id });
+    
+    if (!requser) {
+              return res.status(404).json({ message: "User not found" });
+    }
   
     if (!project) {
       return res.status(403).json({ message: "Project do not exist" });
     }
-    let {error}= proposalSchemaValidation.validate(req.body);
+    const newprojectdata = {
+      createdBy: requser._id,
+      description:description,
+      price: price,
+      answers:answers
+
+    };
     
-    if(error) {
-      return res.status(404).json({message : error.details[0].message});
-    }
-    const proposal = new Proposal(req.body);
+    const proposal = new Proposal(newprojectdata);
     project.proposals.push(proposal._id);
 
     project.save();

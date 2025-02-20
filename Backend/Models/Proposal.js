@@ -3,6 +3,7 @@ import joi from 'joi';
 import JoiObjectId from "joi-objectid";
 const ObjectId = JoiObjectId(joi);
 
+
 let proposalSchema = new mongoose.Schema({
     createdBy : {
         type : mongoose.Schema.Types.ObjectId,
