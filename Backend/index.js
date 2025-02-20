@@ -3,12 +3,14 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import { addUser, editUser, getUser } from "./Controllers/User.js";
+import { User } from "./Models/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
 
 import { addProposalToProject, getProposal } from "./Controllers/proposals.js";
 import { createProject, getAllProposalsOfProject, getProject } from "./Controllers/project.js";
 import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getTokenbyClerkID } from "./Controllers/authentication.js";
+import { Project } from "./Models/Project.js";
 
 const PORT = 3000;
 
@@ -57,3 +59,24 @@ app.post("/getTokenbyClerkID", getTokenbyClerkID);
 app.post("/getProjectsbyClerkID", getProjectsbyClerkID);
 
 app.post("/getprojectByID", getprojectByID);
+app.post("/GetProjects",async(req,res)=>{
+
+  const {Clerk_id} = req.body;
+  console.log(Clerk_id);
+
+  const requser = await User.findOne({
+    Clerk_id: Clerk_id
+  });
+
+  const userid = requser._id;
+  console.log(userid);
+
+
+  const projects = await Project.find({
+    
+createdBy: {$ne:userid}
+  });
+
+  return res.status(200).json(projects);
+
+})

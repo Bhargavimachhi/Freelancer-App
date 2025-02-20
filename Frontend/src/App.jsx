@@ -24,6 +24,8 @@ import SkillSelector from "./Pages/onboarding/SkillSelector";
 import WorkExperience from "./Pages/onboarding/WorkExperience";
 import Education from "./Pages/onboarding/Education";
 import Categories from "./Pages/onboarding/Categories";
+import ProjectDetailPage from "./Pages/ProjectDetail";
+import FindProjects from "./Pages/FindProjects";
 
 //components
 import Navbar from "./components/Navbar";
@@ -110,6 +112,9 @@ const App = () => {
 
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
+
+            <Route path="/FindProjects" element={<FindProjects/>}/>
+            <Route path="/ProjectDetail/:id" element={<ProjectDetailPage/>}/>
           </Routes>
         </Main>
       </ThemeProvider>
