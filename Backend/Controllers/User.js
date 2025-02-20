@@ -53,10 +53,45 @@ export const editUser = async (req, res) => {
     if(error) {
       return res.status(404).json({message : error.details[0].message});
     }
-    await Listing.findByIdAndUpdate(id, req.body);
+    await User.findByIdAndUpdate(id, req.body);
     res.status(200).json({ message: "Profile details edited successfully" });
   }
   catch (err) {
+    res.status(500).json({message : "Internal server error", err});
+  }
+};
+
+export const editPropertiesOfUser = async (req, res) => {
+  try {
+    let {id} = req.params;
+    let user = await User.findOne({Clerk_id : id});
+
+    if (!user) {
+      return res.status(403).json({ message: "User does not exists" });
+    }
+
+    let data = req.body;
+    
+    for (let key in data) {
+      if (data.hasOwnProperty(key)) {
+
+        if(key === 'email') {
+          return res.status(404).json({ message: "Email cannot be edited" });
+        }
+        user[key] = data[key];
+      }
+    }
+    user
+      .save()
+      .then(() => {
+        res.status(200).json({ message: "Profile details edited successfully" });
+      })
+      .catch((err) => {
+        res.status(500).json({message : "Error Occurred !!!"});
+      });
+  }
+  catch (err) {
+    console.log(err);
     res.status(500).json({message : "Internal server error", err});
   }
 };
