@@ -1,7 +1,5 @@
 import React from "react";
 import { useUser } from "@clerk/clerk-react";
-import { Link } from "react-router-dom";
-import useOnboardingNavigation from "@/hooks/useOnboardingNavigation";
 import OnboardingNavigation from "@/components/OnboardingNavigation";
 
 const Welcome = () => {
