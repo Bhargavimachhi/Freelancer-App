@@ -12,6 +12,7 @@ import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import "stream-chat-react/dist/css/v2/index.css";
 import CreateChat from "../components/CreateChatButton";
+import LoadingPage from "../components/LoadingPage.jsx"
 
 const apiKey = "uu4gqeduxqn7";
 const chatClient = StreamChat.getInstance(apiKey);
@@ -51,7 +52,7 @@ const Chatpage = () => {
     // return () => chatClient.disconnectUser();
   }, [userId, username]);
 
-  if (!clientReady) return <p>Loading chat...</p>;
+  if (!clientReady) return <LoadingPage />
 
   return (
     <>

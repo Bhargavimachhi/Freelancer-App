@@ -29,6 +29,7 @@ import Categories from "./Pages/onboarding/Categories";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Profile from "./Pages/Profile";
+import LoadinPage from "./components/LoadingPage";
 
 const App = () => {
   return (
@@ -48,6 +49,7 @@ const App = () => {
             {/* Other pages */}
             <Route exact path="/hire" element={<Hire />} />
             <Route path="/DashBoard" element={<DashBoard />} />
+            <Route path="/loading" element={<LoadinPage />} />
 
             {/* onboarding pages */}
 

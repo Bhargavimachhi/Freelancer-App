@@ -1,7 +1,12 @@
+import LoadinPage from "@/components/LoadingPage";
+import { useUser } from "@clerk/clerk-react";
 import React from "react";
 import { useForm } from "react-hook-form";
 
 const Profile = () => {
+
+  const { user } = useUser();
+  
   const {
     register,
     handleSubmit,
@@ -11,6 +16,10 @@ const Profile = () => {
   const onSubmit = (data) => {
     console.log(data);
   };
+
+  if(!user) {
+    return <LoadinPage />
+  }
 
   return (
     <section className="mx-auto mt-4 max-w-7xl">
@@ -39,7 +48,7 @@ const Profile = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           >
-            <div>
+            {/* <div>
               <label className="block text-gray-700">Date of Birth *</label>
               <input
                 type="date"
@@ -51,16 +60,16 @@ const Profile = () => {
                   {errors.dob.message}
                 </p>
               )}
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <label className="block text-gray-700">Country *</label>
               <select
                 {...register("country", { required: "Country is required" })}
                 className="w-full p-2 mt-2 border rounded-md border-btn"
               >
                 <option value="">Select Country</option>
-                <option value="India" mt-1>
+                <option value="India">
                   India
                 </option>
                 <option value="USA">USA</option>
@@ -68,39 +77,46 @@ const Profile = () => {
               {errors.country && (
                 <p className="text-sm text-red-500">{errors.country.message}</p>
               )}
-            </div>
+            </div> */}
 
             <div>
-              <label className="block text-gray-700">Street Address *</label>
+              <label className="block text-gray-700">Name *</label>
               <input
                 type="text"
-                {...register("address", {
-                  required: "Street address is required",
+                {...register("name", {
+                  required: "Name is required",
                 })}
+                value={user?.fullName}
                 className="w-full p-2 mt-2 border rounded-md border-btn"
               />
-              {errors.address && (
+              {errors.name && (
                 <p className="mt-1 text-sm text-red-500">
-                  {errors.address.message}
+                  {errors.name.message}
                 </p>
               )}
             </div>
 
             <div>
-              <label className="block text-gray-700">City *</label>
+              <label className="block text-gray-700">Contact</label>
               <input
                 type="text"
-                {...register("city", { required: "City is required" })}
+                {...register("contact")}
+                value={user?.contact}
                 className="w-full p-2 mt-2 border rounded-md border-btn"
               />
-              {errors.city && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.city.message}
-                </p>
-              )}
             </div>
 
             <div>
+              <label className="block text-gray-700">About me</label>
+              <textarea
+                type="text"
+                {...register("bio")}
+                value={user?.aboutMe}
+                className="w-full p-2 mt-2 border rounded-md border-btn"
+              />
+            </div>
+
+            {/* <div>
               <label className="block text-gray-700">State/Province</label>
               <input
                 type="text"
@@ -112,9 +128,9 @@ const Profile = () => {
                   {errors.state.message}
                 </p>
               )}
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <label className="block text-gray-700">ZIP/Postal Code</label>
               <input
                 type="text"
@@ -126,9 +142,9 @@ const Profile = () => {
                   {errors.zip.message}
                 </p>
               )}
-            </div>
+            </div> */}
 
-            <div>
+            {/* <div>
               <label className="block text-gray-700">Phone *</label>
               <input
                 type="text"
@@ -140,7 +156,7 @@ const Profile = () => {
                   {errors.phone.message}
                 </p>
               )}
-            </div>
+            </div> */}
 
             <div className="flex sm:justify-end sm:col-span-2">
               <button
