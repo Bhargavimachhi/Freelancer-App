@@ -2,6 +2,8 @@ import LoadinPage from "@/components/LoadingPage";
 import { useUser } from "@clerk/clerk-react";
 import React from "react";
 import { useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Profile = () => {
 
@@ -13,8 +15,21 @@ const Profile = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async(data) => {
     console.log(data);
+    try {
+        const response = await axios.post(`http://localhost:3000/user/${user.id}/edit-properties`, data);
+
+        if (response.status === 200) {
+            toast.success(response.data.message);
+        }
+        else {
+          toast.error(response.data.message);
+        }
+    } catch (error) {
+        toast.error("Error occured");
+        console.error('Error checking user existence:', error)
+    }
   };
 
   if(!user) {
@@ -48,36 +63,6 @@ const Profile = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           >
-            {/* <div>
-              <label className="block text-gray-700">Date of Birth *</label>
-              <input
-                type="date"
-                {...register("dob", { required: "Date of Birth is required" })}
-                className="w-full p-2 mt-2 border rounded-md border-btn"
-              />
-              {errors.dob && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.dob.message}
-                </p>
-              )}
-            </div> */}
-
-            {/* <div>
-              <label className="block text-gray-700">Country *</label>
-              <select
-                {...register("country", { required: "Country is required" })}
-                className="w-full p-2 mt-2 border rounded-md border-btn"
-              >
-                <option value="">Select Country</option>
-                <option value="India">
-                  India
-                </option>
-                <option value="USA">USA</option>
-              </select>
-              {errors.country && (
-                <p className="text-sm text-red-500">{errors.country.message}</p>
-              )}
-            </div> */}
 
             <div>
               <label className="block text-gray-700">Name *</label>
@@ -87,13 +72,9 @@ const Profile = () => {
                   required: "Name is required",
                 })}
                 value={user?.fullName}
+                onChange={() => {}}
                 className="w-full p-2 mt-2 border rounded-md border-btn"
               />
-              {errors.name && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.name.message}
-                </p>
-              )}
             </div>
 
             <div>
@@ -110,53 +91,11 @@ const Profile = () => {
               <label className="block text-gray-700">About me</label>
               <textarea
                 type="text"
-                {...register("bio")}
+                {...register("aboutMe")}
                 value={user?.aboutMe}
                 className="w-full p-2 mt-2 border rounded-md border-btn"
               />
             </div>
-
-            {/* <div>
-              <label className="block text-gray-700">State/Province</label>
-              <input
-                type="text"
-                {...register("state", { required: "State is required" })}
-                className="w-full p-2 mt-2 border rounded-md border-btn"
-              />
-              {errors.state && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.state.message}
-                </p>
-              )}
-            </div> */}
-
-            {/* <div>
-              <label className="block text-gray-700">ZIP/Postal Code</label>
-              <input
-                type="text"
-                {...register("zip", { required: "Zip code is required" })}
-                className="w-full p-2 mt-2 border rounded-md border-btn"
-              />
-              {errors.zip && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.zip.message}
-                </p>
-              )}
-            </div> */}
-
-            {/* <div>
-              <label className="block text-gray-700">Phone *</label>
-              <input
-                type="text"
-                {...register("phone", { required: "Phone number is required" })}
-                className="w-full p-2 mt-2 border rounded-md border-btn"
-              />
-              {errors.phone && (
-                <p className="mt-1 text-sm text-red-500">
-                  {errors.phone.message}
-                </p>
-              )}
-            </div> */}
 
             <div className="flex sm:justify-end sm:col-span-2">
               <button
