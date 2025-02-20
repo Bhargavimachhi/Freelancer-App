@@ -40,7 +40,8 @@ const FindProjects = () => {
 
   return (
     <>
-    <h1 className="text-3xl font-bold mb-8">Projects For you : </h1>
+    <h1 className="text-3xl font-bold mb-8 mt-5 ml-5">Projects For you : </h1>
+    <div className="flex mt-5 ml-5">
     { projects.length > 0 ? (
 
         projects.map((project)=>{
@@ -60,13 +61,14 @@ const FindProjects = () => {
             );
 
         })
-
+      
         
     ) : (
         <>
         <h1> No projects found ...</h1>
         </>
     )}
+    </div>
     </>
   )
 }

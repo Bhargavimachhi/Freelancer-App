@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../compone
 
 export default function ProjectCard({ name, tags, experienceLevel, price, onViewProject }) {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm ml-5">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">{name}</CardTitle>
       </CardHeader>
