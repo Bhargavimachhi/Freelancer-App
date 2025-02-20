@@ -109,7 +109,7 @@ export default function CreateProjectSection() {
     console.log("Updated Project Data:", updatedProjectData);
 
     try {
-        const res = await axios.post("http://localhost:3000/CreateProject", updatedProjectData);
+        const res = await axios.post("http://localhost:3000/project/add", updatedProjectData);
         console.log(res.data);
 
         if (res.data.message === "Project Created") {
