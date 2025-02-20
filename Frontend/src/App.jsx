@@ -26,11 +26,12 @@ import Education from "./Pages/onboarding/Education";
 import Categories from "./Pages/onboarding/Categories";
 import ProjectDetailPage from "./Pages/ProjectDetail";
 import FindProjects from "./Pages/FindProjects";
+import MainProfile from "./Pages/MainProfile";
+import Profile from "./Pages/Profile";
 
 //components
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import Profile from "./Pages/Profile";
 import LoadinPage from "./components/LoadingPage";
 
 const App = () => {
@@ -106,6 +107,7 @@ const App = () => {
 
             {/* profile page */}
             <Route path="/profile" element={<Profile />} />
+            <Route path="/main-profile" element={<MainProfile />} />
 
             {/* chat page */}
             <Route path="/chats" element={<Chatpage />} />
@@ -113,8 +115,8 @@ const App = () => {
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
 
-            <Route path="/FindProjects" element={<FindProjects/>}/>
-            <Route path="/ProjectDetail/:id" element={<ProjectDetailPage/>}/>
+            <Route path="/FindProjects" element={<FindProjects />} />
+            <Route path="/ProjectDetail/:id" element={<ProjectDetailPage />} />
           </Routes>
         </Main>
       </ThemeProvider>
