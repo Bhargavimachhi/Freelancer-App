@@ -23,10 +23,7 @@ const FindProjects = () => {
        const fetchprojects = async () =>{
 
         if (userId) {
-            const res = await axios.post("http://localhost:3000/GetProjects", {
-              Clerk_id: userId
-            });
-            console.log(res.data);
+            const res = await axios.get(`http://localhost:3000/user/${userId}/projects`);
             setprojects(res.data);
           }
 

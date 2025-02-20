@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import { addUser, editPropertiesOfUser, editUser, getUser } from "./Controllers/User.js";
+import { addUser, editPropertiesOfUser, editUser, getAllProjectsOfUser, getUser } from "./Controllers/User.js";
 import { User } from "./Models/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
@@ -34,6 +34,7 @@ app.post("/user/add", addUser);
 app.post("/user/:id/edit", editUser);
 app.get("/user/:id", getUser);
 app.post("/user/:id/edit-properties", editPropertiesOfUser);
+app.get("/user/:id/projects", getAllProjectsOfUser);
 
 //Project Routes
 app.get("/project/:id", getProject);
@@ -60,24 +61,3 @@ app.post("/getTokenbyClerkID", getTokenbyClerkID);
 app.post("/getProjectsbyClerkID", getProjectsbyClerkID);
 
 app.post("/getprojectByID", getprojectByID);
-app.post("/GetProjects",async(req,res)=>{
-
-  const {Clerk_id} = req.body;
-  console.log(Clerk_id);
-
-  const requser = await User.findOne({
-    Clerk_id: Clerk_id
-  });
-
-  const userid = requser._id;
-  console.log(userid);
-
-
-  const projects = await Project.find({
-    
-createdBy: {$ne:userid}
-  });
-
-  return res.status(200).json(projects);
-
-})
