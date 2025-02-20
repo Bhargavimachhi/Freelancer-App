@@ -6,7 +6,7 @@ const ObjectId = JoiObjectId(joi);
 
 let proposalSchema = new mongoose.Schema({
     createdBy : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         required : true,
     },
     price : {
@@ -24,7 +24,7 @@ let proposalSchema = new mongoose.Schema({
 });
 
 export const proposalSchemaValidation = joi.object({
-    createdBy : ObjectId().required(),
+    createdBy : joi.string().required(),
     description : joi.string().required(),
     price : joi.number().required(),
 });

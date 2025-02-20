@@ -6,7 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "../compone
 
 export default function ProjectCard({ name, tags, experienceLevel, price, onViewProject }) {
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm ml-5">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">{name}</CardTitle>
       </CardHeader>
@@ -24,7 +24,7 @@ export default function ProjectCard({ name, tags, experienceLevel, price, onView
         </div>
         <div className="flex justify-between items-center">
           <span className="text-sm text-muted-foreground">Price</span>
-          <span className="text-lg font-bold">${price.toFixed(2)}</span>
+          <span className="text-lg font-bold">&#8377;{price.toFixed(2)}</span>
         </div>
       </CardContent>
       <CardFooter>
