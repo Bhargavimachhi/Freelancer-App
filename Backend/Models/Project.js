@@ -25,7 +25,7 @@ let projectSchema = new mongoose.Schema({
         default : []
     }],
     createdBy : {
-        type : mongoose.Schema.Types.ObjectId,
+        type : String,
         required : true
     },
     file : {
@@ -52,13 +52,17 @@ let projectSchema = new mongoose.Schema({
     isPaymentDone : {
         type : Boolean,
         default : false,
+    },
+    postedOn : {
+        type : Date,
+        default : Date.now()
     }
 });
 
 export const projectSchemaValidation = joi.object({
     title : joi.string().required(),
     description : joi.string().required(),
-    createdBy : ObjectId().required(),
+    createdBy : joi.string().required(),
     experienceLevel : joi.string().required().valid('basic', 'intermediate', 'expert'),
     price : joi.number().required(),
 });

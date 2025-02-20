@@ -28,7 +28,7 @@ export const addUser = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const {id} = req.params;
-    let user = await User.findById(id);
+    let user = await User.findOne({Clerk_id : id});
 
     if (!user) {
       return res.status(403).json({ message: "User does not exists" });

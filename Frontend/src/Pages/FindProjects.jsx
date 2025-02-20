@@ -51,7 +51,7 @@ const FindProjects = () => {
                             price={project.price}
                             onViewProject={() => {
                              
-                                navi(`/ProjectDetail/${project._id}`)
+                                navi(`/project/${project._id}`)
                               
                             }}
                           />

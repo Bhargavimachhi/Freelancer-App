@@ -113,8 +113,8 @@ const App = () => {
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
 
-            <Route path="/FindProjects" element={<FindProjects/>}/>
-            <Route path="/ProjectDetail/:id" element={<ProjectDetailPage/>}/>
+            <Route path="/my-projects" element={<FindProjects/>}/>
+            <Route path="/project/:id" element={<ProjectDetailPage/>}/>
           </Routes>
         </Main>
       </ThemeProvider>

@@ -11,19 +11,23 @@ import { Label } from '../components/ui/label';
 import { useUser } from '@clerk/clerk-react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import LoadinPage from '@/components/LoadingPage';
 
 
 
 const ProjectDetailPage = () => {
 
 
-  const id = useParams();
-  const projectid = id.id;
+  const {id} = useParams();
+  const projectid = id;
   const [isProposalDialogOpen, setIsProposalDialogOpen] = useState(false);
 
   const { user, isLoaded } = useUser();
   const [userId, setUserId] = useState(null);
   const [project1,setproject1] = useState(null);
+  const [createdBy, setCreatedBy] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const [coverLetter, setCoverLetter] = useState('');
   const [bidAmount, setBidAmount] = useState('');
@@ -34,7 +38,6 @@ const ProjectDetailPage = () => {
    useEffect(() => {
           if (isLoaded && user) {
             setUserId(user.id);
-            console.log(user.id);
            
           }
         }, [isLoaded, user]);
@@ -43,11 +46,14 @@ const ProjectDetailPage = () => {
           const fetchproject = async () =>{
    
            if (userId) {
-               const res = await axios.get(`http://localhost:3000/project/${projectid}`, {
+               let res = await axios.get(`http://localhost:3000/project/${projectid}`, {
                  Clerk_id: userId
                });
-               console.log(res.data.project);
                setproject1(res.data.project);
+
+               res = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
+               setCreatedBy(res.data.user);
+               setLoading(false);
              }
    
           }
@@ -57,41 +63,15 @@ const ProjectDetailPage = () => {
            // return () => chatClient.disconnectUser();
          }, [userId]);
         
-  
-  // Example project data based on your schema
-  const project = {
-    title: "E-commerce Website Development with React and Node.js",
-    description: "Looking for an experienced full-stack developer to build a complete e-commerce platform. The site should include product listings, user authentication, shopping cart, payment integration with Stripe, and an admin dashboard.",
-    tags: ["React", "Node.js", "MongoDB", "Stripe", "Full-stack"],
-    questions: [
-      "How many years of experience do you have with React?",
-      "Have you integrated Stripe payment before?",
-      "Can you provide examples of e-commerce sites you've built?"
-    ],
-    experienceLevel: "expert",
-    price: 2500,
-    file: "project-requirements.pdf",
-    createdAt: "2025-02-15",
-    // Project creator info
-    createdBy: {
-      _id: "user123",
-      name: "Sarah Johnson",
-      title: "Marketing Director at TechBrand",
-      image: "/api/placeholder/40/40",
-      rating: 4.8,
-      projectsPosted: 12
-    },
-   
-  };
   const handleSubmit = async () => {
     try {
+
       const res = await axios.post(`http://localhost:3000/project/${projectid}/add-proposal`, {
         description: coverLetter,
         price: bidAmount,
         answers: answers,
         Clerk_id: userId
       });
-      console.log(res.data);
 
       // Reset states
       setCoverLetter('');
@@ -103,10 +83,10 @@ const ProjectDetailPage = () => {
       setIsProposalDialogOpen(false);
 
       // Show alert
-      alert('Proposal submitted successfully!');
+      toast.success('Proposal submitted successfully!');
     } catch (error) {
       console.error('Error submitting proposal:', error);
-      alert('Failed to submit proposal. Please try again.');
+      toast.error('Failed to submit proposal. Please try again.');
     }
 
     
@@ -115,6 +95,10 @@ const ProjectDetailPage = () => {
     const url = `https://res.cloudinary.com/dktw0yum9/image/upload/${publicId}.pdf`;
     window.open(url, '_blank');
   };
+
+  if(loading) {
+    return <LoadinPage />
+  }
 
 
   return (
@@ -128,7 +112,7 @@ const ProjectDetailPage = () => {
           <div className="flex justify-between items-start">
             <div>
               <CardTitle className="text-2xl">{project1.title}</CardTitle>
-              <CardDescription className="mt-2">Posted on {project1.createdAt}</CardDescription>
+              <CardDescription className="mt-2">Posted on {Date(project1.postedOn).toString().split("GMT")[0]}</CardDescription>
             </div>
             <div className="text-right">
               <p className="text-xl font-bold">${project1.price}</p>
@@ -164,7 +148,7 @@ const ProjectDetailPage = () => {
                 </div>
               )}
               
-              {project.file && (
+              {project1?.file && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-2">Attachments</h3>
                   <Button variant="outline" onClick={()=>{
@@ -185,29 +169,29 @@ const ProjectDetailPage = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="flex items-center gap-3 mb-4">
+                    { createdBy?.image &&
                     <Avatar>
-                      <AvatarImage src={project.createdBy.image} alt={project.createdBy.name} />
-                      <AvatarFallback>{project.createdBy.name.charAt(0)}</AvatarFallback>
-                    </Avatar>
+                      <AvatarImage src={createdBy.image} alt={createdBy.name} />
+                      <AvatarFallback>{createdBy.name.charAt(0)}</AvatarFallback>
+                    </Avatar>}
                     <div>
-                      <p className="font-medium">{project.createdBy.name}</p>
-                      <p className="text-sm text-muted-foreground">{project.createdBy.title}</p>
+                      {createdBy?.name && <p className="font-medium">Name : {createdBy.name}</p>}
+                      {createdBy?.title && <p className="text-sm text-muted-foreground">{createdBy.title}</p>}
                     </div>
                   </div>
                   
                   <div className="space-y-2 text-sm">
+                    {createdBy?.rating && 
                     <div className="flex justify-between">
                       <span>Rating:</span>
-                      <span className="font-medium">⭐ {project.createdBy.rating}/5</span>
-                    </div>
+                      <span className="font-medium">⭐ {createdBy.rating}/5</span>
+                    </div>}
+
+                    { createdBy?.projectsPosted &&
                     <div className="flex justify-between">
                       <span>Projects Posted:</span>
-                      <span className="font-medium">{project.createdBy.projectsPosted}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span>Member Since:</span>
-                      <span className="font-medium">Jan 2023</span>
-                    </div>
+                      <span className="font-medium">{createdBy.projectsPosted}</span>
+                    </div>}
                   </div>
                 </CardContent>
               </Card>
@@ -240,9 +224,9 @@ const ProjectDetailPage = () => {
             
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="bid-amount">Your Bid (USD)</Label>
+                <Label htmlFor="bid-amount">Your Bid (INR)</Label>
                 <div className="relative">
-                  <span className="absolute left-3 top-1/2 -translate-y-1/2">$</span>
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2">&#8377;</span>
                   <input 
                     id="bid-amount" 
                     type="number" 
