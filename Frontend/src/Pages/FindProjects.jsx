@@ -4,18 +4,19 @@ import axios from "axios";
 import { useUser } from '@clerk/clerk-react'
 import ProjectCard from "../components/ProjectCard";
 import { useNavigate } from "react-router-dom";
+import LoadinPage from "@/components/LoadingPage";
 const FindProjects = () => {
 
     const { user, isLoaded } = useUser();
       const [userId, setUserId] = useState(null);
       const [projects,setprojects] = useState([]);
+      const [loading,setLoading] = useState(true);
       const navi = useNavigate();
 
       useEffect(() => {
         if (isLoaded && user) {
           setUserId(user.id);
-          console.log(user.id);
-         
+          
         }
       }, [isLoaded, user]);
 
@@ -25,6 +26,7 @@ const FindProjects = () => {
         if (userId) {
             const res = await axios.get(`http://localhost:3000/user/${userId}/projects`);
             setprojects(res.data);
+            setLoading(false);
           }
 
        }
@@ -33,6 +35,10 @@ const FindProjects = () => {
     
         // return () => chatClient.disconnectUser();
       }, [userId]);
+
+      if(loading) {
+        return <LoadinPage />
+      }
 
 
   return (

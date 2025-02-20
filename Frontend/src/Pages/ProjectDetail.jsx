@@ -115,7 +115,7 @@ const ProjectDetailPage = () => {
               <CardDescription className="mt-2">Posted on {Date(project1.postedOn).toString().split("GMT")[0]}</CardDescription>
             </div>
             <div className="text-right">
-              <p className="text-xl font-bold">${project1.price}</p>
+              <p className="text-xl font-bold">&#8377;{project1.price}</p>
               <Badge className="ml-2 capitalize">{project1.experienceLevel}</Badge>
             </div>
           </div>
