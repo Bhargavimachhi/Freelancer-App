@@ -11,6 +11,7 @@ import { addProposalToProject, getProposal } from "./Controllers/proposals.js";
 import { createProject, getAllProposalsOfProject, getProject } from "./Controllers/project.js";
 import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getTokenbyClerkID } from "./Controllers/authentication.js";
 import { Project } from "./Models/Project.js";
+import { CreateOffer,AcceptOffer,DeclineOffer,PayOffer,sumbitwork,approvework } from "./Controllers/offers.js";
 
 const PORT = 3000;
 
@@ -50,6 +51,14 @@ app.get("/skills", getSkills);
 
 // Authentication Routes
 app.post("/checkifuserexists", checkIfUserExists);
+
+//Offers Routes 
+app.post("/CreateOffer",CreateOffer);
+app.put("/:offerId/accept",AcceptOffer);
+app.put("/:offerId/decline",DeclineOffer);
+app.put("/:offerId/pay",PayOffer);
+app.put("/:offerId/sumbit",sumbitwork);
+app.put("/:offerId/approve",approvework);
 
 // It takes in the email and gives the token for chatting
 app.post("/getToken", getToken);
