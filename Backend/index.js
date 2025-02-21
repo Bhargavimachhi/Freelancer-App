@@ -70,3 +70,38 @@ app.post("/getTokenbyClerkID", getTokenbyClerkID);
 app.post("/getProjectsbyClerkID", getProjectsbyClerkID);
 
 app.post("/getprojectByID", getprojectByID);
+
+app.get("/freelancer/offers/:id",async(req,res)=>{
+  const id = req.params.id;
+
+  const user = await User.findOne({
+    Clerk_id:id
+  });
+
+  const userid = user._id;
+
+  const alloffers = await Offers.find({
+    FreelancerId: userid
+    
+  });
+  return res.status(200).json({
+    alloffers
+  });
+});
+app.get("/client/offers/:id",async(req,res)=>{
+  const id = req.params.id;
+
+  const user = await User.findOne({
+    Clerk_id:id
+  });
+
+  const userid = user._id;
+
+  const alloffers = await Offers.find({
+    clientId: userid
+    
+  });
+  return res.status(200).json({
+    alloffers
+  });
+});
