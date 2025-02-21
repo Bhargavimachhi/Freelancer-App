@@ -12,7 +12,7 @@ import { createProject, getAllProposalsOfProject, getProject } from "./Controlle
 import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getTokenbyClerkID } from "./Controllers/authentication.js";
 import { Project } from "./Models/Project.js";
 import { CreateOffer,AcceptOffer,DeclineOffer,PayOffer,sumbitwork,approvework } from "./Controllers/offers.js";
-
+import { Offers } from "./Models/Offers.js";
 const PORT = 3000;
 
 const app = express();

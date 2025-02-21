@@ -33,6 +33,8 @@ import Profile from "./Pages/Profile";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import LoadinPage from "./components/LoadingPage";
+import MyOffers from "./Pages/MyOffers";
+import Offers from "./Pages/Offers";
 
 const App = () => {
   return (
@@ -117,6 +119,8 @@ const App = () => {
 
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
+            <Route path="/myoffers" element={<MyOffers/>}/>
+            <Route path="/offers" element={<Offers/>}/>
 
             
           </Routes>
