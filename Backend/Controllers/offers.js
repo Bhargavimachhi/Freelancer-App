@@ -65,7 +65,7 @@ export const sumbitwork = async (req,res)=>{
     const updatedoffer = await Offers.findByIdAndUpdate(req.params.offerId,{
       submission:{
         files:files,
-        notes: notes
+        note: notes
       },
       status:"submitted"
     },
