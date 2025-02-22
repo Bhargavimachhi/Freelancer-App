@@ -22,9 +22,9 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-// Cashfree.XClientId = "TEST104789643c6ca7ecadb2f1637ba846987401";
-// Cashfree.XClientSecret = "cfsk_ma_test_ac00b5486fb8476e9c8a3ace1d691608_41004b67";
-// Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
+Cashfree.XClientId = "TEST104789643c6ca7ecadb2f1637ba846987401";
+Cashfree.XClientSecret = "cfsk_ma_test_ac00b5486fb8476e9c8a3ace1d691608_41004b67";
+Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
 
 function generateOrderId() {
   const uniqueId = crypto.randomBytes(16).toString('hex');
