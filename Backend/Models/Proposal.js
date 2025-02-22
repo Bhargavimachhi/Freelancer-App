@@ -21,6 +21,10 @@ let proposalSchema = new mongoose.Schema({
         type : String,
         default : []
     }],
+    isShortListed:{
+        type:Boolean,
+        default:false
+    }
 });
 
 export const proposalSchemaValidation = joi.object({

@@ -35,6 +35,7 @@ import Footer from "./components/Footer";
 import LoadinPage from "./components/LoadingPage";
 import MyOffers from "./Pages/MyOffers";
 import Offers from "./Pages/Offers";
+import MyProjectDetail from "./Pages/MyProjectDetail";
 
 const App = () => {
   return (
@@ -116,6 +117,7 @@ const App = () => {
               
             <Route path="/my-projects" element={<FindProjects/>}/>
             <Route path="/project/:id" element={<ProjectDetailPage/>}/>
+            <Route path="/myproject/:id" element={<MyProjectDetail/>}/>
 
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />

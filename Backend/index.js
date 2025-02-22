@@ -13,6 +13,7 @@ import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getT
 import { Project } from "./Models/Project.js";
 import { CreateOffer,AcceptOffer,DeclineOffer,PayOffer,sumbitwork,approvework } from "./Controllers/offers.js";
 import { Offers } from "./Models/Offers.js";
+import { Proposal } from "./Models/Proposal.js";
 const PORT = 3000;
 
 const app = express();
@@ -105,3 +106,25 @@ app.get("/client/offers/:id",async(req,res)=>{
     alloffers
   });
 });
+
+app.put("/shortListProposal/:id",async(req,res)=>{
+
+  const id = req.params.id;
+
+  const reqproposal = await Proposal.findByIdAndUpdate(id,{
+    isShortListed:true
+
+  },
+{new:true});
+
+return res.status(200).json({reqproposal,message:"The proposal is shortlisted."});
+
+});
+app.get("/getuserbyClerkID/:id",async(req,res)=>{
+  const id = req.params.id;
+
+  const requser = await User.findOne({
+    Clerk_id:id
+  });
+  return res.status(200).json({requser});
+})
