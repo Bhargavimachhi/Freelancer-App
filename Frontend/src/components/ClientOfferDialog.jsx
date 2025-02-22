@@ -7,11 +7,25 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Download } from "lucide-react";
+import {load} from '@cashfreepayments/cashfree-js';
 
 
 
 
 export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer }) => {
+
+  const [cashfree,setCashfree] = useState(null);
+  useEffect(() => {
+    const initializeSDK = async () => {
+      const cashfreeInstance = await load({
+        mode: "sandbox",
+      });
+      setCashfree(cashfreeInstance);
+    };
+
+    initializeSDK();
+  }, []);
+
   if (!offer) return null;
 
   const statusColors = {
@@ -23,20 +37,9 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
     submitted: "bg-orange-500",
     completed: "bg-green-500",
   };
+  const [orderId, setOrderId] = useState("")
 
-  const handlePayment = async () => {
-    try {
-      const res = await axios.put(`http://localhost:3000/${offer._id}/pay`);
-     console.log(res.data);
-     alert("Payment is done..");
-     onClose();
-     window.location.reload();
-
-      
-    } catch (error) {
-      console.error("Payment failed:", error);
-    }
-  };
+  
 
   const handleAcceptSubmission = async () => {
     try {
@@ -50,6 +53,69 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
       console.error("Failed to accept submission:", error);
     }
   };
+
+  const getSessionId = async () => {
+    try {
+      console.log(offer.amount);
+      let res = await axios.post("http://localhost:3000/payment",{
+        amount: offer.amount
+      })
+      
+      if(res.data && res.data.payment_session_id){
+
+        console.log(res.data)
+        setOrderId(res.data.order_id)
+        return res.data.payment_session_id
+      }
+
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const verifyPayment = async () => {
+    try {
+      
+      let res = await axios.post("http://localhost:3000/verify", {
+        orderId: orderId
+      })
+
+      if(res && res.data){
+
+        const res = await axios.put(`http://localhost:3000/${offer._id}/pay`);
+        console.log(res.data);
+        alert("Payment is done..");
+        onClose();
+        window.location.reload();
+        
+      }
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const handleClick = async (e) => {
+    
+    try {
+
+      let sessionId = await getSessionId()
+      let checkoutOptions = {
+        paymentSessionId : sessionId,
+        redirectTarget:"_modal",
+      }
+
+      cashfree.checkout(checkoutOptions).then((res) => {
+        console.log("payment initialized")
+
+        verifyPayment(orderId)
+      })
+
+
+    } catch (error) {
+      console.log("this is the error ",error)
+    }
+
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -99,10 +165,10 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
           </div>
 
           {offer.status === "accepted" && (
-            <Button className="w-full" onClick={handlePayment}>
+            <button className="w-full" onClick={handleClick}>
               <Wallet className="w-4 h-4 mr-2" />
               Pay Now {offer.amount}
-            </Button>
+            </button>
           )}
 
           {offer.status === "submitted" && (
