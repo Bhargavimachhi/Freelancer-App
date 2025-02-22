@@ -53,10 +53,10 @@ const MyProjectDetail = () => {
                console.log(res.data.project);
              
 
-               const res2 = await axios.get(`http://localhost:3000/getuserbyClerkID/${res.data.project.createdBy}`);
-               console.log(res2.data.requser);
+               const res2 = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
+               console.log(res2.data.user);
                
-               setCreatedBy(res2.data.requser);
+               setCreatedBy(res2.data.user);
 
               
                setLoading(false);
