@@ -55,11 +55,9 @@ const ProjectDetailPage = () => {
 
                res = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
                setCreatedBy(res.data.user);
-               console.log(res.data.user);
 
                res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
                setProposals(res.data.proposals);
-               console.log(res.data.proposals);
                setLoading(false);
              }
    
@@ -360,6 +358,7 @@ const ProjectDetailPage = () => {
                 </CardContent>
                 <CardFooter className="flex gap-2 justify-end">
                   {!proposal.isShortListed && <Button variant="outline" onClick={()=>handleShortList(proposal)}>Shortlist</Button>}
+                  <Button variant="outline" onClick={() => navi(`/project/${projectid}/proposal/${proposal._id}/analyze`)}>AI Analysis</Button>
                   <Button variant="outline">Message</Button>
                   <Button variant="outline" onClick={()=>handleHiring({clientId:project.createdBy, FreelancerId:proposal.createdBy._id, ProjectId:projectid,amount:proposal.price})}>Hire Freelancer</Button>
                 </CardFooter>
@@ -409,6 +408,7 @@ const ProjectDetailPage = () => {
                 </CardContent>
                 <CardFooter className="flex gap-2 justify-end">
                   <Button variant="outline">Message</Button>
+                  <Button variant="outline" onClick={() => navi(`/project/${projectid}/proposal/${proposal._id}/analyze`)}>AI Analysis</Button>
                   <Button onClick={()=>handleHiring({clientId:project.createdBy, FreelancerId:proposal.createdBy._id, ProjectId:projectid,amount:proposal.price})}>Hire Freelancer</Button>
                 </CardFooter>
               </Card>
