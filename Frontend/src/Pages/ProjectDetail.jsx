@@ -361,7 +361,7 @@ const ProjectDetailPage = () => {
                 <CardFooter className="flex gap-2 justify-end">
                   {!proposal.isShortListed && <Button variant="outline" onClick={()=>handleShortList(proposal)}>Shortlist</Button>}
                   <Button variant="outline">Message</Button>
-                  <Button onClick={()=>handleHiring({clientId:project.createdBy, FreelancerId:proposal.createdBy._id, ProjectId:projectid,amount:proposal.price})}>Hire Freelancer</Button>
+                  <Button variant="outline" onClick={()=>handleHiring({clientId:project.createdBy, FreelancerId:proposal.createdBy._id, ProjectId:projectid,amount:proposal.price})}>Hire Freelancer</Button>
                 </CardFooter>
               </Card>
             )) : 

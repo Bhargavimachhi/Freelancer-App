@@ -15,7 +15,6 @@ import {
 import { Progress } from "@/components/ui/progress"
 
 export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson}) {
-  console.log("this is the last",scoringjson);
     
   const [isDialogOpen, setIsDialogOpen] = useState(false)
  

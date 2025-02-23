@@ -37,6 +37,7 @@ import LoadinPage from "./components/LoadingPage";
 import MyOffers from "./Pages/MyOffers";
 import Offers from "./Pages/Offers";
 import MyProjectDetail from "./Pages/MyProjectDetail";
+import { ProposalAnalysis } from "./Pages/ProposalAnalysis";
 
 
 const App = () => {
@@ -126,6 +127,7 @@ const App = () => {
             <Route path="/myoffers" element={<MyOffers/>}/>
             <Route path="/offers" element={<Offers/>}/>
             <Route path="/Analyze" element={<AIFeature/>}/>
+            <Route path="/project/:projectId/proposal/:proposalId/analyze" element={<ProposalAnalysis />} />
 
             
           </Routes>
