@@ -1,4 +1,5 @@
 import {Offers}  from "../Models/Offers.js";
+import { User } from "../Models/User.js";
 
 export const CreateOffer = async (req,res) =>{
 
@@ -86,3 +87,39 @@ export const approvework = async (req,res)=>{
       updatedoffer
     });
 }
+
+export const getAllOffersOfClient = async(req,res) => {
+  const id = req.params.id;
+
+  const user = await User.findOne({
+    Clerk_id:id
+  });
+
+  const userid = user._id;
+
+  const alloffers = await Offers.find({
+    clientId: userid
+    
+  });
+  return res.status(200).json({
+    alloffers
+  });
+};
+
+export const getAllOffersOfFreelancer = async(req,res) => {
+  const id = req.params.id;
+
+  const user = await User.findOne({
+    Clerk_id:id
+  });
+
+  const userid = user._id;
+
+  const alloffers = await Offers.find({
+    FreelancerId: userid
+    
+  });
+  return res.status(200).json({
+    alloffers
+  });
+};

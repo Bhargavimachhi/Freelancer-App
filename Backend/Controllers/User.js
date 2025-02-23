@@ -131,3 +131,17 @@ export const getAllProjectsOfUser = async(req,res)=>{
   return res.status(200).json(projects);
 
 }
+
+export const shortlistUser = async(req,res)=>{
+
+  const id = req.params.id;
+
+  const reqproposal = await Proposal.findByIdAndUpdate(id,{
+    isShortListed:true
+
+  },
+{new:true});
+
+return res.status(200).json({reqproposal,message:"The proposal is shortlisted."});
+
+};

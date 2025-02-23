@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import { addUser, editPropertiesOfUser, editUser, getAllProjectsOfUser, getUser, getUserUsingClerkId } from "./Controllers/User.js";
+import { addUser, editPropertiesOfUser, editUser, getAllProjectsOfUser, getUser, getUserUsingClerkId, shortlistUser } from "./Controllers/User.js";
 import { User } from "./Models/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
@@ -11,11 +11,12 @@ import { addProposalToProject, getProposal } from "./Controllers/proposals.js";
 import { createProject, getAllProposalsOfProject, getProject } from "./Controllers/project.js";
 import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getTokenbyClerkID } from "./Controllers/authentication.js";
 import { Project } from "./Models/Project.js";
-import { CreateOffer,AcceptOffer,DeclineOffer,PayOffer,sumbitwork,approvework } from "./Controllers/offers.js";
+import { CreateOffer,AcceptOffer,DeclineOffer,PayOffer,sumbitwork,approvework, getAllOffersOfClient, getAllOffersOfFreelancer } from "./Controllers/offers.js";
 import { Offers } from "./Models/Offers.js";
 import { Proposal } from "./Models/Proposal.js";
 import crypto from "crypto";
 import { Cashfree } from "cashfree-pg";
+import { payment, verify } from "./Controllers/payment.js";
 const PORT = 3000;
 
 const app = express();
@@ -79,6 +80,7 @@ app.put("/:offerId/decline",DeclineOffer);
 app.put("/:offerId/pay",PayOffer);
 app.put("/:offerId/sumbit",sumbitwork);
 app.put("/:offerId/approve",approvework);
+app.get("/client/:id/offers", getAllOffersOfClient);
 
 // It takes in the email and gives the token for chatting
 app.post("/getToken", getToken);
@@ -91,119 +93,10 @@ app.post("/getProjectsbyClerkID", getProjectsbyClerkID);
 
 app.post("/getprojectByID", getprojectByID);
 
-app.post('/payment', async (req, res) => {
+app.post('/payment', payment);
 
-  const {amount} = req.body;
-  console.log(amount);
+app.post('/verify', verify);
 
+app.get("/freelancer/:id/offers", getAllOffersOfFreelancer);
 
-  try {
-
-
-      let request = {
-          "order_amount": amount,
-          "order_currency": "INR",
-          "order_id": generateOrderId(),
-          "customer_details": {
-              "customer_id": "webcodder01",
-              "customer_phone": "9999999999",
-              "customer_name": "Web Codder",
-              "customer_email": "webcodder@example.com"
-          },
-      }
-     
-
-      Cashfree.PGCreateOrder("2022-09-01", request).then(response => {
-          console.log(response.data);
-          res.json(response.data);
-
-          console.log('Order Created successfully:',response.data);
-      }).catch(error => {
-          console.error(error.response.data.message);
-      });
-
-      
-
-
-  } catch (error) {
-      console.log(error);
-  }
-});
-
-app.post('/verify', async (req, res) => {
-
-  try {
-
-      let {
-          orderId
-      } = req.body;
-
-      Cashfree.PGOrderFetchPayments("2023-08-01", orderId).then((response) => {
-
-          res.json(response.data);
-      }).catch(error => {
-          console.error(error.response.data.message);
-      });
-
-
-  } catch (error) {
-      console.log(error);
-  }
-});
-
-app.get("/freelancer/offers/:id",async(req,res)=>{
-  const id = req.params.id;
-
-  const user = await User.findOne({
-    Clerk_id:id
-  });
-
-  const userid = user._id;
-
-  const alloffers = await Offers.find({
-    FreelancerId: userid
-    
-  });
-  return res.status(200).json({
-    alloffers
-  });
-});
-app.get("/client/offers/:id",async(req,res)=>{
-  const id = req.params.id;
-
-  const user = await User.findOne({
-    Clerk_id:id
-  });
-
-  const userid = user._id;
-
-  const alloffers = await Offers.find({
-    clientId: userid
-    
-  });
-  return res.status(200).json({
-    alloffers
-  });
-});
-
-app.put("/shortListProposal/:id",async(req,res)=>{
-
-  const id = req.params.id;
-
-  const reqproposal = await Proposal.findByIdAndUpdate(id,{
-    isShortListed:true
-
-  },
-{new:true});
-
-return res.status(200).json({reqproposal,message:"The proposal is shortlisted."});
-
-});
-app.get("/getuserbyClerkID/:id",async(req,res)=>{
-  const id = req.params.id;
-
-  const requser = await User.findOne({
-    Clerk_id:id
-  });
-  return res.status(200).json({requser});
-})
+app.put("/shortlist/user/:id", shortlistUser);
