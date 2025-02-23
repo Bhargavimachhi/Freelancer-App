@@ -54,18 +54,15 @@ const ProjectDetailPage = () => {
 
                res = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
                setCreatedBy(res.data.user);
+
+               res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
+               setProposals(res.data.proposals);
+               console.log(res.data);
                setLoading(false);
              }
    
           }
-          const fetchProposals = async() => {
-            const res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
-            setProposals(res.data.proposals);
-          }
-
-       
            fetchproject();
-           fetchProposals();
        
            // return () => chatClient.disconnectUser();
          }, [userId]);

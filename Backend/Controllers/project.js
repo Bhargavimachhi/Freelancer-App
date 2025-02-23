@@ -59,10 +59,10 @@ export const getAllProposalsOfProject = async(req, res) => {
     }
     let proposals = [];
 
-    project.proposals.map(async(id) => {
-        let proposal = await Proposal.findById(id);
-        proposals.push(proposal);
-    });
+    for(let i=0; i<project.proposals.length; i++) {
+      let proposal = await Proposal.findById(project.proposals[i]);
+      proposals.push(proposal);
+    }
 
     project
       .save()
