@@ -1,6 +1,6 @@
 import GeminiFlash from "./AIModels/GeminiFlashModel.js";
 
-async function ScoreProposal(project,proposal,freelancer){
+export async function ScoreProposal(project,proposal,freelancer){
 
     const prompt = `
     You are a project matching expert. Analyze the compatibility between this project and freelancer.
@@ -43,26 +43,3 @@ async function ScoreProposal(project,proposal,freelancer){
   };
 
 }
-const project = {
-    description: "A website for my cat's birthday.",
-    tags: ["HTML", "CSS", "JavaScript"],
-    questions: ["Do you have experience with pet-related websites?", "Can you provide a portfolio?"],
-    experienceLevel: "Intermediate",
-    price: 500
-  };
-  
-  const proposal = {
-    price: 450,
-    description: "I can create a beautiful website for your cat's birthday.",
-    answers: ["Yes, I have created a pet-related website before.", "Here is my portfolio: [link]"]
-  };
-  
-  const freelancer = {
-    skills: ["HTML", "CSS", "JavaScript", "React"],
-    aboutMe: "I am a web developer with 5 years of experience.",
-    expertise: "Web Development",
-    rating: 4.8
-  };
-
-  const answer  = await ScoreProposal(project,proposal,freelancer);
-  console.log(answer);

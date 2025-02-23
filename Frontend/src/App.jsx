@@ -28,6 +28,7 @@ import ProjectDetailPage from "./Pages/ProjectDetail";
 import FindProjects from "./Pages/FindProjects";
 import MainProfile from "./Pages/MainProfile";
 import Profile from "./Pages/Profile";
+import AIFeature from "./Pages/AIFeature";
 
 //components
 import Navbar from "./components/Navbar";
@@ -36,6 +37,7 @@ import LoadinPage from "./components/LoadingPage";
 import MyOffers from "./Pages/MyOffers";
 import Offers from "./Pages/Offers";
 import MyProjectDetail from "./Pages/MyProjectDetail";
+
 
 const App = () => {
   return (
@@ -123,6 +125,7 @@ const App = () => {
             <Route path="*" element={<NotFound />} />
             <Route path="/myoffers" element={<MyOffers/>}/>
             <Route path="/offers" element={<Offers/>}/>
+            <Route path="/Analyze" element={<AIFeature/>}/>
 
             
           </Routes>
