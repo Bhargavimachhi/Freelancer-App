@@ -18,7 +18,6 @@ export function OfferCard({ offer}) {
         const fetchProject = async () => {
           try {
             const res = await axios.get(`http://localhost:3000/project/${offer.ProjectId}`);
-            console.log("this is project", res.data.project);
             setProject(res.data.project);
           } catch (error) {
             console.error("Error fetching project:", error);
@@ -29,7 +28,6 @@ export function OfferCard({ offer}) {
           try {
             const res = await axios.get(`http://localhost:3000/user/${offer.
 clientId}`);
-            console.log("This is the user", res.data);
             setclient(res.data.user);
           } catch (error) {
             console.error("Error fetching user:", error);
@@ -73,7 +71,7 @@ clientId}`);
 
     {project && client ? (
         <>
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={()=>setIsDialogOpen(true)} >
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow mt-5" onClick={()=>setIsDialogOpen(true)} >
         <CardContent className="p-6">
           <div className="flex justify-between items-start mb-4">
             <div>

@@ -14,7 +14,6 @@ const MyOffers = () => {
      useEffect(() => {
             if (isLoaded && user) {
               setuserid(user.id);
-              console.log(user.id);
              
             }
           }, [isLoaded, user]);
@@ -25,8 +24,7 @@ const MyOffers = () => {
           const getoffers = async () =>{
 
             if(userid){
-              const res = await axios.get(`http://localhost:3000/client/offers/${userid}`);
-              console.log(res.data.alloffers);
+              const res = await axios.get(`http://localhost:3000/client/${userid}/offers`);
               setoffers(res.data.alloffers);
             }
            

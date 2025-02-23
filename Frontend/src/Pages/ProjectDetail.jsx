@@ -10,7 +10,7 @@ import { Textarea } from '../components/ui/textarea';
 import { Label } from '../components/ui/label';
 import { useUser } from '@clerk/clerk-react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import LoadinPage from '@/components/LoadingPage';
 
@@ -18,6 +18,7 @@ import LoadinPage from '@/components/LoadingPage';
 
 const ProjectDetailPage = () => {
 
+  const navi = useNavigate();
 
   const {id} = useParams();
   const projectid = id;
@@ -54,10 +55,11 @@ const ProjectDetailPage = () => {
 
                res = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
                setCreatedBy(res.data.user);
+               console.log(res.data.user);
 
                res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
                setProposals(res.data.proposals);
-               console.log(res.data);
+               console.log(res.data.proposals);
                setLoading(false);
              }
    
@@ -89,7 +91,6 @@ const ProjectDetailPage = () => {
       // Show alert
       toast.success('Proposal submitted successfully!');
     } catch (error) {
-      console.log(error);
       toast.error('Failed to submit proposal. Please try again.');
     }
 
@@ -104,6 +105,21 @@ const ProjectDetailPage = () => {
     return <LoadinPage />
   }
 
+  const handleShortList = async (proposal)=>{
+    const res = await axios.put(`http://localhost:3000/shortlist/user/${proposal._id}`);
+    if(res.data.message === "The proposal is shortlisted."){
+      toast.success("Proposal is shortlisted");
+    }
+  }
+
+  const handleHiring = async (data) =>{
+    toast.loading("Starting the process..");
+    const res = await axios.post("http://localhost:3000/CreateOffer", data);
+    if(res.data.newOffer){
+      toast.success("New Offer is created..");
+      navi("/myoffers");
+    }
+  }
 
   return (
     <div className="container mx-auto py-8 px-4">
@@ -343,9 +359,9 @@ const ProjectDetailPage = () => {
                   </div>
                 </CardContent>
                 <CardFooter className="flex gap-2 justify-end">
-                  <Button variant="outline">Shortlist</Button>
+                  {!proposal.isShortListed && <Button variant="outline" onClick={()=>handleShortList(proposal)}>Shortlist</Button>}
                   <Button variant="outline">Message</Button>
-                  <Button>Hire Freelancer</Button>
+                  <Button onClick={()=>handleHiring({clientId:project.createdBy, FreelancerId:proposal.createdBy._id, ProjectId:projectid,amount:proposal.price})}>Hire Freelancer</Button>
                 </CardFooter>
               </Card>
             )) : 
@@ -355,9 +371,50 @@ const ProjectDetailPage = () => {
             
           
           
-          <TabsContent value="shortlisted" >
-            <p className="text-muted-foreground">No Shortlisted proposals yet</p>
-          </TabsContent>
+          <TabsContent value="shortlisted" className="space-y-4 mt-4">
+          {proposals.length > 0 ? proposals.map((proposal) => (
+            
+              proposal.isShortListed && <Card key={proposal._id}>
+                <CardHeader>
+                  <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-3">
+                      <div>
+                        <h3 className="font-semibold">{proposal.createdBy.name}</h3>
+                        <p className="text-sm text-muted-foreground">{proposal.description}</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-bold">${proposal.price}</p>
+                      {/* <p className="text-sm text-muted-foreground">Delivery: {proposal.timeline}</p> */}
+                    </div>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <p className="mb-4">{proposal.coverLetter}</p>
+                  
+                  <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+                    <div className="flex items-center gap-1">
+                      <span>Rating:</span>
+                      <span className="font-medium">⭐ {proposal.createdBy.rating}/5</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span>Completed Projects:</span>
+                      <span className="font-medium">{proposal.createdBy.createdProjects.length}</span>
+                    </div>
+                    {/* <div className="flex items-center gap-1">
+                      <span>Submitted:</span>
+                      <span className="font-medium">{proposal.submittedAt}</span>
+                    </div> */}
+                  </div>
+                </CardContent>
+                <CardFooter className="flex gap-2 justify-end">
+                  <Button variant="outline">Message</Button>
+                  <Button onClick={()=>handleHiring({clientId:project.createdBy, FreelancerId:proposal.createdBy._id, ProjectId:projectid,amount:proposal.price})}>Hire Freelancer</Button>
+                </CardFooter>
+              </Card>
+            )) : 
+                <p className="text-muted-foreground">No Shortlisted candidates yet</p> }
+            </TabsContent>
         </Tabs>
       </div>
       
