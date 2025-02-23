@@ -20,7 +20,8 @@ export const addProposalToProject = async (req, res) => {
       createdBy: requser,
       description:description,
       price: price,
-      answers:answers
+      answers:answers,
+      project : id
 
     };
     

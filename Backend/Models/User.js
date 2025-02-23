@@ -62,7 +62,7 @@ let userSchema = new mongoose.Schema({
     }],
     rating : {
         type : Number,
-        default : null,
+        default : 0,
     },
     languages : [{
         type : String,

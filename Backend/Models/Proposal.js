@@ -7,6 +7,10 @@ let proposalSchema = new mongoose.Schema({
         type : Object,
         required : true,
     },
+    project : {
+        type : mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     price : {
         type : Number,
         required : true

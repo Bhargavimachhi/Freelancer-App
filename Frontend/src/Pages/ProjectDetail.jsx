@@ -54,16 +54,18 @@ const ProjectDetailPage = () => {
 
                res = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
                setCreatedBy(res.data.user);
-               
-               res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
-               setProposals(res.data.proposals);
-               console.log(proposals);
                setLoading(false);
              }
    
           }
+          const fetchProposals = async() => {
+            const res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
+            setProposals(res.data.proposals);
+          }
+
        
            fetchproject();
+           fetchProposals();
        
            // return () => chatClient.disconnectUser();
          }, [userId]);
@@ -307,8 +309,8 @@ const ProjectDetailPage = () => {
             <TabsTrigger value="all">All Proposals</TabsTrigger>
             <TabsTrigger value="shortlisted">Shortlisted</TabsTrigger>
           </TabsList>
-          {proposals.length > 0 ? proposals.map((proposal) => (
           <TabsContent value="all" className="space-y-4 mt-4">
+          {proposals.length > 0 ? proposals.map((proposal) => (
             
               <Card key={proposal._id}>
                 <CardHeader>
@@ -349,13 +351,11 @@ const ProjectDetailPage = () => {
                   <Button>Hire Freelancer</Button>
                 </CardFooter>
               </Card>
-              </TabsContent>
             )) : 
-            <TabsContent value="all" >
-                <p className="text-muted-foreground">No Proposals submitted yet</p>
+                <p className="text-muted-foreground">No Proposals submitted yet</p> }
             </TabsContent>
             
-            }
+            
           
           
           <TabsContent value="shortlisted" >

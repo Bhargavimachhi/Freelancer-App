@@ -57,6 +57,7 @@ app.get("/user/:id", getUser);
 app.get("/user/clerk/:id", getUserUsingClerkId);
 app.post("/user/:id/edit-properties", editPropertiesOfUser);
 app.get("/user/:id/projects", getAllProjectsOfUser);
+app.put("/shortlist/user/:id", shortlistUser);
 
 //Project Routes
 app.get("/project/:id", getProject);
@@ -81,6 +82,7 @@ app.put("/:offerId/pay",PayOffer);
 app.put("/:offerId/sumbit",sumbitwork);
 app.put("/:offerId/approve",approvework);
 app.get("/client/:id/offers", getAllOffersOfClient);
+app.get("/freelancer/:id/offers", getAllOffersOfFreelancer);
 
 // It takes in the email and gives the token for chatting
 app.post("/getToken", getToken);
@@ -96,7 +98,3 @@ app.post("/getprojectByID", getprojectByID);
 app.post('/payment', payment);
 
 app.post('/verify', verify);
-
-app.get("/freelancer/:id/offers", getAllOffersOfFreelancer);
-
-app.put("/shortlist/user/:id", shortlistUser);
