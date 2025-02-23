@@ -1,13 +1,15 @@
 import mongoose from 'mongoose';
 import joi from 'joi';
-import JoiObjectId from "joi-objectid";
-const ObjectId = JoiObjectId(joi);
 
 
 let proposalSchema = new mongoose.Schema({
     createdBy : {
-        type : String,
+        type : Object,
         required : true,
+    },
+    project : {
+        type : mongoose.Schema.Types.ObjectId,
+        required: true,
     },
     price : {
         type : Number,

@@ -17,10 +17,11 @@ export const addProposalToProject = async (req, res) => {
       return res.status(403).json({ message: "Project do not exist" });
     }
     const newprojectdata = {
-      createdBy: requser.Clerk_id,
+      createdBy: requser,
       description:description,
       price: price,
-      answers:answers
+      answers:answers,
+      project : id
 
     };
     

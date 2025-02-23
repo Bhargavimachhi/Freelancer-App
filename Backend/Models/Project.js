@@ -25,7 +25,7 @@ let projectSchema = new mongoose.Schema({
         default : []
     }],
     createdBy : {
-        type : String,
+        type : mongoose.Schema.Types.ObjectId,
         required : true
     },
     file : {

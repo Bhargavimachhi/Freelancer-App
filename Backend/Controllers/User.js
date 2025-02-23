@@ -28,7 +28,22 @@ export const addUser = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const {id} = req.params;
-    let user = await User.findOne({_id : id});
+    let user = await User.findById(id);
+
+    if (!user) {
+      return res.status(403).json({ message: "User does not exists" });
+    }
+
+    return res.status(200).json({message : "success", user});
+  } catch(err) {
+    res.status(500).json({message : "Internal Server Error", err});
+  }
+}
+
+export const getUserUsingClerkId = async(req, res) => {
+  try {
+    const {id} = req.params;
+    let user = await User.findOne({Clerk_id : id});
 
     if (!user) {
       return res.status(403).json({ message: "User does not exists" });
@@ -116,3 +131,17 @@ export const getAllProjectsOfUser = async(req,res)=>{
   return res.status(200).json(projects);
 
 }
+
+export const shortlistUser = async(req,res)=>{
+
+  const id = req.params.id;
+
+  const reqproposal = await Proposal.findByIdAndUpdate(id,{
+    isShortListed:true
+
+  },
+{new:true});
+
+return res.status(200).json({reqproposal,message:"The proposal is shortlisted."});
+
+};
