@@ -25,7 +25,8 @@ const ProjectDetailPage = () => {
 
   const { user, isLoaded } = useUser();
   const [userId, setUserId] = useState(null);
-  const [project1,setproject1] = useState(null);
+  const [project,setproject] = useState(null);
+  const [proposals,setProposals] = useState([]);
   const [createdBy, setCreatedBy] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,10 +50,14 @@ const ProjectDetailPage = () => {
                let res = await axios.get(`http://localhost:3000/project/${projectid}`, {
                  Clerk_id: userId
                });
-               setproject1(res.data.project);
+               setproject(res.data.project);
 
                res = await axios.get(`http://localhost:3000/user/${res.data.project.createdBy}`);
                setCreatedBy(res.data.user);
+               
+               res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
+               setProposals(res.data.proposals);
+               console.log(proposals);
                setLoading(false);
              }
    
@@ -85,7 +90,7 @@ const ProjectDetailPage = () => {
       // Show alert
       toast.success('Proposal submitted successfully!');
     } catch (error) {
-      console.error('Error submitting proposal:', error);
+      console.log(error);
       toast.error('Failed to submit proposal. Please try again.');
     }
 
@@ -104,19 +109,19 @@ const ProjectDetailPage = () => {
   return (
     <div className="container mx-auto py-8 px-4">
       {/* Main Project Card */}
-      {project1 ? (
+      {project ? (
 
         <>
          <Card className="mb-8">
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
-              <CardTitle className="text-2xl">{project1.title}</CardTitle>
-              <CardDescription className="mt-2">Posted on {Date(project1.postedOn).toString().split("GMT")[0]}</CardDescription>
+              <CardTitle className="text-2xl">{project.title}</CardTitle>
+              <CardDescription className="mt-2">Posted on {Date(project.postedOn).toString().split("GMT")[0]}</CardDescription>
             </div>
             <div className="text-right">
-              <p className="text-xl font-bold">&#8377;{project1.price}</p>
-              <Badge className="ml-2 capitalize">{project1.experienceLevel}</Badge>
+              <p className="text-xl font-bold">&#8377;{project.price}</p>
+              <Badge className="ml-2 capitalize">{project.experienceLevel}</Badge>
             </div>
           </div>
         </CardHeader>
@@ -125,37 +130,37 @@ const ProjectDetailPage = () => {
             {/* Left Column - Project Details */}
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">Project Description</h3>
-              <p className="mb-6">{project1.description}</p>
+              <p className="mb-6">{project.description}</p>
               
               <div className="mb-6">
                 <h3 className="text-lg font-semibold mb-2">Skills Required</h3>
                 <div className="flex flex-wrap gap-2">
-                  {project1.tags.map((tag, index) => (
+                  {project.tags.map((tag, index) => (
                     <Badge key={index} variant="secondary">{tag}</Badge>
                   ))}
                 </div>
               </div>
              
               
-              {project1.questions.length > 0 && (
+              {project.questions.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-2">Screening Questions</h3>
                   <ul className="list-disc pl-6">
-                    {project1.questions.map((question, index) => (
+                    {project.questions.map((question, index) => (
                       <li key={index} className="mb-1">{question}</li>
                     ))}
                   </ul>
                 </div>
               )}
               
-              {project1?.file && (
+              {project?.file && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold mb-2">Attachments</h3>
                   <Button variant="outline" onClick={()=>{
-                    openPDF(project1.file)
+                    openPDF(project.file)
                   }} className="flex items-center gap-2" >
                     <span className="text-lg">📄</span>
-                    <span>{project1.file}</span>
+                    <span>{project.file}</span>
                   </Button>
                 </div>
               )}
@@ -255,7 +260,7 @@ const ProjectDetailPage = () => {
             
             <div className="space-y-2">
               <Label>Answer Screening Questions</Label>
-              {project1.questions.map((question, index) => (
+              {project.questions.map((question, index) => (
                 <div key={index} className="mt-4">
                   <p className="mb-2 font-medium">{question}</p>
                   <Textarea 
@@ -294,7 +299,7 @@ const ProjectDetailPage = () => {
       )}
 
       {/* Proposals Section */}
-      {/* <div>
+      <div>
         <h2 className="text-2xl font-bold mb-4">Proposals ({project.proposals.length})</h2>
         
         <Tabs defaultValue="all" className="mb-8">
@@ -302,25 +307,21 @@ const ProjectDetailPage = () => {
             <TabsTrigger value="all">All Proposals</TabsTrigger>
             <TabsTrigger value="shortlisted">Shortlisted</TabsTrigger>
           </TabsList>
-          
+          {proposals.length > 0 ? proposals.map((proposal) => (
           <TabsContent value="all" className="space-y-4 mt-4">
-            {project.proposals.map((proposal) => (
+            
               <Card key={proposal._id}>
                 <CardHeader>
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
-                      <Avatar>
-                        <AvatarImage src={proposal.freelancer.image} alt={proposal.freelancer.name} />
-                        <AvatarFallback>{proposal.freelancer.name.charAt(0)}</AvatarFallback>
-                      </Avatar>
                       <div>
-                        <h3 className="font-semibold">{proposal.freelancer.name}</h3>
-                        <p className="text-sm text-muted-foreground">{proposal.freelancer.title}</p>
+                        <h3 className="font-semibold">{proposal.createdBy.name}</h3>
+                        <p className="text-sm text-muted-foreground">{proposal.description}</p>
                       </div>
                     </div>
                     <div className="text-right">
                       <p className="font-bold">${proposal.price}</p>
-                      <p className="text-sm text-muted-foreground">Delivery: {proposal.timeline}</p>
+                      {/* <p className="text-sm text-muted-foreground">Delivery: {proposal.timeline}</p> */}
                     </div>
                   </div>
                 </CardHeader>
@@ -330,32 +331,39 @@ const ProjectDetailPage = () => {
                   <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm">
                     <div className="flex items-center gap-1">
                       <span>Rating:</span>
-                      <span className="font-medium">⭐ {proposal.freelancer.rating}/5</span>
+                      <span className="font-medium">⭐ {proposal.createdBy.rating}/5</span>
                     </div>
                     <div className="flex items-center gap-1">
                       <span>Completed Projects:</span>
-                      <span className="font-medium">{proposal.freelancer.completedProjects}</span>
+                      <span className="font-medium">{proposal.createdBy.createdProjects.length}</span>
                     </div>
-                    <div className="flex items-center gap-1">
+                    {/* <div className="flex items-center gap-1">
                       <span>Submitted:</span>
                       <span className="font-medium">{proposal.submittedAt}</span>
-                    </div>
+                    </div> */}
                   </div>
                 </CardContent>
                 <CardFooter className="flex gap-2 justify-end">
+                  <Button variant="outline">Shortlist</Button>
                   <Button variant="outline">Message</Button>
                   <Button>Hire Freelancer</Button>
                 </CardFooter>
               </Card>
-            ))}
-          </TabsContent>
+              </TabsContent>
+            )) : 
+            <TabsContent value="all" >
+                <p className="text-muted-foreground">No Proposals submitted yet</p>
+            </TabsContent>
+            
+            }
           
-          <TabsContent value="shortlisted" className="h-40 flex items-center justify-center">
-            <p className="text-muted-foreground">No shortlisted proposals yet</p>
+          
+          <TabsContent value="shortlisted" >
+            <p className="text-muted-foreground">No Shortlisted proposals yet</p>
           </TabsContent>
         </Tabs>
       </div>
-       */}
+      
       {/* Submit Proposal Dialog */}
       
     </div>

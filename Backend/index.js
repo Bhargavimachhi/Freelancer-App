@@ -2,7 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import { addUser, editPropertiesOfUser, editUser, getAllProjectsOfUser, getUser } from "./Controllers/User.js";
+import { addUser, editPropertiesOfUser, editUser, getAllProjectsOfUser, getUser, getUserUsingClerkId } from "./Controllers/User.js";
 import { User } from "./Models/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
@@ -53,6 +53,7 @@ app.listen(PORT, () => {
 app.post("/user/add", addUser);
 app.post("/user/:id/edit", editUser);
 app.get("/user/:id", getUser);
+app.get("/user/clerk/:id", getUserUsingClerkId);
 app.post("/user/:id/edit-properties", editPropertiesOfUser);
 app.get("/user/:id/projects", getAllProjectsOfUser);
 

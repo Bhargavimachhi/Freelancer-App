@@ -28,7 +28,22 @@ export const addUser = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const {id} = req.params;
-    let user = await User.findOne({_id : id});
+    let user = await User.findById(id);
+
+    if (!user) {
+      return res.status(403).json({ message: "User does not exists" });
+    }
+
+    return res.status(200).json({message : "success", user});
+  } catch(err) {
+    res.status(500).json({message : "Internal Server Error", err});
+  }
+}
+
+export const getUserUsingClerkId = async(req, res) => {
+  try {
+    const {id} = req.params;
+    let user = await User.findOne({Clerk_id : id});
 
     if (!user) {
       return res.status(403).json({ message: "User does not exists" });
