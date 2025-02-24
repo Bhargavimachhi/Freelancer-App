@@ -7,7 +7,8 @@ import {ScoreProposal} from "../../../AIfunctions/ScoreProposal.js";
 import ProposalAnalysisPage from '@/components/ProposalAnalysis';
 import LoadinPage from '@/components/LoadingPage.jsx';
 import { useParams } from 'react-router-dom';
-import AskQuestion from "../../../AIfunctions/AskQuestion.js";
+import AskBadpoints from "../../../AIfunctions/AskQuestion.js";
+import { Askgoodpoints } from '../../../AIfunctions/AskQuestion.js';
 
 export const ProposalAnalysis = () => {
     const {projectId, proposalId} = useParams();
@@ -76,8 +77,9 @@ export const ProposalAnalysis = () => {
   
           };
   
-          const ans = await GiveGoodpoints(projectobject,proposalobject,freelancerobject);
-          const ans2 = await AskQuestion(projectobject,proposalobject,freelancerobject);
+          const ans = await Askgoodpoints(projectobject,proposalobject,freelancerobject);
+          
+          const ans2 = await AskBadpoints(projectobject,proposalobject,freelancerobject);
           const ans3 = await ScoreProposal(projectobject,proposalobject,freelancerobject);
           setgoodpoints(ans);
           setbadpoints(ans2);

@@ -4,7 +4,7 @@ import { useState } from "react"
 import { AlertCircle, CheckCircle2, Trophy, Info, Brain, Briefcase, MessageSquare, Coins } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {useInterval} from "react-use";
+
 import {
   Dialog,
   DialogContent,
@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
+import { TypeAnimation } from "react-type-animation";
 
 
 export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson}) {
@@ -23,13 +24,9 @@ export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson})
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
  
-  const dummyThinkingProcess = [
-    "Analyzing the project requirements...",
-    "Comparing the freelancer's skills with the project tags...",
-    "Evaluating the freelancer's experience level...",
-    "Assessing the freelancer's answers to the project questions...",
-    "Comparing the proposal price with the project budget..."
-  ];
+ const thinkingprocess = badpoints.thinkContent + goodpoints.thinkContent;
+ 
+
 
 
   
@@ -38,14 +35,7 @@ export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson})
     setCurrentStepIndex(0);
   };
 
-  useInterval(
-    () => {
-      if (currentStepIndex < dummyThinkingProcess.length - 1) {
-        setCurrentStepIndex(currentStepIndex + 1);
-      }
-    },
-    showThinkingProcess ? 1000 : null // Update every second if showing the thinking process
-  );
+  
 
  
 
@@ -72,9 +62,18 @@ export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson})
                     </Button>
                   </div>
                   <div className="text-sm text-white">
-                  {dummyThinkingProcess.slice(0, currentStepIndex + 1).map((step, index) => (
-                      <div key={index}>{step}</div>
-                    ))}
+                  <TypeAnimation
+        splitter={(str) => str.split(/(?= )/)} 
+        sequence={[
+         thinkingprocess,
+          3000,
+          '',
+        ]}
+        speed={{ type: 'keyStrokeDelayInMs', value: 30 }}
+        omitDeletionAnimation={true}
+        style={{ fontSize: '1em', display: 'block', minHeight: '200px' }}
+        repeat={Infinity}
+      />
                   </div>
                 </div>
               )}
@@ -98,7 +97,7 @@ export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson})
 
               <ul className="space-y-4">
               
-                {goodpoints.map((goodpoint)=>{
+                {goodpoints.goodPoints.map((goodpoint)=>{
                     return(
                      <li className="flex items-start gap-2">
                      <CheckCircle2 className="mt-1 h-4 w-4 text-green-500" />
