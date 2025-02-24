@@ -6,12 +6,25 @@ import ProjectCard from "../components/ProjectCard";
 import { useNavigate } from "react-router-dom";
 import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
+import { TextField, InputAdornment } from '@mui/material';
+import { Search } from '@mui/icons-material';
+
 
 const FindProjects = () => {
   const { user, isLoaded } = useUser();
   const [userId, setUserId] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredProjects = projects.filter(project =>
+    project.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,6 +64,21 @@ const FindProjects = () => {
           <h1 className="mb-4 text-4xl font-bold tracking-tight">
             Projects For You:
           </h1>
+          <TextField
+            label="Search Projects"
+            variant="outlined"
+            fullWidth
+            value={searchTerm}
+            onChange={handleSearch}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ marginBottom: 4 }}
+          />
           <p className="mb-6 text-text">
             Explore a variety of freelance projects tailored to your skills and
             expertise. Whether you're a beginner or an experienced professional,
@@ -64,8 +92,8 @@ const FindProjects = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          {projects.length > 0 ? (
-            projects.map((project, index) => (
+          {filteredProjects.length > 0 ? (
+            filteredProjects.map((project, index) => (
               <motion.div
                 key={project._id}
                 initial={{ opacity: 0, y: 20 }}
