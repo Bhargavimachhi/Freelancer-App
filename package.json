@@ -2,6 +2,7 @@
   "type": "module",
   "dependencies": {
     "@clerk/clerk-react": "^5.22.13",
+    "@langchain/core": "^0.3.40",
     "@langchain/google-genai": "^0.1.8",
     "body-parser": "^1.20.3",
     "cashfree-pg": "^4.3.10",

@@ -39,7 +39,6 @@ import Offers from "./Pages/Offers";
 import MyProjectDetail from "./Pages/MyProjectDetail";
 import { ProposalAnalysis } from "./Pages/ProposalAnalysis";
 
-
 const App = () => {
   return (
     <>
@@ -117,19 +116,20 @@ const App = () => {
 
             {/* chat page */}
             <Route path="/chats" element={<Chatpage />} />
-              
-            <Route path="/my-projects" element={<FindProjects/>}/>
-            <Route path="/project/:id" element={<ProjectDetailPage/>}/>
-            <Route path="/myproject/:id" element={<MyProjectDetail/>}/>
+
+            <Route path="/my-projects" element={<FindProjects />} />
+            <Route path="/project/:id" element={<ProjectDetailPage />} />
+            <Route path="/myproject/:id" element={<MyProjectDetail />} />
 
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
-            <Route path="/myoffers" element={<MyOffers/>}/>
-            <Route path="/offers" element={<Offers/>}/>
-            <Route path="/Analyze" element={<AIFeature/>}/>
-            <Route path="/project/:projectId/proposal/:proposalId/analyze" element={<ProposalAnalysis />} />
-
-            
+            <Route path="/myoffers" element={<MyOffers />} />
+            <Route path="/offers" element={<Offers />} />
+            <Route path="/Analyze" element={<AIFeature />} />
+            <Route
+              path="/project/:projectId/proposal/:proposalId/analyze"
+              element={<ProposalAnalysis />}
+            />
           </Routes>
         </Main>
       </ThemeProvider>

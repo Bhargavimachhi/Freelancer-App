@@ -7,6 +7,10 @@ import {
   Disclosure,
   DisclosureButton,
   DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
   Popover,
   PopoverButton,
   PopoverGroup,
@@ -19,22 +23,6 @@ import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 const products = [
   {
@@ -83,16 +71,6 @@ const Navbar = () => {
         aria-label="Global"
         className="flex items-center justify-between p-4 mx-auto lg:px-8"
       >
-        <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img
-              alt=""
-              src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-              className="w-auto h-8"
-            />
-          </Link>
-        </div>
         <div className="flex lg:hidden">
           <button
             type="button"
@@ -103,6 +81,17 @@ const Navbar = () => {
             <ICONS.BARS aria-hidden="true" className="size-6" />
           </button>
         </div>
+        <div className="flex lg:flex-1">
+          <Link to="/" className="-m-1.5 p-1.5">
+            <span className="sr-only">Your Company</span>
+            <img
+              alt=""
+              src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+              className="w-auto h-8"
+            />
+          </Link>
+        </div>
+
         <PopoverGroup className="hidden lg:flex lg:gap-x-12">
           <Popover className="relative">
             <PopoverButton className="flex items-center font-semibold text-black border-none outline-none hover:text-helper gap-x-1 text-sm/6">
@@ -228,53 +217,97 @@ const Navbar = () => {
             What's new
           </Link>
         </PopoverGroup>
-        <div className="items-center hidden gap-5 lg:flex lg:flex-1 lg:justify-end">
-          {/* <Link
-            to="/login"
-            className="font-semibold text-black text-sm/6 hover:text-helper"
-          >
-            <button>Log in</button>
-          </Link>
-          <Link to="/signup" className="font-semibold text-black text-sm/6">
-            <button className="p-2 text-white rounded-lg bg-btn hover:bg-opacity-90">
-              Sign Up
-            </button>
-          </Link> */}
+        <div className="items-center block gap-5 lg:flex lg:flex-1 lg:justify-end">
           {isSignedIn ? (
             <>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Avatar className="cursor-pointer">
-                    <AvatarImage
-                      src={
-                        user.hasImage
-                          ? user.imageUrl
-                          : "https://github.com/shadcn.png"
-                      }
-                      alt="@shadcn"
-                    />
-                    <AvatarFallback>USER</AvatarFallback>
-                  </Avatar>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56">
-                  <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                  </DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <SignOutButton />
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <Menu as="div" className="relative">
+                <div>
+                  <MenuButton className="relative flex text-sm bg-gray-800 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                    <span className="absolute -inset-1.5" />
+                    <span className="sr-only">Open user menu</span>
+                    <Avatar className="cursor-pointer">
+                      <AvatarImage
+                        src={
+                          user.hasImage
+                            ? user.imageUrl
+                            : "https://github.com/shadcn.png"
+                        }
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>USER</AvatarFallback>
+                    </Avatar>
+                  </MenuButton>
+                </div>
+                <MenuItems
+                  transition
+                  className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in cursor-pointer"
+                >
+                  <MenuItem>
+                    <div className="data-[focus]:bg-gray-100 data-[focus]:outline-none">
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        Hello, <br />
+                        {user?.fullName}
+                      </Link>
+                      <hr />
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
+                      <Link
+                        to="/main-profile"
+                        className="block px-4 py-2 text-sm "
+                      >
+                        My Profile
+                      </Link>
+                      <ICONS.PROFILE size={25} className="mr-3" />
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
+                      <Link
+                        to="/dashboard"
+                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        My Dashboard
+                      </Link>
+                      <ICONS.DASHBOARD size={25} className="mr-3" />
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
+                      <Link
+                        to="/chats"
+                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        Chat
+                      </Link>
+                      <ICONS.MESSAGECIRCLE size={25} className="mr-3" />
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
+                      <Link className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
+                        <SignOutButton />
+                      </Link>
+                      <ICONS.SIGNOUT size={25} className="mr-3" />
+                    </div>
+                  </MenuItem>
+                </MenuItems>
+              </Menu>
             </>
           ) : (
-            <Link
-              to="/login"
-              onClick={() => setMobileMenuOpen(false)}
-              className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
-            >
-              Log in
-            </Link>
+            <div className="data-[focus]:bg-gray-100 data-[focus]:outline-none">
+              <Link
+                to="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
+              >
+                Log in
+              </Link>
+            </div>
           )}
         </div>
       </nav>
@@ -288,7 +321,7 @@ const Navbar = () => {
       >
         <div className="fixed inset-0 z-10" />
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full px-4 py-4 overflow-y-auto bg-white sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-row-reverse items-center justify-between">
             <Link
               to="/"
               className="-m-1.5 p-1.5"
@@ -371,41 +404,7 @@ const Navbar = () => {
                   What's new
                 </Link>
               </div>
-              <div className="flex flex-col gap-3 py-6">
-                {isSignedIn ? (
-                  <>
-                    <Link
-                      to="/chats"
-                      className="-mx-3 px-3 py-2.5 text-white rounded-lg hover:bg-btnhover bg-btn"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      <ICONS.MESSAGECIRCLE className="w-6 h-6" />
-                    </Link>
-                    <Link
-                      to="/dashboard"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
-                    >
-                      Dashboard
-                    </Link>
-                    <SignOutButton className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn" />
-                  </>
-                ) : (
-                  <Link
-                    to="/login"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="-mx-3 block rounded-lg text-center px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-btnhover bg-btn"
-                  >
-                    Log in
-                  </Link>
-                )}
-              </div>
             </div>
-            {/* <div className="w-full py-4 rounded-lg bg-btn hover:bg-opacity-90">
-              <Link to="/signup" onClick={() => setMobileMenuOpen(false)}>
-                <button className="w-full text-white">Sign Up Now</button>
-              </Link>
-            </div> */}
           </div>
         </DialogPanel>
       </Dialog>
