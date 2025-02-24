@@ -26,6 +26,10 @@ let proposalSchema = new mongoose.Schema({
     isShortListed:{
         type:Boolean,
         default:false
+    },
+    aiScore: {
+        type: Number,
+        default: 0,
     }
 });
 

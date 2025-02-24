@@ -2,6 +2,7 @@ import { Proposal } from '../Models/Proposal.js';
 import { proposalSchemaValidation } from '../Models/Proposal.js';
 import { Project } from '../Models/Project.js';
 import { User } from '../Models/User.js';
+import { GiveScorceToProposalUsingParameters } from './AIFunctions.js';
 
 export const addProposalToProject = async (req, res) => {
     const { id } = req.params; 
@@ -32,7 +33,9 @@ export const addProposalToProject = async (req, res) => {
   
     proposal
       .save()
-      .then(() => {
+      .then(async() => {
+        proposal.aiScore = await GiveScorceToProposalUsingParameters(id, proposal._id.toString());
+        proposal.save();
         res.status(200).json({ message: "Proposal Added Successfully" });
       })
       .catch((err) => {
