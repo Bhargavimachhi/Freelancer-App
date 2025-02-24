@@ -78,7 +78,6 @@ export default function CreateProjectSection() {
   };
   const uploadImage = async (publicid) => {
 
-   console.log(publicid);
     const data = new FormData();
     data.append("file", image);
     data.append("upload_preset", "Freelancing website");
@@ -87,11 +86,9 @@ export default function CreateProjectSection() {
 
     try {
       const response = await axios.post("https://api.cloudinary.com/v1_1/dktw0yum9/image/upload", data);
-      console.log(response.data);
       seturl(response.data.url);
       return response.data.url;
     } catch (err) {
-      console.error(err);
       return null;
     }
   };
@@ -101,16 +98,12 @@ export default function CreateProjectSection() {
 
     const publicid = user.id + projectData.title;
     const uploadedImageUrl = await uploadImage(publicid);
-    console.log("This is the public id: ", publicid);
-    console.log("Uploaded Image URL: ", uploadedImageUrl);
 
     // Use a temporary object to ensure projectFile is updated immediately
     const updatedProjectData = { ...projectData, projectFile: publicid };
-    console.log("Updated Project Data:", updatedProjectData);
 
     try {
         const res = await axios.post("http://localhost:3000/project/add", updatedProjectData);
-        console.log(res.data);
 
         if (res.data.message === "Project Created") {
             setIsDialogOpen(false);
