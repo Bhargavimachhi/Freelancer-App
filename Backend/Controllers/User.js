@@ -122,7 +122,6 @@ export const getAllProjectsOfUser = async(req,res)=>{
   });
 
   const userid = requser._id;
-  console.log(userid);
 
 
   const projects = await Project.find({
