@@ -17,6 +17,7 @@ import { Proposal } from "./Models/Proposal.js";
 import crypto from "crypto";
 import { Cashfree } from "cashfree-pg";
 import { payment, verify } from "./Controllers/payment.js";
+import { GiveScorceToProposal } from "./Controllers/AIFunctions.js";
 const PORT = 3000;
 
 const app = express();
@@ -98,3 +99,4 @@ app.post("/getprojectByID", getprojectByID);
 app.post('/payment', payment);
 
 app.post('/verify', verify);
+app.post("/GiveScore",GiveScorceToProposal);

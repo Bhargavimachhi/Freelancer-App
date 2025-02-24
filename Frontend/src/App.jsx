@@ -124,7 +124,7 @@ const App = () => {
             {/* 404 page */}
             <Route path="*" element={<NotFound />} />
             <Route path="/myoffers" element={<MyOffers />} />
-            <Route path="/offers" element={<Offers />} />
+            <Route path="/jobs" element={<Offers />} />
             <Route path="/Analyze" element={<AIFeature />} />
             <Route
               path="/project/:projectId/proposal/:proposalId/analyze"
