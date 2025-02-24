@@ -25,8 +25,7 @@ const Offers = () => {
           const getoffers = async () =>{
 
             if(userid){
-              const res = await axios.get(`http://localhost:3000/freelancer/offers/${userid}`);
-              console.log(res.data.alloffers);
+              const res = await axios.get(`http://localhost:3000/freelancer/${userid}/offers`);
               setoffers(res.data.alloffers);
             }
            

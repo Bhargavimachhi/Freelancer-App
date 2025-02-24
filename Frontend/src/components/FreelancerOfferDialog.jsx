@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { FileUp, Download, Wallet } from "lucide-react";
+import toast from "react-hot-toast";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import axios from "axios";
@@ -33,14 +34,14 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
       if(newStatus == "accepted"){
         const res = await axios.put(`http://localhost:3000/${offer._id}/accept`);
         console.log(res.data);
-        alert("You have accepted the offer");
+        toast.success("You have accepted the offer");
         onClose();
         window.location.reload();
       }
       else {
         const res = await axios.put(`http://localhost:3000/${offer._id}/decline`);
         console.log(res.data);
-        alert("You have declined the offer");
+        toast.success("You have declined the offer");
         onClose();
         window.location.reload();
       }

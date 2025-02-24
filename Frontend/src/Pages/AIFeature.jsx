@@ -76,8 +76,8 @@ const AIFeature = () => {
   
       setLoading(true);
       try {
-        const res = await axios.get(`http://localhost:3000/getuserbyClerkID/${selectedProposal.createdBy}`);
-        const freelancer = res.data.requser;
+        const res = await axios.get(`http://localhost:3000/user/${selectedProposal.createdBy}`);
+        const freelancer = res.data.user;
 
         const projectobject = {
             description: selectedProject.description,

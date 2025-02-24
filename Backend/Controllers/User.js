@@ -1,6 +1,7 @@
 import { User } from '../Models/User.js';
 import { userSchemaValidation } from '../Models/User.js';
 import { Project } from '../Models/Project.js';
+import { Proposal } from '../Models/Proposal.js';
 
 export const addUser = async (req, res) => {
     let user = await User.find({ email: req.body.email });
