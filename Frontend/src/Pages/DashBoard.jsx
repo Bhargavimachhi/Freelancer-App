@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import CreateProjectSection from "../components/CreateProjectButton";
 import ProjectCard from "@/components/ProjectCard";
+import LoadingPage from "@/components/LoadingPage";
 
 const DashBoard = () => {
   const { user, isLoaded } = useUser();
@@ -19,15 +20,13 @@ const DashBoard = () => {
       };
 
       try {
-        console.log("This is the user data", userData);
         const response = await axios.post(
           "http://localhost:3000/checkifuserexists",
           userData
         );
-        console.log(response.data);
 
         if (response.data.message === "User does not exist in database") {
-          console.log("It worked");
+          
           // navi('/Onboarding')
         }
       } catch (error) {
@@ -45,7 +44,6 @@ const DashBoard = () => {
       );
 
       const projectIds = res.data.createdProjects;
-      console.log(projectIds);
       const projectPromises = projectIds.map(async (projectId) => {
         const projectData = await axios.post(
           "http://localhost:3000/getprojectByID",
@@ -63,7 +61,7 @@ const DashBoard = () => {
   }, [user, navi]);
 
   if (!isLoaded) {
-    return <h1>Loading...</h1>;
+    return <LoadingPage />;
   }
 
   return (

@@ -9,7 +9,6 @@ const serverClient = StreamChat.getInstance(apiKey, apiSecret);
 
 export const checkIfUserExists = async (req, res) => {
     const email = req.body.email;
-    console.log(email);
   
     const user = await User.findOne({
       email: email,
@@ -43,8 +42,6 @@ export const getToken = async (req, res) => {
   const { useremail } = req.body;
 
   const requser = await User.findOne({ email: useremail });
-
-  console.log(useremail);
 
   const token = serverClient.createToken(requser.Clerk_id);
 
