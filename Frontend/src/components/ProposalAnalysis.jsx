@@ -4,6 +4,7 @@ import { useState } from "react"
 import { AlertCircle, CheckCircle2, Trophy, Info, Brain, Briefcase, MessageSquare, Coins } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import {useInterval} from "react-use";
 import {
   Dialog,
   DialogContent,
@@ -14,15 +15,69 @@ import {
 } from "@/components/ui/dialog"
 import { Progress } from "@/components/ui/progress"
 
+
 export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson}) {
     
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [showThinkingProcess, setShowThinkingProcess] = useState(false);
+  const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+ 
+  const dummyThinkingProcess = [
+    "Analyzing the project requirements...",
+    "Comparing the freelancer's skills with the project tags...",
+    "Evaluating the freelancer's experience level...",
+    "Assessing the freelancer's answers to the project questions...",
+    "Comparing the proposal price with the project budget..."
+  ];
+
+
+  
+  const handleShowThinkingProcess = () => {
+    setShowThinkingProcess(true);
+    setCurrentStepIndex(0);
+  };
+
+  useInterval(
+    () => {
+      if (currentStepIndex < dummyThinkingProcess.length - 1) {
+        setCurrentStepIndex(currentStepIndex + 1);
+      }
+    },
+    showThinkingProcess ? 1000 : null // Update every second if showing the thinking process
+  );
+
  
 
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto p-6 space-y-6">
         <h2 className="text-3xl font-bold tracking-tight">Proposal Analysis</h2>
+        <Button
+            // onClick={() => handlePositivesSubmit(new Event("submit") as any)}
+            // disabled={isPositivesStreaming}
+            onClick={handleShowThinkingProcess}
+            variant="outline"
+            className="w-full"
+          >
+            <Brain className="mr-2 h-4 w-4" />
+            Show AI Thinking Process
+          </Button>
+          {showThinkingProcess && (
+                <div className="bg-gray-600 p-4 rounded-lg space-y-2">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold">Thinking Process</span>
+                    <Button variant="ghost" size="sm" onClick={() => setShowThinkingProcess(false)}>
+                      Stop
+                    </Button>
+                  </div>
+                  <div className="text-sm text-white">
+                  {dummyThinkingProcess.slice(0, currentStepIndex + 1).map((step, index) => (
+                      <div key={index}>{step}</div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
         {/* Top row with pros and cons */}
         <div className="grid gap-6 md:grid-cols-2">
@@ -35,6 +90,12 @@ export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson})
               </div>
             </CardHeader>
             <CardContent className="pt-6">
+
+     
+          
+           
+          
+
               <ul className="space-y-4">
               
                 {goodpoints.map((goodpoint)=>{
@@ -61,7 +122,7 @@ export default function ProposalAnalysisPage({goodpoints,badpoints,scoringjson})
             </CardHeader>
             <CardContent className="pt-6">
               <ul className="space-y-4">
-              {badpoints.map((badpoint)=>{
+              {badpoints.badPoints.map((badpoint)=>{
                     return(
                      <li className="flex items-start gap-2">
                      <CheckCircle2 className="mt-1 h-4 w-4 text-green-500" />
