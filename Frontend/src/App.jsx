@@ -29,6 +29,7 @@ import FindProjects from "./Pages/FindProjects";
 import MainProfile from "./Pages/MainProfile";
 import Profile from "./Pages/Profile";
 import AIFeature from "./Pages/AIFeature";
+import Roomname from "./Pages/Roomname";
 
 //components
 import Navbar from "./components/Navbar";
@@ -38,6 +39,7 @@ import MyOffers from "./Pages/MyOffers";
 import Offers from "./Pages/Offers";
 import MyProjectDetail from "./Pages/MyProjectDetail";
 import { ProposalAnalysis } from "./Pages/ProposalAnalysis";
+import Meetingpage from "./Pages/Meetingpage";
 
 const App = () => {
   return (
@@ -130,6 +132,8 @@ const App = () => {
               path="/project/:projectId/proposal/:proposalId/analyze"
               element={<ProposalAnalysis />}
             />
+            <Route path="/Roomenter" element={<Roomname/>}/>
+            <Route path="/Meeting/:roomId" element={<Meetingpage/>}/>
           </Routes>
         </Main>
       </ThemeProvider>
