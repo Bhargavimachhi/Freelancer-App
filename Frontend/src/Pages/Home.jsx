@@ -78,7 +78,7 @@ const Home = () => {
         {/* Up your work game section */}
         <section className="container px-4 py-16 mx-auto max-w-7xl">
           <h2 className="mb-12 text-3xl font-bold text-center">
-            Up your work game, it's easy
+            Freelancer App work game, it's easy
           </h2>
           <div className="grid max-w-4xl gap-8 mx-auto md:grid-cols-3">
             <div className="flex gap-4">

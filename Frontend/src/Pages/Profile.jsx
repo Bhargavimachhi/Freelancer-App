@@ -6,34 +6,35 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 const Profile = () => {
-
   const { user } = useUser();
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async(data) => {
+  const onSubmit = async (data) => {
     console.log(data);
     try {
-        const response = await axios.post(`http://localhost:3000/user/${user.id}/edit-properties`, data);
+      const response = await axios.post(
+        `http://localhost:3000/user/${user.id}/edit-properties`,
+        data
+      );
 
-        if (response.status === 200) {
-            toast.success(response.data.message);
-        }
-        else {
-          toast.error(response.data.message);
-        }
+      if (response.status === 200) {
+        toast.success(response.data.message);
+      } else {
+        toast.error(response.data.message);
+      }
     } catch (error) {
-        toast.error("Error occured");
-        console.error('Error checking user existence:', error)
+      toast.error("Error occured");
+      console.error("Error checking user existence:", error);
     }
   };
 
-  if(!user) {
-    return <LoadinPage />
+  if (!user) {
+    return <LoadinPage />;
   }
 
   return (
@@ -63,7 +64,6 @@ const Profile = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
           >
-
             <div>
               <label className="block text-gray-700">Name *</label>
               <input

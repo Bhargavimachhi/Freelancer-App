@@ -2,10 +2,15 @@ import React, { useEffect, Fragment, useState } from "react";
 import { ICONS } from "@/assets/icons/icons";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
+import { useUser } from "@clerk/clerk-react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useUserContext } from "@/Context/UserContext";
 
-const AboutModal = () => {
-  const [editAbout, setEditAbout] = useState(null);
+const AboutModal = ({ editAbout, setEditAbout }) => {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const { getUserDetails } = useUserContext();
 
   const {
     register,
@@ -15,15 +20,42 @@ const AboutModal = () => {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (editAbout) {
+      setValue("aboutMe", editAbout.aboutMe);
+      openModal();
+    }
+  }, [editAbout]);
+
   const closeModal = () => {
     setIsOpen(false);
     setEditAbout(null);
     reset();
   };
 
-  const onSubmit = (data) => {
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const onSubmit = async (data) => {
     console.log("Data :", data);
-    closeModal(); // Close modal after submission
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/user/${user?.id}/edit-properties`,
+        data
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal(); // Close modal after submission
+        getUserDetails();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error occured");
+      console.error("Error checking user existence:", error);
+    }
   };
 
   return (
@@ -31,11 +63,11 @@ const AboutModal = () => {
       <div className="font-bold text-center text-white rounded-lg">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="flex items-center px-4 py-3 text-white transition-all duration-300 ease-in-out rounded-full bg-btn hover:bg-btnhover"
+          onClick={openModal}
+          className="p-2 transition-colors duration-200 rounded-full bg-bg hover:bg-gray-200"
         >
-          {/* <ICONS.BRIEFCASE size={20} color="#fff" className="mr-2" /> */}
-          {editAbout ? "Edit About" : "Add About"}
+          <ICONS.PLUS size={20} className="text-text" />
+          {/* {editAbout ? "Edit About" : "Add About"} */}
         </button>
       </div>
 
@@ -89,15 +121,15 @@ const AboutModal = () => {
                       </p>
                       <textarea
                         rows={7}
-                        {...register("description", {
+                        {...register("aboutMe", {
                           required: "Description is required",
                         })}
-                        placeholder="Describe your work experience"
+                        placeholder="Write about your self..."
                         className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                       ></textarea>
-                      {errors.description && (
+                      {errors.aboutMe && (
                         <p className="text-sm text-red-500">
-                          {errors.description.message}
+                          {errors.aboutMe.message}
                         </p>
                       )}
                     </div>

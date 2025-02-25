@@ -1,10 +1,12 @@
 import {
   Book,
+  Bookmark,
   BriefcaseBusiness,
   ChevronDownIcon,
   ChevronUp,
   CirclePlay,
   CircleUserRound,
+  Edit,
   Facebook,
   Fingerprint,
   House,
@@ -17,6 +19,7 @@ import {
   MessageCircleMore,
   MoveRight,
   Phone,
+  Plus,
   Search,
   Shield,
   Star,
@@ -47,6 +50,9 @@ export const ICONS = {
   PROFILE: CircleUserRound,
   HOME: House,
   SIGNOUT: LogOut,
+  EDIT: Edit,
+  BOOKMARK: Bookmark,
+  PLUS: Plus,
 
   //Social Icons
   FACEBOOK: Facebook,
