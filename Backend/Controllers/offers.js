@@ -1,5 +1,18 @@
 import {Offers}  from "../Models/Offers.js";
 import { User } from "../Models/User.js";
+import Pusher from "pusher";
+
+
+const pusher = new Pusher({
+  appId: "1947940",
+  key: "97f4daf56e0efc37b28d",
+  secret: "0397303033d8667c132f",
+  cluster: "ap2",
+  useTLS: true
+});
+const triggerOfferUpdate = (offerId, state) => {
+  pusher.trigger("offers", "offer-updated", { offerId, state });
+};
 
 export const CreateOffer = async (req,res) =>{
 
@@ -9,6 +22,7 @@ export const CreateOffer = async (req,res) =>{
       
         const newOffer = new Offers({clientId, FreelancerId, ProjectId, amount});
         await newOffer.save();
+        triggerOfferUpdate(newOffer._id, "pending");
       
         return res.status(200).json({
           newOffer
@@ -27,6 +41,7 @@ export const AcceptOffer = async (req,res)=>{
         status:"accepted"
       },
     {new:true});
+    triggerOfferUpdate(updatedoffer._id, "accepted");
     
     return res.status(200).json({
       updatedoffer
@@ -39,6 +54,7 @@ export const DeclineOffer = async (req,res)=>{
         status:"declined"
       },
     {new:true});
+    triggerOfferUpdate(updatedoffer._id, "declined");
     
     return res.status(200).json({
       updatedoffer
@@ -53,6 +69,7 @@ export const PayOffer = async (req,res) =>{
         status:"work_in_progress"
       },
     {new:true});
+    triggerOfferUpdate(updatedoffer._id, "work_in_progress");
     
     return res.status(200).json({
       updatedoffer
@@ -71,6 +88,7 @@ export const sumbitwork = async (req,res)=>{
       status:"submitted"
     },
   {new:true});
+  triggerOfferUpdate(updatedoffer._id, "submitted");
   return res.status(200).json({
     updatedoffer
   });
@@ -81,6 +99,7 @@ export const approvework = async (req,res)=>{
         status:"completed"
       },
     {new:true});
+    triggerOfferUpdate(updatedoffer._id, "completed");
     
     return res.status(200).json({
       message:"Work approved very nice",
