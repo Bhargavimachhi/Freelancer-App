@@ -27,7 +27,6 @@ export default async function AskBadpoints(project,proposal,freelancer){
 
       const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/);
       const thinkContent = thinkMatch ? thinkMatch[1].trim() : "";
-      console.log(thinkContent);
 
       
 
@@ -66,7 +65,6 @@ export  async function Askgoodpoints(project,proposal,freelancer){
 
       const thinkMatch = content.match(/<think>([\s\S]*?)<\/think>/);
       const thinkContent = thinkMatch ? thinkMatch[1].trim() : "";
-      console.log(thinkContent);
 
       
 
