@@ -20,6 +20,10 @@ let projectSchema = new mongoose.Schema({
         type : String,
         default : []
     }],
+    milestones : [{
+        type : String,
+        default : []
+    }],
     proposals : [{
         type : mongoose.Schema.Types.ObjectId,
         default : []

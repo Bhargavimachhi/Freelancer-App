@@ -23,6 +23,10 @@ let proposalSchema = new mongoose.Schema({
         type : String,
         default : []
     }],
+    milestonesRequiredTime : [{
+        type : Number,
+        default : []
+    }],
     isShortListed:{
         type:Boolean,
         default:false
