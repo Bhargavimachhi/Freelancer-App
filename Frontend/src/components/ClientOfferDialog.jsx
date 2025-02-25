@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Download } from "lucide-react";
 import {load} from '@cashfreepayments/cashfree-js';
+import Pusher from "pusher-js";
 
 
 
@@ -15,6 +16,32 @@ import {load} from '@cashfreepayments/cashfree-js';
 export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer }) => {
 
   const [cashfree,setCashfree] = useState(null);
+  const [offerState, setOfferState] = useState(offer.status);
+
+  useEffect(() => {
+    setOfferState(offer.status); 
+  }, [offer.status]);
+    useEffect(() => {
+      
+      const pusher = new Pusher("97f4daf56e0efc37b28d", {
+        cluster: "ap2",
+      });
+  
+     
+      const channel = pusher.subscribe("offers");
+  
+     
+      channel.bind("offer-updated", (data) => {
+        if (data.offerId === offer._id) {
+          setOfferState(data.state); 
+        }
+      });
+  
+      return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+      };
+    }, [offer._id])
   useEffect(() => {
     const initializeSDK = async () => {
       const cashfreeInstance = await load({
@@ -123,7 +150,7 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
         <DialogHeader>
           <DialogTitle className="flex justify-between items-center">
             <span>Offer Details</span>
-            <Badge className={statusColors[offer.status]}>{offer.status.replace(/_/g, " ")}</Badge>
+            <Badge className={statusColors[offerState]}>{offerState.replace(/_/g, " ")}</Badge>
           </DialogTitle>
         </DialogHeader>
 
@@ -148,7 +175,7 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
 
            
 
-            {offer.submission && (offer.status === "submitted" || offer.status === "completed") && (
+            {offer.submission && (offerState === "submitted" || offerState === "completed") && (
               <div>
                 <h3 className="font-semibold mb-2">Submission</h3>
                 <p className="text-sm mb-2">{offer.submission.note}</p>
@@ -164,14 +191,14 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
             )}
           </div>
 
-          {offer.status === "accepted" && (
+          {offerState === "accepted" && (
             <button className="w-full" onClick={handleClick}>
               <Wallet className="w-4 h-4 mr-2" />
               Pay Now {offer.amount}
             </button>
           )}
 
-          {offer.status === "submitted" && (
+          {offerState === "submitted" && (
             <div className="flex gap-2">
               <Button className="flex-1" onClick={handleAcceptSubmission}>
                 Accept & Complete

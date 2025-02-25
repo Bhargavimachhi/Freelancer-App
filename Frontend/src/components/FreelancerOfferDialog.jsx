@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { FileUp, Download, Wallet } from "lucide-react";
 import toast from "react-hot-toast";
+import Pusher from "pusher-js";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import axios from "axios";
@@ -14,6 +15,32 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
   const [files, setFiles] = useState([]);
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+   const [offerState, setOfferState] = useState(offer.status);
+  
+    useEffect(() => {
+      setOfferState(offer.status); 
+    }, [offer.status]);
+      useEffect(() => {
+        
+        const pusher = new Pusher("97f4daf56e0efc37b28d", {
+          cluster: "ap2",
+        });
+    
+       
+        const channel = pusher.subscribe("offers");
+    
+       
+        channel.bind("offer-updated", (data) => {
+          if (data.offerId === offer._id) {
+            setOfferState(data.state); 
+          }
+        });
+    
+        return () => {
+          channel.unbind_all();
+          channel.unsubscribe();
+        };
+      }, [offer._id])
 
   if (!offer) return null;
 
@@ -78,7 +105,7 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
         <DialogHeader>
           <DialogTitle className="flex justify-between items-center">
             <span>Offer Details</span>
-            <Badge className={statusColors[offer.status]}>{offer.status.replace(/_/g, " ")}</Badge>
+            <Badge className={statusColors[offerState]}>{offerState.replace(/_/g, " ")}</Badge>
           </DialogTitle>
         </DialogHeader>
 
@@ -100,7 +127,7 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
               <p className="text-lg font-medium">{offer.amount}</p>
             </div>
 
-            {offer.status === "accepted" && (
+            {offerState === "accepted" && (
               <Alert>
                 <Wallet className="h-4 w-4" />
                 <AlertDescription>
@@ -109,7 +136,7 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
               </Alert>
             )}
 
-            {offer.submission && (offer.status === "submitted" || offer.status === "completed") && (
+            {offer.submission && (offerState === "submitted" || offerState === "completed") && (
               <div>
                 <h3 className="font-semibold mb-2">Submission</h3>
                 <p className="text-sm mb-2">{offer.submission.note}</p>
@@ -124,7 +151,7 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
               </div>
             )}
 
-            {offer.status === "work_in_progress" && (
+            {offerState === "work_in_progress" && (
               <div className="space-y-4">
                 <div>
                   <h3 className="font-semibold mb-2">Submit Work</h3>
@@ -148,7 +175,7 @@ const FreelancerOfferDialog = ({ offer, isOpen, onClose,project,client }) => {
             )}
           </div>
 
-          {offer.status === "pending" && (
+          {offerState === "pending" && (
             <div className="flex gap-2">
               <Button className="flex-1" onClick={() => handleStatusUpdate("accepted")}>
                 Accept Offer

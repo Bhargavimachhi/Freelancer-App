@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Wallet } from "lucide-react"
 
-
+import Pusher from "pusher-js";
 import { useState,useEffect } from "react";
 import axios from "axios";
 import FreelancerOfferDialog from "./FreelancerOfferDialog";
@@ -13,6 +13,29 @@ export function OfferCard({ offer}) {
     const [project, setProject] = useState(null);
       const [client, setclient] = useState(null);
       const [isDialogOpen, setIsDialogOpen] = useState(false);
+      const [offerState, setOfferState] = useState(offer.status);
+      
+        useEffect(() => {
+         
+          const pusher = new Pusher("97f4daf56e0efc37b28d", {
+            cluster: "ap2",
+          });
+      
+          
+          const channel = pusher.subscribe("offers");
+      
+        
+          channel.bind("offer-updated", (data) => {
+            if (data.offerId === offer._id) {
+              setOfferState(data.state);
+            }
+          });
+      
+          return () => {
+            channel.unbind_all();
+            channel.unsubscribe();
+          };
+        }, [offer._id]);
 
       useEffect(() => {
         const fetchProject = async () => {
@@ -79,7 +102,7 @@ clientId}`);
               <p className="text-sm text-muted-foreground">by {client.name}</p>
             </div>
             <div className="flex flex-col items-end gap-2">
-              <Badge className={statusColors[offer.status]}>{offer.status.replace(/_/g, " ")}</Badge>
+              <Badge className={statusColors[offerState]}>{offerState.replace(/_/g, " ")}</Badge>
               {offer.status === "waiting_for_payment" && (
                 <Badge variant="outline" className="flex items-center gap-1">
                   <Wallet className="w-3 h-3" />

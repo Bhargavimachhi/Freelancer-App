@@ -9,11 +9,35 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Download } from "lucide-react";
 import { ClientOfferDialog } from './ClientOfferDialog';
+import Pusher from 'pusher-js';
 
 const OfferCard = ({ offer }) => {
   const [project, setProject] = useState(null);
   const [freelancer, setFreelancer] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [offerState, setOfferState] = useState(offer.status);
+
+  useEffect(() => {
+   
+    const pusher = new Pusher("97f4daf56e0efc37b28d", {
+      cluster: "ap2",
+    });
+
+    
+    const channel = pusher.subscribe("offers");
+
+    // Listen for offer updates
+    channel.bind("offer-updated", (data) => {
+      if (data.offerId === offer._id) {
+        setOfferState(data.state);
+      }
+    });
+
+    return () => {
+      channel.unbind_all();
+      channel.unsubscribe();
+    };
+  }, [offer._id]);
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -80,7 +104,7 @@ const OfferCard = ({ offer }) => {
                 <p className="text-sm text-muted-foreground">by {freelancer.name}</p>
               </div>
               <div className="flex flex-col items-end gap-2">
-                <Badge className={statusColors[offer.status]}>{offer.status.replace(/_/g, " ")}</Badge>
+                <Badge className={statusColors[offerState]}>{offerState.replace(/_/g, " ")}</Badge>
                 {offer.status === "accepted" && offer.paymentStatus === "unpaid" && (
                   <Badge variant="outline" className="flex items-center gap-1">
                     <Wallet className="w-3 h-3" />
