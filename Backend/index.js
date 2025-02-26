@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import {
+  addReviewToUser,
   addUser,
   editPropertiesOfUser,
   editUser,
@@ -64,6 +65,7 @@ app.get("/user/clerk/:id", getUserUsingClerkId);
 app.post("/user/:id/edit-properties", editPropertiesOfUser);
 app.get("/user/:id/projects", getAllProjectsOfUser);
 app.put("/shortlist/user/:id", shortlistUser);
+app.post("/user/:id/add-review", addReviewToUser);
 
 // Project Routes
 app.get("/project/:id", getProject);

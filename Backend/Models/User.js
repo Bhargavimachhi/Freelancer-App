@@ -105,7 +105,7 @@ let userSchema = new mongoose.Schema({
     type: [
       {
         createdBy: {
-          type: mongoose.Schema.Types.ObjectId,
+          type: String,
           required: true,
         },
         rating: { type: Number, required: true, min: 1, max: 5 },
@@ -159,7 +159,7 @@ export const userSchemaValidation = joi.object({
 
   reviews: joi.array().items(
     joi.object().keys({
-      createdBy: ObjectId().required(),
+      createdBy: joi.string().required(),
       rating: joi.number().min(1).max(5).required(),
       description: joi.string().required(),
     })
