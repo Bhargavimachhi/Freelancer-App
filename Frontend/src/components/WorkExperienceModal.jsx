@@ -161,39 +161,41 @@ const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
                           </p>
                         )}
                       </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          Start Date *
-                        </label>
-                        <input
-                          type="date"
-                          {...register("startDate", {
-                            required: "Start Date is required",
-                          })}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.startDate && (
-                          <p className="text-sm text-red-500">
-                            {errors.startDate.message}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          End Date *
-                        </label>
-                        <input
-                          type="date"
-                          {...register("endDate", {
-                            required: "End Date is required",
-                          })}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.startDate && (
-                          <p className="text-sm text-red-500">
-                            {errors.startDate.message}
-                          </p>
-                        )}
+                      <div className="flex">
+                        <div className="mr-5">
+                          <label className="block mb-2 text-sm font-medium text-text">
+                            Start Date *
+                          </label>
+                          <input
+                            type="date"
+                            {...register("startDate", {
+                              required: "Start Date is required",
+                            })}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                          />
+                          {errors.startDate && (
+                            <p className="text-sm text-red-500">
+                              {errors.startDate.message}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-text">
+                            End Date *
+                          </label>
+                          <input
+                            type="date"
+                            {...register("endDate", {
+                              required: "End Date is required",
+                            })}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                          />
+                          {errors.startDate && (
+                            <p className="text-sm text-red-500">
+                              {errors.startDate.message}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="mb-4">

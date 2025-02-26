@@ -6,6 +6,8 @@ import { useUserContext } from "@/Context/UserContext";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { skills } from "../../data/skills";
+const allSkills = skills;
 
 const ProjectModal = ({ editProject, setEditProject }) => {
   const { getUserDetails } = useUserContext();
@@ -31,6 +33,9 @@ const ProjectModal = ({ editProject, setEditProject }) => {
       setValue("endDate", editProject.endDate);
       setValue("description", editProject.description);
       openModal();
+    }
+    async function fetchSkills() {
+      
     }
   }, [editProject]);
 
@@ -65,24 +70,6 @@ const ProjectModal = ({ editProject, setEditProject }) => {
       console.error("Error updating user data:", error);
     }
   };
-
-  const allSkills = [
-    "Web Development",
-    "Web Application",
-    "React.js",
-    "Node.js",
-    "MongoDB",
-    "JavaScript",
-    "CSS",
-    "HTML",
-    "Tailwind CSS",
-    "API Development",
-    "UI/UX Design",
-    "Software Engineering",
-    "Frontend Development",
-    "Backend Development",
-    "Full Stack Development",
-  ];
 
   const filteredSkills = allSkills.filter(
     (skill) =>
@@ -213,15 +200,6 @@ const ProjectModal = ({ editProject, setEditProject }) => {
                               ))}
                             </ul>
                           )}
-                          <textarea
-                            {...register("skills", {
-                              required: "Skills is required",
-                            })}
-                            rows={2}
-                            className="block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md"
-                            readOnly
-                            value={skills.join(", ")}
-                          />
                           {errors.skills && (
                             <p className="text-sm text-red-500">
                               {errors.skills.message}
@@ -250,39 +228,41 @@ const ProjectModal = ({ editProject, setEditProject }) => {
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                       </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          Start Date *
-                        </label>
-                        <input
-                          type="date"
-                          {...register("startDate", {
-                            required: "Start Date is required",
-                          })}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.startDate && (
-                          <p className="text-sm text-red-500">
-                            {errors.startDate.message}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          End Date *
-                        </label>
-                        <input
-                          type="date"
-                          {...register("endDate", {
-                            required: "End Date is required",
-                          })}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.startDate && (
-                          <p className="text-sm text-red-500">
-                            {errors.startDate.message}
-                          </p>
-                        )}
+                      <div className="flex">
+                        <div className="mr-5">
+                          <label className="block mb-2 text-sm font-medium text-text">
+                            Start Date *
+                          </label>
+                          <input
+                            type="date"
+                            {...register("startDate", {
+                              required: "Start Date is required",
+                            })}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                          />
+                          {errors.startDate && (
+                            <p className="text-sm text-red-500">
+                              {errors.startDate.message}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <label className="block mb-2 text-sm font-medium text-text">
+                            End Date *
+                          </label>
+                          <input
+                            type="date"
+                            {...register("endDate", {
+                              required: "End Date is required",
+                            })}
+                            className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                          />
+                          {errors.startDate && (
+                            <p className="text-sm text-red-500">
+                              {errors.startDate.message}
+                            </p>
+                          )}
+                        </div>
                       </div>
                     </div>
                     <div className="flex justify-end">

@@ -6,6 +6,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import { useUserContext } from "@/Context/UserContext";
+import { skills } from "../../data/skills";
+const allSkills = skills;
 
 const SkillsModal = ({ editSkills, setEditSkills }) => {
   const { user } = useUser();
@@ -61,24 +63,6 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
       console.error("Error updating user data:", error);
     }
   };
-
-  const allSkills = [
-    "Web Development",
-    "Web Application",
-    "React.js",
-    "Node.js",
-    "MongoDB",
-    "JavaScript",
-    "CSS",
-    "HTML",
-    "Tailwind CSS",
-    "API Development",
-    "UI/UX Design",
-    "Software Engineering",
-    "Frontend Development",
-    "Backend Development",
-    "Full Stack Development",
-  ];
 
   const filteredSkills = allSkills.filter(
     (skill) =>
@@ -174,15 +158,6 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
                             ))}
                           </ul>
                         )}
-                        <textarea
-                          {...register("skills", {
-                            required: "Skills is required",
-                          })}
-                          rows={2}
-                          className="block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md"
-                          readOnly
-                          value={skills.join(", ")}
-                        />
                         {errors.skills && (
                           <p className="text-sm text-red-500">
                             {errors.skills.message}
