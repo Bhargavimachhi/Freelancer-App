@@ -11,6 +11,7 @@ import Experience from "@/components/Profile/Experience";
 import Education from "@/components/Profile/Education";
 import Project from "@/components/Profile/Project";
 import Skills from "@/components/Profile/Skills";
+import Reviews from "@/components/Profile/Reviews";
 
 export default function MainProfile() {
   const { user } = useUser();
@@ -60,6 +61,9 @@ export default function MainProfile() {
 
         {/* Skills */}
         <Skills />
+
+        {/* Reviews */}
+        <Reviews />
 
         {/* Other Details */}
         <Experience />

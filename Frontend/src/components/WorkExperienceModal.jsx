@@ -2,9 +2,15 @@ import React, { useEffect, Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { ICONS } from "@/assets/icons/icons";
+import { useUserContext } from "@/Context/UserContext";
+import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
+  const { getUserDetails } = useUserContext();
 
   const {
     register,
@@ -16,6 +22,8 @@ const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
 
   useEffect(() => {
     if (editExperience) {
+      setValue("projectsDone", editExperience?.projectsDone);
+      setValue("moneyEarned", editExperience?.moneyEarned);
       setIsOpen(true);
     }
   }, [editExperience]);
@@ -30,9 +38,25 @@ const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
     setIsOpen(true);
   };
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("Data :", data);
-    closeModal(); // Close modal after submission
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/user/${user?.id}/edit-properties`,
+        { previousWork: [data] } // Ensure data is an array
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal(); // Close modal after submission
+        getUserDetails();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error occurred");
+      console.error("Error updating user data:", error);
+    }
   };
 
   return (
@@ -41,10 +65,10 @@ const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
         <button
           type="button"
           onClick={openModal}
-          className="flex items-center px-4 py-3 text-white transition-all duration-300 ease-in-out rounded-full bg-btn hover:bg-btnhover"
+          className="p-2 transition-colors duration-200 rounded-full bg-bg hover:bg-gray-200"
         >
-          <ICONS.BRIEFCASE size={20} color="#fff" className="mr-2" />
-          {editExperience ? "Edit Work Experience" : "Add Work Experience"}
+          <ICONS.PLUS size={20} className="text-text" />
+          {/* {editExperience ? "Edit Work Experience" : "Add Work Experience"} */}
         </button>
       </div>
 
@@ -77,8 +101,8 @@ const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-semibold text-text">
                       {editExperience
-                        ? "Edit Work Experience"
-                        : "Add Work Experience"}
+                        ? "Edit others Details"
+                        : "Add others Details"}
                     </h2>
                     <button
                       onClick={closeModal}
@@ -91,128 +115,42 @@ const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
                     <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-1">
                       <div>
                         <label className="block mb-2 text-sm font-medium text-text">
-                          Title *
+                          Total Project Completed *
                         </label>
                         <input
-                          type="text"
-                          {...register("jobTitle", {
-                            required: "Title is required",
+                          type="number"
+                          {...register("projectsDone", {
+                            required: "Field is required",
                           })}
-                          placeholder="Ex. Software Engineer"
+                          placeholder="Ex. 10"
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
-                        {errors.jobTitle && (
+                        {errors.projectsDone && (
                           <p className="text-sm text-red-500">
-                            {errors.jobTitle.message}
+                            {errors.projectsDone.message}
                           </p>
                         )}
                       </div>
                       <div>
                         <label className="block mb-2 text-sm font-medium text-text">
-                          Company *
+                          Total Money Earned *
                         </label>
                         <input
-                          type="text"
-                          {...register("companyName", {
-                            required: "Company Name is required",
+                          type="number"
+                          {...register("moneyEarned", {
+                            required: "Field is required",
                           })}
-                          placeholder="Ex. Microsoft"
+                          placeholder="Ex. $100"
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
-                        {errors.companyName && (
+                        {errors.moneyEarned && (
                           <p className="text-sm text-red-500">
-                            {errors.companyName.message}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          Location *
-                        </label>
-                        <input
-                          type="text"
-                          {...register("location", {
-                            required: "Location is required",
-                          })}
-                          placeholder="Ex. London"
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.location && (
-                          <p className="text-sm text-red-500">
-                            {errors.location.message}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          Country *
-                        </label>
-                        <input
-                          type="text"
-                          {...register("country", {
-                            required: "Country is required",
-                          })}
-                          placeholder="Ex. India"
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.location && (
-                          <p className="text-sm text-red-500">
-                            {errors.country.message}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          Start Date *
-                        </label>
-                        <input
-                          type="date"
-                          {...register("startDate", {
-                            required: "Start Date is required",
-                          })}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.startDate && (
-                          <p className="text-sm text-red-500">
-                            {errors.startDate.message}
-                          </p>
-                        )}
-                      </div>
-                      <div>
-                        <label className="block mb-2 text-sm font-medium text-text">
-                          End Date *
-                        </label>
-                        <input
-                          type="date"
-                          {...register("endDate", {
-                            required: "End Date is required",
-                          })}
-                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
-                        {errors.startDate && (
-                          <p className="text-sm text-red-500">
-                            {errors.startDate.message}
+                            {errors.moneyEarned.message}
                           </p>
                         )}
                       </div>
                     </div>
-                    <div className="mb-4">
-                      <label className="block mb-2 text-sm font-medium text-text">
-                        Description *
-                      </label>
-                      <textarea
-                        {...register("description", {
-                          required: "Description is required",
-                        })}
-                        placeholder="Describe your work experience"
-                        className="block w-full px-3 py-2 border border-gray-300 rounded-md"
-                      ></textarea>
-                      {errors.description && (
-                        <p className="text-sm text-red-500">
-                          {errors.description.message}
-                        </p>
-                      )}
-                    </div>
+
                     <div className="flex justify-end">
                       <button
                         type="submit"

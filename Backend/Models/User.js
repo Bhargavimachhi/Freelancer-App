@@ -24,12 +24,16 @@ let userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
+
   previousWork: {
-    type: {
-      projectsDone: { type: Number, default: 0 },
-      moneyEarned: { type: Number, default: 0 },
-    },
+    type: [
+      {
+        projectsDone: { type: Number, default: 0 },
+        moneyEarned: { type: Number, default: 0 },
+      },
+    ],
   },
+
   education: {
     type: [
       {
@@ -100,8 +104,11 @@ let userSchema = new mongoose.Schema({
   reviews: {
     type: [
       {
-        createdBy: { type: mongoose.Schema.Types.ObjectId, required: true },
-        rating: { type: Number, required: true },
+        createdBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          required: true,
+        },
+        rating: { type: Number, required: true, min: 1, max: 5 },
         description: { type: String, required: true },
       },
     ],
@@ -122,6 +129,13 @@ export const userSchemaValidation = joi.object({
       startDate: joi.string().required(),
       endDate: joi.string().required(),
       skills: joi.array().items(joi.string()), // Ensures skills is an array of strings
+    })
+  ),
+
+  previousWork: joi.array().items(
+    joi.object().keys({
+      projectsDone: joi.number().required(),
+      moneyEarned: joi.number().required(),
     })
   ),
 
