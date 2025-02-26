@@ -57,7 +57,13 @@ const ProjectDetailPage = () => {
                setCreatedBy(res.data.user);
 
                res = await axios.get(`http://localhost:3000/project/${projectid}/proposals`);
-               setProposals(res.data.proposals);
+               let data = res.data.proposals;
+
+               for(let i=0; i<data.length; i++) {
+                res = await axios.get(`http://localhost:3000/user/${data[i].createdBy}`);
+                data[i]['createdBy'] = res.data.user;
+               }
+               setProposals(data);
                setLoading(false);
              }
    
@@ -333,7 +339,7 @@ const ProjectDetailPage = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold">${proposal.price}</p>
+                      <p className="font-bold">&#8377; {proposal.price}</p>
                       {/* <p className="text-sm text-muted-foreground">Delivery: {proposal.timeline}</p> */}
                     </div>
                   </div>

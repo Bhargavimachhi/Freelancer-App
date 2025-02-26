@@ -4,7 +4,7 @@ import joi from 'joi';
 
 let proposalSchema = new mongoose.Schema({
     createdBy : {
-        type : Object,
+        type : mongoose.Schema.Types.ObjectId,
         required : true,
     },
     project : {

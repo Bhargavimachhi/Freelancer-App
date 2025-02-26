@@ -154,3 +154,40 @@ export const shortlistUser = async (req, res) => {
     .status(200)
     .json({ reqproposal, message: "The proposal is shortlisted." });
 };
+
+export const addReviewToUser = async(req, res) => {
+  try {
+    let { id } = req.params;
+    let user = await User.findOne({Clerk_id : id});
+
+    if (!user) {
+      return res.status(403).json({ message: "User does not exists" });
+    }
+    let data = req.body;
+
+    if(!data.createdBy) {
+      return res.status(403).json({ message: "Creator of review does not exists" });
+    }
+
+    if(!data.rating) {
+      return res.status(403).json({ message: "Enter Rating" });
+    }
+
+    if(isNaN(data.rating)) {
+      return res.status(403).json({ message: "Rating should be number" });
+    }
+
+    if(data.rating < 1 || data.rating > 5) {
+      return res.status(403).json({ message: "Rating should be between 1 and 5" });
+    }
+
+    user.reviews.push(req.body);
+    user.rating = ((user.rating * (user.reviews.length-1))+data.rating)/user.reviews.length;
+    await user.save();
+    res.status(200).json({ message: "Review submitted successfully" });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal server error", err });
+  }
+}
