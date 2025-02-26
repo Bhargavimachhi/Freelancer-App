@@ -72,7 +72,7 @@ const EducationModal = ({ editEducation, setEditEducation }) => {
           onClick={openModal}
           className="p-2 transition-colors duration-200 rounded-full bg-bg hover:bg-gray-200"
         >
-          <ICONS.PLUS size={20} className="text-text"/>
+          <ICONS.PLUS size={20} className="text-text" />
           {/* {editEducation ? "Edit Education" : "Add Education"} */}
         </button>
       </div>

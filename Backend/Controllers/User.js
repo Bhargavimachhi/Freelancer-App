@@ -102,6 +102,11 @@ export const editPropertiesOfUser = async (req, res) => {
       return res.status(400).json({ message: "Projects must be an array" });
     }
 
+    // Validate `reviews` format
+    if (data.reviews && !Array.isArray(data.reviews)) {
+      return res.status(400).json({ message: "Reviews must be an array" });
+    }
+
     // Ensure skills is an array
     if (data.skills && !Array.isArray(data.skills)) {
       return res.status(400).json({ message: "Skills must be an array" });

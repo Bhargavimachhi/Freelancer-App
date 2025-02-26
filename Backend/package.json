@@ -11,6 +11,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cashfree-payout": "^0.0.14",
     "cashfree-pg": "^4.3.10",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
