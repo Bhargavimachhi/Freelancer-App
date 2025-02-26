@@ -11,42 +11,24 @@ const allSkills = skills;
 
 const SkillsModal = ({ editSkills, setEditSkills }) => {
   const { user } = useUser();
-  const { getUserDetails } = useUserContext();
+  const { getUserDetails, userData } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
   const [input, setInput] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    formState: { errors },
-  } = useForm();
+  const { handleSubmit } = useForm();
 
   useEffect(() => {
     if (editSkills) {
-      setValue("skills", editSkills?.skills);
+      setSkills(userData?.skills);
       openModal();
     }
-    async function fetchUser() {
-      try {
-        const res = await axios.get(`http://localhost:3000/user/clerk/${user.id}`);
-        setSkills(res.data.user.skills);
-        setLoading(false);
-      }
-      catch (err) {
-        console.log(err);
-      }
-    }
-    fetchUser();
   }, [editSkills, user]);
 
   const closeModal = () => {
     setIsOpen(false);
     setEditSkills(null);
-    reset();
+    // reset();
   };
 
   const openModal = () => {
@@ -55,7 +37,6 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
 
   const onSubmit = async (data) => {
     data.skills = skills; // Ensure skills is added as an array
-    console.log("Final Data Sent:", data); // Debugging
 
     try {
       const response = await axios.post(
@@ -170,11 +151,7 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
                             ))}
                           </ul>
                         )}
-                        {errors.skills && (
-                          <p className="text-sm text-red-500">
-                            {errors.skills.message}
-                          </p>
-                        )}
+
                         <div className="flex flex-wrap gap-2 mt-2">
                           {skills.map((skill) => (
                             <span

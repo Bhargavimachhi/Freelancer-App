@@ -61,8 +61,8 @@ const FindProjects = () => {
       <Navigate name={"Projects"} item={"My-Projects"} />
       <main className="px-4 mx-auto max-w-7xl md:px-6 lg:px-3">
         <div className="w-full">
-          <div className="flex w-full flow-root mb-3">
-            <h1 className="mb-4 text-4xl font-bold tracking-tight float-left">
+          <div className="flex w-full mb-3">
+            <h1 className="float-left mb-4 text-4xl font-bold tracking-tight">
               Projects For You:
             </h1>
             <CreateProjectSection />
