@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import joi from 'joi';
-
+import JoiObjectId from "joi-objectid";
+const ObjectId = JoiObjectId(joi);
 
 let proposalSchema = new mongoose.Schema({
     createdBy : {
@@ -38,9 +39,12 @@ let proposalSchema = new mongoose.Schema({
 });
 
 export const proposalSchemaValidation = joi.object({
-    createdBy : joi.string().required(),
+    createdBy : joi.required(),
+    project : joi.required(),
     description : joi.string().required(),
     price : joi.number().required(),
+    answers : joi.array(),
+    milestonesRequiredTime : joi.array(),
 });
 
 export const Proposal = mongoose.model("Proposal", proposalSchema);

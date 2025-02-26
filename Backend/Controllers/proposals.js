@@ -6,25 +6,35 @@ import { GiveScorceToProposalUsingParameters } from './AIFunctions.js';
 
 export const addProposalToProject = async (req, res) => {
     const { id } = req.params; 
-    const {  Clerk_id,description,price,answers } = req.body;
+    const { Clerk_id } = req.body;
     const project = await Project.findById(id);
     const requser = await User.findOne({ Clerk_id: Clerk_id });
     
     if (!requser) {
-              return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
   
     if (!project) {
       return res.status(403).json({ message: "Project do not exist" });
     }
-    const newprojectdata = {
-      createdBy: requser,
-      description:description,
-      price: price,
-      answers:answers,
-      project : id
 
+    const newprojectdata = {
+      createdBy: requser._id,
+      description: req.body.description,
+      price: req.body.price,
+      answers: req.body.answers,
+      project : id,
+      milestonesRequiredTime : req.body.milestonesRequiredTime
     };
+
+    // console.log(newprojectdata);
+
+    const {error} = proposalSchemaValidation.validate(newprojectdata);
+    // console.log(error);
+
+    if(error) {
+      return res.status(404).json({ message: error.details[0].message });
+    }
     
     const proposal = new Proposal(newprojectdata);
     project.proposals.push(proposal._id);
