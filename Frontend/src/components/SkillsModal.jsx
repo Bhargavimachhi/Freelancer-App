@@ -13,6 +13,7 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
   const { user } = useUser();
   const { getUserDetails } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [skills, setSkills] = useState([]);
   const [input, setInput] = useState("");
 
@@ -29,7 +30,18 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
       setValue("skills", editSkills?.skills);
       openModal();
     }
-  }, [editSkills]);
+    async function fetchUser() {
+      try {
+        const res = await axios.get(`http://localhost:3000/user/clerk/${user.id}`);
+        setSkills(res.data.user.skills);
+        setLoading(false);
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+    fetchUser();
+  }, [editSkills, user]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -147,9 +159,9 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
                         />
                         {input && (
                           <ul className="mt-1 bg-white border border-gray-300 rounded-md">
-                            {filteredSkills.map((skill) => (
+                            {filteredSkills.map((skill, index) => (
                               <li
-                                key={skill}
+                                key={index}
                                 className="px-3 py-2 cursor-pointer hover:bg-gray-200"
                                 onClick={() => addSkill(skill)}
                               >
