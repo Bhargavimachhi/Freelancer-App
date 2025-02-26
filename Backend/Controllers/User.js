@@ -1,147 +1,151 @@
-import { User } from '../Models/User.js';
-import { userSchemaValidation } from '../Models/User.js';
-import { Project } from '../Models/Project.js';
-import { Proposal } from '../Models/Proposal.js';
+import { User } from "../Models/User.js";
+import { userSchemaValidation } from "../Models/User.js";
+import { Project } from "../Models/Project.js";
+import { Proposal } from "../Models/Proposal.js";
 
 export const addUser = async (req, res) => {
-    let user = await User.find({ email: req.body.email });
-  
-    if (user && user.length > 0) {
-      return res.status(403).json({ message: "User already exists" });
-    }
-    let {error}= userSchemaValidation.validate(req.body);
-    
-    if(error) {
-      return res.status(404).json({message : error.details[0].message});
-    }
-    user = new User(req.body);
-  
-    user
-      .save()
-      .then(() => {
-        res.status(200).json({ message: "User Added Successfully" });
-      })
-      .catch((err) => {
-        res.status(500).json({message : "Error Occurred !!!"});
-      });
+  let user = await User.find({ email: req.body.email });
+
+  if (user && user.length > 0) {
+    return res.status(403).json({ message: "User already exists" });
+  }
+  let { error } = userSchemaValidation.validate(req.body);
+
+  if (error) {
+    return res.status(404).json({ message: error.details[0].message });
+  }
+  user = new User(req.body);
+
+  user
+    .save()
+    .then(() => {
+      res.status(200).json({ message: "User Added Successfully" });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error Occurred !!!" });
+    });
 };
 
 export const getUser = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     let user = await User.findById(id);
 
     if (!user) {
       return res.status(403).json({ message: "User does not exists" });
     }
 
-    return res.status(200).json({message : "success", user});
-  } catch(err) {
-    res.status(500).json({message : "Internal Server Error", err});
+    return res.status(200).json({ message: "success", user });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", err });
   }
-}
+};
 
-export const getUserUsingClerkId = async(req, res) => {
+export const getUserUsingClerkId = async (req, res) => {
   try {
-    const {id} = req.params;
-    let user = await User.findOne({Clerk_id : id});
+    const { id } = req.params;
+    let user = await User.findOne({ Clerk_id: id });
 
     if (!user) {
       return res.status(403).json({ message: "User does not exists" });
     }
 
-    return res.status(200).json({message : "success", user});
-  } catch(err) {
-    res.status(500).json({message : "Internal Server Error", err});
+    return res.status(200).json({ message: "success", user });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", err });
   }
-}
+};
 
 export const editUser = async (req, res) => {
-
   try {
-    let {id} = req.params;
+    let { id } = req.params;
     let user = await User.findById(id);
 
     if (!user) {
       return res.status(403).json({ message: "User does not exists" });
     }
-    let {error}= userSchemaValidation.validate(req.body);
-    
-    if(error) {
-      return res.status(404).json({message : error.details[0].message});
+    let { error } = userSchemaValidation.validate(req.body);
+
+    if (error) {
+      return res.status(404).json({ message: error.details[0].message });
     }
     await User.findByIdAndUpdate(id, req.body);
     res.status(200).json({ message: "Profile details edited successfully" });
-  }
-  catch (err) {
-    res.status(500).json({message : "Internal server error", err});
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error", err });
   }
 };
 
 export const editPropertiesOfUser = async (req, res) => {
   try {
-    let {id} = req.params;
-    let user = await User.findOne({Clerk_id : id});
+    let { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "User ID is missing" });
+    }
+
+    let user = await User.findOne({ Clerk_id: id });
 
     if (!user) {
-      return res.status(403).json({ message: "User does not exists" });
+      return res.status(403).json({ message: "User does not exist" });
     }
 
     let data = req.body;
-    
-    for (let key in data) {
-      if (data.hasOwnProperty(key)) {
 
-        if(key === 'email') {
-          return res.status(404).json({ message: "Email cannot be edited" });
-        }
-        user[key] = data[key];
-      }
+    // Prevent email updates
+    if (data.email) {
+      return res.status(404).json({ message: "Email cannot be edited" });
     }
-    user
-      .save()
-      .then(() => {
-        res.status(200).json({ message: "Profile details edited successfully" });
-      })
-      .catch((err) => {
-        res.status(500).json({message : "Error Occurred !!!"});
-      });
-  }
-  catch (err) {
+
+    // Ensure projects is an array
+    if (data.projects && !Array.isArray(data.projects)) {
+      return res.status(400).json({ message: "Projects must be an array" });
+    }
+
+    // Ensure skills is an array
+    if (data.skills && !Array.isArray(data.skills)) {
+      return res.status(400).json({ message: "Skills must be an array" });
+    }
+
+    // Update user data
+    user.set(data); // Use `set` instead of `Object.assign`
+
+    await user.save();
+    res.status(200).json({ message: "Profile details edited successfully" });
+  } catch (err) {
     console.log(err);
-    res.status(500).json({message : "Internal server error", err});
+    res.status(500).json({ message: "Internal server error", err });
   }
 };
 
-export const getAllProjectsOfUser = async(req,res)=>{
-
-  const {id} = req.params;
+export const getAllProjectsOfUser = async (req, res) => {
+  const { id } = req.params;
 
   const requser = await User.findOne({
-    Clerk_id: id
+    Clerk_id: id,
   });
 
   const userid = requser._id;
 
-
   const projects = await Project.find({
-    createdBy: {$ne:userid}
+    createdBy: { $ne: userid },
   });
 
   return res.status(200).json(projects);
+};
 
-}
-
-export const shortlistUser = async(req,res)=>{
-
+export const shortlistUser = async (req, res) => {
   const id = req.params.id;
 
-  const reqproposal = await Proposal.findByIdAndUpdate(id,{
-    isShortListed:true
+  const reqproposal = await Proposal.findByIdAndUpdate(
+    id,
+    {
+      isShortListed: true,
+    },
+    { new: true }
+  );
 
-  },
-{new:true});
-
-return res.status(200).json({reqproposal,message:"The proposal is shortlisted."});
-
+  return res
+    .status(200)
+    .json({ reqproposal, message: "The proposal is shortlisted." });
 };

@@ -1,10 +1,15 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { ICONS } from "@/assets/icons/icons";
+import { useUserContext } from "@/Context/UserContext";
+import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
-const ProjectModal = () => {
-  const [editProject, setEditProject] = useState(null);
+const ProjectModal = ({ editProject, setEditProject }) => {
+  const { getUserDetails } = useUserContext();
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [skills, setSkills] = useState([]);
   const [input, setInput] = useState("");
@@ -17,15 +22,48 @@ const ProjectModal = () => {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (editProject) {
+      setValue("title", editProject?.title);
+      setValue("link", editProject?.link);
+      setValue("skills", editProject.skills);
+      setValue("startDate", editProject.startDate);
+      setValue("endDate", editProject.endDate);
+      setValue("description", editProject.description);
+      openModal();
+    }
+  }, [editProject]);
+
   const closeModal = () => {
     setIsOpen(false);
     setEditProject(null);
     reset();
   };
 
-  const onSubmit = (data) => {
-    console.log("Data :", data);
-    closeModal(); // Close modal after submission
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const onSubmit = async (data) => {
+    data.skills = skills; // Keep it as an array instead of a string
+    console.log("Data:", data);
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/user/${user?.id}/edit-properties`,
+        { projects: [data] } // Ensure projects is an array
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal();
+        getUserDetails();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error occurred");
+      console.error("Error updating user data:", error);
+    }
   };
 
   const allSkills = [
@@ -68,11 +106,11 @@ const ProjectModal = () => {
       <div className="font-bold text-center text-white rounded-lg">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="flex items-center px-4 py-3 text-white transition-all duration-300 ease-in-out rounded-full bg-btn hover:bg-btnhover"
+          onClick={openModal}
+          className="p-2 transition-colors duration-200 rounded-full bg-bg hover:bg-gray-200"
         >
-          <ICONS.BRIEFCASE size={20} color="#fff" className="mr-2" />
-          {editProject ? "Edit Project" : "Add Project"}
+          <ICONS.PLUS size={20} className="text-text" />
+          {/* {editProject ? "Edit Project" : "Add Project"} */}
         </button>
       </div>
       <Transition appear show={isOpen} as={Fragment}>
@@ -120,15 +158,15 @@ const ProjectModal = () => {
                         </label>
                         <input
                           type="text"
-                          {...register("project", {
+                          {...register("title", {
                             required: "Project name is required",
                           })}
                           placeholder="Ex. Freelancer Platform"
                           className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
-                        {errors.project && (
+                        {errors.title && (
                           <p className="text-sm text-red-500">
-                            {errors.project.message}
+                            {errors.title.message}
                           </p>
                         )}
                       </div>
@@ -175,7 +213,7 @@ const ProjectModal = () => {
                               ))}
                             </ul>
                           )}
-                          {/* <textarea
+                          <textarea
                             {...register("skills", {
                               required: "Skills is required",
                             })}
@@ -188,7 +226,7 @@ const ProjectModal = () => {
                             <p className="text-sm text-red-500">
                               {errors.skills.message}
                             </p>
-                          )} */}
+                          )}
                           <div className="flex flex-wrap gap-2 mt-2">
                             {skills.map((skill) => (
                               <span

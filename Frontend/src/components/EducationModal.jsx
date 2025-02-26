@@ -1,14 +1,17 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { ICONS } from "@/assets/icons/icons";
+import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
+import { useUserContext } from "@/Context/UserContext";
+import toast from "react-hot-toast";
 
-const EducationModal = ({
-  editEducation,
-  setEditEducation,
-  isOpen,
-  setIsOpen,
-}) => {
+const EducationModal = ({ editEducation, setEditEducation }) => {
+  const { user } = useUser();
+  const [isOpen, setIsOpen] = useState(false);
+  const { getUserDetails } = useUserContext();
+
   const {
     register,
     handleSubmit,
@@ -19,15 +22,15 @@ const EducationModal = ({
 
   useEffect(() => {
     if (editEducation) {
-      setValue("school", editEducation.school);
-      setValue("degree", editEducation.degree);
+      setValue("school", editEducation?.school);
+      setValue("degree", editEducation?.degree);
       setValue("fieldOfStudy", editEducation.fieldOfStudy);
-      setValue("startYear", editEducation.startYear);
-      setValue("endYear", editEducation.endYear);
+      setValue("startDate", editEducation.startDate);
+      setValue("endDate", editEducation.endDate);
       setValue("description", editEducation.description);
-      setIsOpen(true);
+      openModal();
     }
-  }, [editEducation, setValue, setIsOpen]);
+  }, [editEducation]);
 
   const closeModal = () => {
     setIsOpen(false);
@@ -35,9 +38,30 @@ const EducationModal = ({
     reset();
   };
 
-  const onSubmit = (data) => {
-    console.log("Education Data:", data);
-    closeModal();
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const onSubmit = async (data) => {
+    console.log("Data :", data);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/user/${user?.id}/edit-properties`,
+        { education: [data] } // Ensure education is an array
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal(); // Close modal after submission
+        getUserDetails();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error occurred");
+      console.error("Error updating user data:", error);
+    }
   };
 
   return (
@@ -45,11 +69,11 @@ const EducationModal = ({
       <div className="font-bold text-center text-white rounded-lg">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="flex items-center px-4 py-3 text-white transition-all duration-300 ease-in-out rounded-full bg-btn hover:bg-btnhover"
+          onClick={openModal}
+          className="p-2 transition-colors duration-200 rounded-full bg-bg hover:bg-gray-200"
         >
-          <ICONS.BOOK size={20} color="#fff" className="mr-2" />
-          {editEducation ? "Edit Education" : "Add Education"}
+          <ICONS.PLUS size={20} className="text-text"/>
+          {/* {editEducation ? "Edit Education" : "Add Education"} */}
         </button>
       </div>
 
@@ -153,15 +177,15 @@ const EducationModal = ({
                           </label>
                           <input
                             type="number"
-                            {...register("startYear", {
+                            {...register("startDate", {
                               required: "Start Year is required",
                             })}
                             placeholder="2022"
                             className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                           />
-                          {errors.startYear && (
+                          {errors.startDate && (
                             <p className="text-sm text-red-500">
-                              {errors.startYear.message}
+                              {errors.startDate.message}
                             </p>
                           )}
                         </div>
@@ -171,15 +195,15 @@ const EducationModal = ({
                           </label>
                           <input
                             type="number"
-                            {...register("endYear", {
+                            {...register("endDate", {
                               required: "End Year is required",
                             })}
                             placeholder="2026"
                             className="block w-full px-3 py-2 border border-gray-300 rounded-md"
                           />
-                          {errors.endYear && (
+                          {errors.endDate && (
                             <p className="text-sm text-red-500">
-                              {errors.endYear.message}
+                              {errors.endDate.message}
                             </p>
                           )}
                         </div>

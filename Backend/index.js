@@ -2,14 +2,41 @@ import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
 import mongoose from "mongoose";
-import { addUser, editPropertiesOfUser, editUser, getAllProjectsOfUser, getUser, getUserUsingClerkId, shortlistUser } from "./Controllers/User.js";
+import {
+  addUser,
+  editPropertiesOfUser,
+  editUser,
+  getAllProjectsOfUser,
+  getUser,
+  getUserUsingClerkId,
+  shortlistUser,
+} from "./Controllers/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
 
 import { addProposalToProject, getProposal } from "./Controllers/proposals.js";
-import { createProject, getAllProposalsOfProject, getProject } from "./Controllers/project.js";
-import { checkIfUserExists, getprojectByID, getProjectsbyClerkID, getToken, getTokenbyClerkID } from "./Controllers/authentication.js";
-import { CreateOffer,AcceptOffer,DeclineOffer,PayOffer,sumbitwork,approvework, getAllOffersOfClient, getAllOffersOfFreelancer } from "./Controllers/offers.js";
+import {
+  createProject,
+  getAllProposalsOfProject,
+  getProject,
+} from "./Controllers/project.js";
+import {
+  checkIfUserExists,
+  getprojectByID,
+  getProjectsbyClerkID,
+  getToken,
+  getTokenbyClerkID,
+} from "./Controllers/authentication.js";
+import {
+  CreateOffer,
+  AcceptOffer,
+  DeclineOffer,
+  PayOffer,
+  sumbitwork,
+  approvework,
+  getAllOffersOfClient,
+  getAllOffersOfFreelancer,
+} from "./Controllers/offers.js";
 import { payment, verify } from "./Controllers/payment.js";
 import { GiveScorceToProposal } from "./Controllers/AIFunctions.js";
 const PORT = 3000;
@@ -47,32 +74,31 @@ app.get("/project/:id/proposals", getAllProposalsOfProject);
 // Proposal Routes
 app.get("/proposal/:id", getProposal);
 
-// Skills Routes 
+// Skills Routes
 app.get("/skills", getSkills);
 
 // Authentication Routes
 app.post("/checkifuserexists", checkIfUserExists);
 
-// Offers Routes 
-app.post("/CreateOffer",CreateOffer);
-app.put("/:offerId/accept",AcceptOffer);
-app.put("/:offerId/decline",DeclineOffer);
-app.put("/:offerId/pay",PayOffer);
-app.put("/:offerId/sumbit",sumbitwork);
-app.put("/:offerId/approve",approvework);
+// Offers Routes
+app.post("/CreateOffer", CreateOffer);
+app.put("/:offerId/accept", AcceptOffer);
+app.put("/:offerId/decline", DeclineOffer);
+app.put("/:offerId/pay", PayOffer);
+app.put("/:offerId/sumbit", sumbitwork);
+app.put("/:offerId/approve", approvework);
 app.get("/client/:id/offers", getAllOffersOfClient);
 app.get("/freelancer/:id/offers", getAllOffersOfFreelancer);
 
 // AI Analysis routes
-app.post("/GiveScore",GiveScorceToProposal);
+app.post("/GiveScore", GiveScorceToProposal);
 
 // Payment Routes
-app.post('/payment', payment);
-app.post('/verify', verify);
+app.post("/payment", payment);
+app.post("/verify", verify);
 
 // Authentication routes
 app.post("/getToken", getToken); // It takes in the email and gives the token for chatting
 app.post("/getTokenbyClerkID", getTokenbyClerkID); // It takes in the Clerk_id and gives the token for chatting
 app.post("/getProjectsbyClerkID", getProjectsbyClerkID); // Thiss sget the projects by the clerk_id
 app.post("/getprojectByID", getprojectByID);
-

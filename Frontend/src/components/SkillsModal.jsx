@@ -1,12 +1,17 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { ICONS } from "@/assets/icons/icons";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { useUser } from "@clerk/clerk-react";
+import { useUserContext } from "@/Context/UserContext";
 
-const SkillsModal = () => {
-  const [editSkills, setEditSkills] = useState(null);
+const SkillsModal = ({ editSkills, setEditSkills }) => {
+  const { user } = useUser();
+  const { getUserDetails } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
-  const [skills, setSkills] = useState(["Web Development", "Web Application"]);
+  const [skills, setSkills] = useState([]);
   const [input, setInput] = useState("");
 
   const {
@@ -17,15 +22,44 @@ const SkillsModal = () => {
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    if (editSkills) {
+      setValue("skills", editSkills?.skills);
+      openModal();
+    }
+  }, [editSkills]);
+
   const closeModal = () => {
     setIsOpen(false);
     setEditSkills(null);
     reset();
   };
 
-  const onSubmit = (data) => {
-    console.log("Data :", data);
-    closeModal(); // Close modal after submission
+  const openModal = () => {
+    setIsOpen(true);
+  };
+
+  const onSubmit = async (data) => {
+    data.skills = skills; // Ensure skills is added as an array
+    console.log("Final Data Sent:", data); // Debugging
+
+    try {
+      const response = await axios.post(
+        `http://localhost:3000/user/${user?.id}/edit-properties`,
+        data // Send complete user data, including skills
+      );
+
+      if (response.status === 200) {
+        toast.success(response.data.message);
+        closeModal();
+        getUserDetails();
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      toast.error("Error occurred");
+      console.error("Error updating user data:", error);
+    }
   };
 
   const allSkills = [
@@ -68,11 +102,11 @@ const SkillsModal = () => {
       <div className="font-bold text-center text-white rounded-lg">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
-          className="flex items-center px-4 py-3 text-white transition-all duration-300 ease-in-out rounded-full bg-btn hover:bg-btnhover"
+          onClick={openModal}
+          className="p-2 transition-colors duration-200 rounded-full bg-bg hover:bg-gray-200"
         >
-          {/* <ICONS.BRIEFCASE size={20} color="#fff" className="mr-2" /> */}
-          {editSkills ? "Edit Skills" : "Add Skills"}
+          <ICONS.PLUS size={20} className="text-text" />
+          {/* {editSkills ? "Edit Skills" : "Add Skills"} */}
         </button>
       </div>
 
@@ -115,15 +149,46 @@ const SkillsModal = () => {
                   </div>
                   <form onSubmit={handleSubmit(onSubmit)}>
                     <div className="grid grid-cols-1 gap-4 mb-4 md:grid-cols-1"></div>
-                    <div className="mb-4">
+                    <div>
                       <label className="block mb-2 text-sm font-medium text-text">
                         Skills *
                       </label>
-                      <div className="my-4">
-                        <h3 className="mb-2 font-semibold text-gray-700">
-                          Your Skills
-                        </h3>
-                        <div className="flex flex-wrap gap-2 p-3 border rounded-lg bg-gray-50">
+                      <div>
+                        <input
+                          type="text"
+                          value={input}
+                          onChange={(e) => setInput(e.target.value)}
+                          placeholder="Type to search skills"
+                          className="block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        />
+                        {input && (
+                          <ul className="mt-1 bg-white border border-gray-300 rounded-md">
+                            {filteredSkills.map((skill) => (
+                              <li
+                                key={skill}
+                                className="px-3 py-2 cursor-pointer hover:bg-gray-200"
+                                onClick={() => addSkill(skill)}
+                              >
+                                {skill}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        <textarea
+                          {...register("skills", {
+                            required: "Skills is required",
+                          })}
+                          rows={2}
+                          className="block w-full px-3 py-2 mt-2 border border-gray-300 rounded-md"
+                          readOnly
+                          value={skills.join(", ")}
+                        />
+                        {errors.skills && (
+                          <p className="text-sm text-red-500">
+                            {errors.skills.message}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap gap-2 mt-2">
                           {skills.map((skill) => (
                             <span
                               key={skill}
@@ -132,29 +197,6 @@ const SkillsModal = () => {
                             >
                               {skill} ✕
                             </span>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="mb-4">
-                        <h3 className="mb-2 font-semibold text-gray-700">
-                          Add a Skill
-                        </h3>
-                        <input
-                          type="text"
-                          placeholder="Type to search skills..."
-                          value={input}
-                          onChange={(e) => setInput(e.target.value)}
-                          className="w-full p-2 mb-2 border rounded-lg"
-                        />
-                        <div className="flex flex-wrap gap-2">
-                          {filteredSkills.map((skill) => (
-                            <button
-                              key={skill}
-                              className="px-3 py-1 text-sm text-gray-700 transition duration-200 bg-gray-100 border rounded-full hover:bg-gray-200"
-                              onClick={() => addSkill(skill)}
-                            >
-                              + {skill}
-                            </button>
                           ))}
                         </div>
                       </div>
