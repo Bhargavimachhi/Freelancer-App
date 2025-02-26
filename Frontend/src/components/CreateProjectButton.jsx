@@ -10,6 +10,7 @@ import { Checkbox } from "../components/ui/checkbox"
 import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import { Cloudinary } from "@cloudinary/url-gen";
+import {CiCirclePlus } from "react-icons/ci"
 
 export default function CreateProjectSection() {
  
@@ -116,12 +117,12 @@ export default function CreateProjectSection() {
 };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-8">Dashboard</h1>
+    <>
+      {/* <h1 className="text-3xl font-bold mb-8">Dashboard</h1> */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <Button size="lg" className="w-full md:w-auto">
-            Create Project
+          <Button size="lg" className={`flex w-full md:w-auto float-right text-white mr-5 bg-blue-600 hover:bg-blue-700`}>
+            + Create Project
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px] bg-white">
@@ -203,7 +204,7 @@ export default function CreateProjectSection() {
           </form>
         </DialogContent>
       </Dialog>
-    </div>
+    </>
   )
 }
 
