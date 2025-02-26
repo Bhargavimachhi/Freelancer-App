@@ -1,14 +1,11 @@
-import React, { useEffect, Fragment } from "react";
+import React, { useEffect, Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { useForm } from "react-hook-form";
 import { ICONS } from "@/assets/icons/icons";
 
-const WorkExperienceModal = ({
-  editExperience,
-  setEditExperience,
-  isOpen,
-  setIsOpen,
-}) => {
+const WorkExperienceModal = ({ editExperience, setEditExperience }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -19,21 +16,18 @@ const WorkExperienceModal = ({
 
   useEffect(() => {
     if (editExperience) {
-      setValue("jobTitle", editExperience.jobTitle);
-      setValue("companyName", editExperience.companyName);
-      setValue("location", editExperience.location);
-      setValue("country", editExperience.country);
-      setValue("startDate", editExperience.startDate);
-      setValue("endDate", editExperience.endDate);
-      setValue("description", editExperience.description);
       setIsOpen(true);
     }
-  }, [editExperience, setValue, setIsOpen]);
+  }, [editExperience]);
 
   const closeModal = () => {
     setIsOpen(false);
     setEditExperience(null);
     reset();
+  };
+
+  const openModal = () => {
+    setIsOpen(true);
   };
 
   const onSubmit = (data) => {
@@ -46,7 +40,7 @@ const WorkExperienceModal = ({
       <div className="font-bold text-center text-white rounded-lg">
         <button
           type="button"
-          onClick={() => setIsOpen(true)}
+          onClick={openModal}
           className="flex items-center px-4 py-3 text-white transition-all duration-300 ease-in-out rounded-full bg-btn hover:bg-btnhover"
         >
           <ICONS.BRIEFCASE size={20} color="#fff" className="mr-2" />

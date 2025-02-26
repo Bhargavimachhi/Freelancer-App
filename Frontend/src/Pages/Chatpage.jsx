@@ -40,10 +40,11 @@ const Chatpage = () => {
       });
       console.log(res.data);
 
-      await chatClient.connectUser(
+      const res2 = await chatClient.connectUser(
         { id: userId, name: username },
         res.data.token
       );
+      console.log("res2 : ",res2);
       setClientReady(true);
     };
 
@@ -69,7 +70,7 @@ const Chatpage = () => {
     <div className="flex h-[60vh]">
       <div className="w-1/4 border-r border-gray-300">
           <button 
-            className="mt-4 p-2 bg-blue-500 text-white rounded"
+            className="p-2 mt-4 text-white bg-blue-500 rounded"
             onClick={() => setIsModalOpen(true)}
           >
             Create Chat
@@ -80,7 +81,7 @@ const Chatpage = () => {
       <div className="w-screen">
         <Channel>
           
-          <div className="p-4 border-t border-gray-300 w-full">
+          <div className="w-full p-4 border-t border-gray-300">
             <ChannelHeader />
             <MessageList className="p-4" />
             <MessageInput className="w-full" />

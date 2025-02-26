@@ -203,13 +203,13 @@ const Navbar = () => {
               </div>
             </PopoverPanel>
           </Popover>
-
+{/* 
           <Link
             to="/"
             className="font-semibold text-black text-sm/6 hover:text-helper"
           >
             Why Upork
-          </Link>
+          </Link> */}
           <Link
             to="/"
             className="font-semibold text-black text-sm/6 hover:text-helper"
