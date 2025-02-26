@@ -129,8 +129,8 @@ const App = () => {
               path="/project/:projectId/proposal/:proposalId/analyze"
               element={<ProposalAnalysis />}
             />
-            <Route path="/Roomenter" element={<Roomname/>}/>
-            <Route path="/Meeting/:roomId" element={<Meetingpage/>}/>
+            <Route path="/Roomenter" element={<Roomname />} />
+            <Route path="/Meeting/:roomId" element={<Meetingpage />} />
           </Routes>
         </Main>
       </ThemeProvider>
