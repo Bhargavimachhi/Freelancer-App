@@ -333,7 +333,7 @@ const ProjectDetailPage = () => {
                       </div>
                     </div>
                     <div className="text-right">
-                      <p className="font-bold">${proposal.price}</p>
+                      <p className="font-bold">&#8377; {proposal.price}</p>
                       {/* <p className="text-sm text-muted-foreground">Delivery: {proposal.timeline}</p> */}
                     </div>
                   </div>
