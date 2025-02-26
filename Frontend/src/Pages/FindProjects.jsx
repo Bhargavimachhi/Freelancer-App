@@ -6,22 +6,22 @@ import ProjectCard from "../components/ProjectCard";
 import { useNavigate } from "react-router-dom";
 import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
-import { TextField, InputAdornment } from '@mui/material';
-import { Search } from '@mui/icons-material';
-
+import { TextField, InputAdornment } from "@mui/material";
+import { Search } from "@mui/icons-material";
+import CreateProjectSection from "@/components/CreateProjectButton";
 
 const FindProjects = () => {
   const { user, isLoaded } = useUser();
   const [userId, setUserId] = useState(null);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredProjects = projects.filter(project =>
+  const filteredProjects = projects.filter((project) =>
     project.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -61,9 +61,13 @@ const FindProjects = () => {
       <Navigate name={"Projects"} item={"My-Projects"} />
       <main className="px-4 mx-auto max-w-7xl md:px-6 lg:px-3">
         <div className="w-full">
-          <h1 className="mb-4 text-4xl font-bold tracking-tight">
-            Projects For You:
-          </h1>
+          <div className="flex w-full flow-root mb-3">
+            <h1 className="mb-4 text-4xl font-bold tracking-tight float-left">
+              Projects For You:
+            </h1>
+            <CreateProjectSection />
+          </div>
+
           <TextField
             label="Search Projects"
             variant="outlined"

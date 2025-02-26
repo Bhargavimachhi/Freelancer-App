@@ -16,8 +16,6 @@ import Role from "./Pages/onboarding/Role";
 import Language from "./Pages/onboarding/LanguageSelection";
 import Bio from "./Pages/onboarding/Bio";
 import HourlyRate from "./Pages/onboarding/HourlyRate";
-import DashBoard from "./Pages/DashBoard";
-import OnBoarding from "./Pages/OnBoarding";
 import Chatpage from "./Pages/Chatpage";
 import ResumeUploader from "./Pages/onboarding/ResumeUploader";
 import SkillSelector from "./Pages/onboarding/SkillSelector";
@@ -58,7 +56,6 @@ const App = () => {
 
             {/* Other pages */}
             <Route exact path="/hire" element={<Hire />} />
-            <Route path="/DashBoard" element={<DashBoard />} />
             <Route path="/loading" element={<LoadinPage />} />
 
             {/* onboarding pages */}
