@@ -32,6 +32,10 @@ let proposalSchema = new mongoose.Schema({
         type:Boolean,
         default:false
     },
+    file : {
+        type : String,
+        default : null
+    },
     aiScore: {
         type: Number,
         default: 0,
