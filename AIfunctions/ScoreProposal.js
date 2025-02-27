@@ -1,6 +1,6 @@
 import GeminiFlash from "./AIModels/GeminiFlashModel.js";
 
-export async function ScoreProposal(project,proposal,freelancer){
+export async function ScoreProposal(project,proposal,freelancer, skillMatch, experienceLevel, answeringCapability, pricing){
 
     const prompt = `
     You are a project matching expert. Analyze the compatibility between this project and freelancer.
@@ -16,10 +16,10 @@ export async function ScoreProposal(project,proposal,freelancer){
     ${JSON.stringify(freelancer, null, 2)}
     
     Score these aspects with the following weights:
-    - Skills Match (40%): Compare project.tags with freelancer.skills
-    - Experience Level (30%): Compare project.experienceLevel with freelancer.expertise
-    - Answering Capabilites (25%): Compare proposal.answers with project.questions
-    - Pricing (5%) : Compare the proposal.price with project.price
+    - Skills Match (${skillMatch}): Compare project.tags with freelancer.skills
+    - Experience Level (${experienceLevel}): Compare project.experienceLevel with freelancer.expertise
+    - Answering Capabilites (${answeringCapability}): Compare proposal.answers with project.questions
+    - Pricing (${pricing}) : Compare the proposal.price with project.price
 
     
     Format your response exactly like this(Dont give indiviual scores on the weights.Just give final score):
