@@ -39,6 +39,7 @@ import MyProjectDetail from "./Pages/MyProjectDetail";
 import { ProposalAnalysis } from "./Pages/ProposalAnalysis";
 import Meetingpage from "./Pages/Meetingpage";
 import MyProjects from "./Pages/MyProjects";
+import CreateProject from "./Pages/CreateProject";
 
 const App = () => {
   return (
@@ -119,6 +120,10 @@ const App = () => {
 
             <Route path="/my-projects" element={<MyProjects />} />
             <Route path="/projects" element={<FindProjects />} />
+            <Route
+              path="/my-projects/create-project"
+              element={<CreateProject />}
+            />
             <Route path="/project/:id" element={<ProjectDetailPage />} />
             <Route path="/myproject/:id" element={<MyProjectDetail />} />
 

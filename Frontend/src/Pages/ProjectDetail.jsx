@@ -16,6 +16,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/ui/tabs";
+import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
 import {
   Dialog,
@@ -54,7 +55,8 @@ const ProjectDetailPage = () => {
   const [bidAmount, setBidAmount] = useState("");
   const [answers, setAnswers] = useState([]);
   const [deliveryTimes, setDeliveryTimes] = useState([]);
-
+  const [publicid,setpublicid] = useState("");
+const [Image,setImage] = useState(null);
   const [projectUrl, setProjectUrl] = useState(null);
 
   useEffect(() => {
@@ -108,8 +110,35 @@ const ProjectDetailPage = () => {
 
     // return () => chatClient.disconnectUser();
   }, [userId]);
+  const handleFileChange = (e) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
+  };
+  const uploadImage = async (publicid) => {
+      
+      const data = new FormData();
+      data.append("file", Image);
+      data.append("upload_preset", "Freelancing website");
+      data.append("cloud_name", "dktw0yum9");
+      data.append("public_id",publicid);
+  
+      try {
+        const response = await axios.post("https://api.cloudinary.com/v1_1/dktw0yum9/image/upload", data);
+        seturl(response.data.url);
+        return response.data.url;
+      } catch (err) {
+        return null;
+      }
+  
+  
+    };
 
   const handleSubmit = async () => {
+    const publicid = user.id + project.title;
+    const uploadedImageUrl = await uploadImage(publicid);
+    setpublicid(publicid);
+   
     try {
       const res = await axios.post(
         `http://localhost:3000/project/${projectid}/add-proposal`,
@@ -118,6 +147,7 @@ const ProjectDetailPage = () => {
           price: bidAmount,
           answers: answers,
           Clerk_id: userId,
+          file:publicid
         }
       );
 
@@ -388,6 +418,10 @@ const ProjectDetailPage = () => {
                       </div>
                     </div>
                   </div>
+                   <div>
+                                <Label htmlFor="file">Flowchart to solve this problem</Label>
+                                <Input id="file" name="file" type="file" onChange={handleFileChange} />
+                              </div>
                   {project.milestones.length > 0 && (
                     <div className="space-y-2">
                       <Label>Milestones</Label>

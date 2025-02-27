@@ -49,6 +49,7 @@ export const proposalSchemaValidation = joi.object({
     price : joi.number().required(),
     answers : joi.array(),
     milestonesRequiredTime : joi.array(),
+    file: joi.string(),
 });
 
 export const Proposal = mongoose.model("Proposal", proposalSchema);
