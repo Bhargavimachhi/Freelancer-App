@@ -38,6 +38,7 @@ import Offers from "./Pages/Offers";
 import MyProjectDetail from "./Pages/MyProjectDetail";
 import { ProposalAnalysis } from "./Pages/ProposalAnalysis";
 import Meetingpage from "./Pages/Meetingpage";
+import CreateProject from "./Pages/CreateProject";
 
 const App = () => {
   return (
@@ -117,6 +118,11 @@ const App = () => {
             <Route path="/chats" element={<Chatpage />} />
 
             <Route path="/my-projects" element={<FindProjects />} />
+            <Route
+              path="/my-projects/create-project"
+              element={<CreateProject />}
+            />
+
             <Route path="/project/:id" element={<ProjectDetailPage />} />
             <Route path="/myproject/:id" element={<MyProjectDetail />} />
 
