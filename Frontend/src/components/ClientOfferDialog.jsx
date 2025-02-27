@@ -131,10 +131,15 @@ export const ClientOfferDialog = ({ offer, isOpen, onClose,project,freelancer })
         redirectTarget:"_modal",
       }
 
-      cashfree.checkout(checkoutOptions).then((res) => {
+      cashfree.checkout(checkoutOptions).then(async (res) => {
         console.log("payment initialized")
+        const res2 = await axios.put(`http://localhost:3000/${offer._id}/pay`);
+        console.log(res2.data);
+        alert("Payment is done..");
+        onClose();
+        window.location.reload();
 
-        verifyPayment(orderId)
+        // verifyPayment(orderId)
       })
 
 
