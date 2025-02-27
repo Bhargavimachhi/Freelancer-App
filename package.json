@@ -5,6 +5,7 @@
     "@langchain/core": "^0.3.40",
     "@langchain/google-genai": "^0.1.8",
     "body-parser": "^1.20.3",
+    "cashfree-payout": "^0.0.14",
     "cashfree-pg": "^4.3.10",
     "cors": "^2.8.5",
     "express": "^4.21.2",

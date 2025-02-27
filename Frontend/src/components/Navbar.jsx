@@ -21,44 +21,49 @@ import { SignOutButton } from "@clerk/clerk-react";
 
 import { ICONS } from "../assets/icons/icons";
 import { Link } from "react-router-dom";
+import logo from "../assets/images/logo.png";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-const products = [
+const forClients = [
   {
-    name: "Analytics",
-    description: "Get a better understanding of your traffic",
-    href: "#",
-    // icon: ChartPieIcon,
+    name: "Hire Freelancers",
+    description:
+      "Watch available freelancers of portal and hire desired talent",
+    href: "/freelancers",
   },
   {
-    name: "Engagement",
-    description: "Speak directly to your customers",
-    href: "#",
-    // icon: CursorArrowRaysIcon,
+    name: "Upload New Project",
+    description: "Hire freelancer specific to your task",
+    href: "/create-project",
   },
   {
-    name: "Security",
-    description: "Your customers’ data will be safe and secure",
-    href: "#",
-    // icon: FingerPrintIcon,
+    name: "Offers",
+    description: "Checkout the offers you have made with freelancers",
+    href: "/myoffers",
   },
   {
-    name: "Integrations",
-    description: "Connect with third-party tools",
-    href: "#",
-    // icon: SquaresPlusIcon,
-  },
-  {
-    name: "Automations",
-    description: "Build strategic funnels that will convert",
-    href: "#",
-    // icon: ArrowPathIcon,
+    name: "Your Projects",
+    description: "Checkout your existing projects",
+    href: "/my-projects",
   },
 ];
-const callsToAction = [
-  { name: "Watch demo", href: "#", icon: ICONS.CIRCLE_PLAY },
-  { name: "Contact sales", href: "#", icon: ICONS.PHONE },
+const forFreelancers = [
+  {
+    name: "Find Work",
+    description: "Watch available tasks for you to work on",
+    href: "/projects",
+  },
+  {
+    name: "Profile",
+    description: "Edit your profile for better match with client",
+    href: "/profile",
+  },
+  {
+    name: "Your Work",
+    description: "Checkout the offers you have got from client",
+    href: "/jobs",
+  },
 ];
 
 const Navbar = () => {
@@ -81,14 +86,9 @@ const Navbar = () => {
             <ICONS.BARS aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <div className="flex lg:flex-1">
-          <Link to="/" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img
-              alt=""
-              src="https://tailwindui.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-              className="w-auto h-8"
-            />
+        <div className="flex lg:flex-1 m-0 h-10">
+          <Link to="/">
+            <img alt="" src={logo} className="w-full h-full" />
           </Link>
         </div>
 
@@ -107,17 +107,11 @@ const Navbar = () => {
               className="absolute z-10 w-screen max-w-md mt-3 overflow-hidden transition bg-white shadow-lg top-full -left-8 rounded-3xl ring-1 ring-gray-900/5 data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
             >
               <div className="p-4">
-                {products.map((item) => (
+                {forClients.map((item) => (
                   <div
                     key={item.name}
                     className="relative flex items-center p-4 rounded-lg group gap-x-6 text-sm/6 hover:bg-bg"
                   >
-                    {/* <div className="flex items-center justify-center flex-none rounded-lg size-11 bg-gray-50 group-hover:bg-white">
-                      <item.icon
-                        aria-hidden="true"
-                        className="text-gray-600 size-6 group-hover:text-indigo-600"
-                      />
-                    </div> */}
                     <div className="flex-auto">
                       <Link
                         to={item.href}
@@ -129,21 +123,6 @@ const Navbar = () => {
                       <p className="mt-1 text-gray-600">{item.description}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-              <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                {callsToAction.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-100"
-                  >
-                    <item.icon
-                      aria-hidden="true"
-                      className="flex-none text-gray-400 size-5"
-                    />
-                    {item.name}
-                  </Link>
                 ))}
               </div>
             </PopoverPanel>
@@ -162,17 +141,11 @@ const Navbar = () => {
               className="absolute z-10 w-screen max-w-md mt-3 overflow-hidden transition bg-white shadow-lg top-full -left-8 rounded-3xl ring-1 ring-gray-900/5 data-closed:translate-y-1 data-closed:opacity-0 data-enter:duration-200 data-enter:ease-out data-leave:duration-150 data-leave:ease-in"
             >
               <div className="p-4">
-                {products.map((item) => (
+                {forFreelancers.map((item) => (
                   <div
                     key={item.name}
                     className="relative flex items-center p-4 rounded-lg group gap-x-6 text-sm/6 hover:bg-bg"
                   >
-                    {/* <div className="flex items-center justify-center flex-none rounded-lg size-11 bg-gray-50 group-hover:bg-white">
-                      <item.icon
-                        aria-hidden="true"
-                        className="text-gray-600 size-6 group-hover:text-indigo-600"
-                      />
-                    </div> */}
                     <div className="flex-auto">
                       <Link
                         to={item.href}
@@ -186,30 +159,8 @@ const Navbar = () => {
                   </div>
                 ))}
               </div>
-              <div className="grid grid-cols-2 divide-x divide-gray-900/5 bg-gray-50">
-                {callsToAction.map((item) => (
-                  <Link
-                    key={item.name}
-                    to={item.href}
-                    className="flex items-center justify-center gap-x-2.5 p-3 text-sm/6 font-semibold text-gray-900 hover:bg-gray-100"
-                  >
-                    <item.icon
-                      aria-hidden="true"
-                      className="flex-none text-gray-400 size-5"
-                    />
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
             </PopoverPanel>
           </Popover>
-          {/* 
-          <Link
-            to="/"
-            className="font-semibold text-black text-sm/6 hover:text-helper"
-          >
-            Why Upork
-          </Link> */}
           <Link
             to="/"
             className="font-semibold text-black text-sm/6 hover:text-helper"
@@ -366,7 +317,7 @@ const Navbar = () => {
                     />
                   </DisclosureButton>
                   <DisclosurePanel className="mt-2 space-y-2">
-                    {[...products, ...callsToAction].map((item) => (
+                    {forClients.map((item) => (
                       <DisclosureButton
                         key={item.name}
                         as="a"
@@ -387,7 +338,7 @@ const Navbar = () => {
                     />
                   </DisclosureButton>
                   <DisclosurePanel className="mt-2 space-y-2">
-                    {[...products, ...callsToAction].map((item) => (
+                    {forFreelancers.map((item) => (
                       <DisclosureButton
                         key={item.name}
                         as="a"
@@ -399,14 +350,6 @@ const Navbar = () => {
                     ))}
                   </DisclosurePanel>
                 </Disclosure>
-
-                <Link
-                  to="/"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block px-3 py-2 -mx-3 font-semibold text-black rounded-lg text-base/7 hover:bg-gray-50"
-                >
-                  Why Upwork
-                </Link>
                 <Link
                   to="/"
                   onClick={() => setMobileMenuOpen(false)}
