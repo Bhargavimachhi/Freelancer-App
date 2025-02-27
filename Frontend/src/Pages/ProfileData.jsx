@@ -4,11 +4,39 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { useUserContext } from "@/Context/UserContext";
 import { useUser } from "@clerk/clerk-react";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 export function ProfileData() {
   const { userData } = useUserContext();
   console.log(userData);
   const {user} = useUser();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+
+  const handlewithdraw = async (amount) =>{
+
+    const res = await axios.post("http://localhost:3000/Payout",{
+      userid: userData._id,
+      amount:amount
+    });
+    console.log(res.status);
+    if(res.status === 200){
+      toast.success("Your Payout is being processed.It will be redirected to your account in few days.");
+      window.location.reload();
+    }
+    else{
+      toast.error("Error in payout.")
+    }
+
+  }
+  const handleDialogSubmit = () => {
+    handlewithdraw(withdrawAmount);
+    setIsDialogOpen(false);
+  };
 
   return (
     <div className="flex flow-root">
@@ -49,10 +77,10 @@ export function ProfileData() {
           <CardContent>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <CardTitle>Your Wallet</CardTitle>
+                <CardTitle>Pending_amount</CardTitle>
                 <div className="flex">
                   <Wallet className="mr-2" /> &#8377;{" "}
-                  {userData?.withdrawable_amount}
+                  {userData?.pending_amount}
                 </div>
               </div>
             </div>
@@ -61,14 +89,33 @@ export function ProfileData() {
               <div className="flex flex-col space-y-1.5">
                 <CardTitle>Withdrawable Amount</CardTitle>
                 <div className="flex">
-                  <Wallet className="mr-2" /> &#8377; {userData?.pending_amount}
+                  <Wallet className="mr-2" /> &#8377; {userData?.withdrawable_amount}
                 </div>
-                <Button variant="outline">Withdraw Money</Button>
+                <Button variant="outline" onClick={()=> setIsDialogOpen(true)}>Withdraw Money</Button>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="bg-white">
+          <DialogHeader>
+            <DialogTitle>Withdraw Money</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col space-y-4 ">
+            <Input
+              type="number"
+              placeholder="Enter amount to withdraw"
+              value={withdrawAmount}
+              onChange={(e) => setWithdrawAmount(e.target.value)}
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleDialogSubmit}>Withdraw</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
