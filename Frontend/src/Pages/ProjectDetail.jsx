@@ -34,6 +34,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
+import { fetchFile } from '../../upload.js';
 
 const ProjectDetailPage = () => {
   const navi = useNavigate();
@@ -124,9 +125,12 @@ const ProjectDetailPage = () => {
       toast.error("Failed to submit proposal. Please try again.");
     }
   };
-  const openPDF = (publicId) => {
-    const url = `https://res.cloudinary.com/dktw0yum9/image/upload/${publicId}.pdf`;
-    window.open(url, "_blank");
+  const openPDF = async (publicId) => {
+   
+    console.log("We are inside");
+        const path = `images/${publicId}`
+        const url = await fetchFile(path);
+        window.open(url,"_blank");
   };
 
   if (loading) {

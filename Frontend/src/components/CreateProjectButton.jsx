@@ -11,6 +11,7 @@ import axios from "axios";
 import { useUser } from "@clerk/clerk-react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import {CiCirclePlus } from "react-icons/ci"
+import {uploadFile} from "../../upload.js";
 
 export default function CreateProjectSection() {
  
@@ -78,20 +79,31 @@ export default function CreateProjectSection() {
     }
   };
   const uploadImage = async (publicid) => {
+    const path = `images/${publicid}`;
+    const success = await uploadFile(image, path);
 
-    const data = new FormData();
-    data.append("file", image);
-    data.append("upload_preset", "Freelancing website");
-    data.append("cloud_name", "dktw0yum9");
-    data.append("public_id",publicid);
-
-    try {
-      const response = await axios.post("https://api.cloudinary.com/v1_1/dktw0yum9/image/upload", data);
-      seturl(response.data.url);
-      return response.data.url;
-    } catch (err) {
+    if (success) {
+      console.log("Its done bro");
+      return url;
+    } else {
       return null;
     }
+
+    // const data = new FormData();
+    // data.append("file", image);
+    // data.append("upload_preset", "Freelancing website");
+    // data.append("cloud_name", "dktw0yum9");
+    // data.append("public_id",publicid);
+
+    // try {
+    //   const response = await axios.post("https://api.cloudinary.com/v1_1/dktw0yum9/image/upload", data);
+    //   seturl(response.data.url);
+    //   return response.data.url;
+    // } catch (err) {
+    //   return null;
+    // }
+
+
   };
 
   const handleSubmit = async (e) => {
