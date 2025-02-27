@@ -24,7 +24,8 @@ export const addProposalToProject = async (req, res) => {
       price: req.body.price,
       answers: req.body.answers,
       project : id,
-      milestonesRequiredTime : req.body.milestonesRequiredTime
+      milestonesRequiredTime : req.body.milestonesRequiredTime,
+      file:req.body.file,
     };
 
     // console.log(newprojectdata);
