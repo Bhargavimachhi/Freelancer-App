@@ -41,13 +41,7 @@ const MyProjects = () => {
           const res = await axios.get(
             `http://localhost:3000/user/${userId}/projects`
           );
-          let data = [];
-          for(let i=0; i<res.data.length; i++) {
-            if(res.data[i].createdBy === userData._id) {
-                data.push(res.data[i]);
-            }
-          }
-          setProjects(data);
+          setProjects(res.data);
         } catch (error) {
           console.error("Error fetching projects:", error);
         } finally {

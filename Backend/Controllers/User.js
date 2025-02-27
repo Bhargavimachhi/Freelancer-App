@@ -2,6 +2,7 @@ import { User } from "../Models/User.js";
 import { userSchemaValidation } from "../Models/User.js";
 import { Project } from "../Models/Project.js";
 import { Proposal } from "../Models/Proposal.js";
+import { request } from "express";
 
 export const addUser = async (req, res) => {
   let user = await User.find({ email: req.body.email });
@@ -130,10 +131,14 @@ export const getAllProjectsOfUser = async (req, res) => {
     Clerk_id: id,
   });
 
+  if(!requser) {
+    return res.status(200).json([]);
+  }
+
   const userid = requser._id;
 
   const projects = await Project.find({
-    createdBy: { $ne: userid },
+    createdBy: userid,
   });
 
   return res.status(200).json(projects);

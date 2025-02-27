@@ -18,6 +18,7 @@ import { getSkills } from "./Controllers/skills.js";
 import { addProposalToProject, getProposal } from "./Controllers/proposals.js";
 import {
   createProject,
+  getAllProjects,
   getAllProposalsOfProject,
   getProject,
   hireFreelancerForProject,
@@ -70,6 +71,7 @@ app.put("/shortlist/user/:id", shortlistUser);
 app.post("/user/:id/add-review", addReviewToUser);
 
 // Project Routes
+app.get("/projects", getAllProjects);
 app.get("/project/:id", getProject);
 app.post("/project/add", createProject);
 app.post("/project/:id/add-proposal", addProposalToProject);

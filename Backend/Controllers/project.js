@@ -63,6 +63,11 @@ export const createProject = async (req, res) => {
   }
 };
 
+export const getAllProjects = async (req, res) => {
+  const projects = await Project.find({});
+  return res.status(200).json({ message: "success", projects });
+};
+
 export const getAllProposalsOfProject = async (req, res) => {
   const { id } = req.params;
   const project = await Project.findById(id);
