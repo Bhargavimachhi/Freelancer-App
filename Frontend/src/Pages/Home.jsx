@@ -5,7 +5,7 @@ import { useUser } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import axios from "axios";
 import Footer from "@/components/Footer";
-import workImage from '../assets/images/work.jpg'
+import workImage from "../assets/images/work.jpg";
 
 const Home = () => {
   const { user, isLoaded } = useUser();
@@ -159,7 +159,9 @@ const Home = () => {
               <Button
                 variant="outline"
                 className="flex flex-col items-start h-auto px-6 py-8 text-white bg-btn hover:bg-btnhover"
-                onClick={() => {navigate('/my-projects')}}
+                onClick={() => {
+                  navigate("/my-projects");
+                }}
               >
                 <h3 className="mb-2 text-lg font-semibold">
                   Post a job and hire a pro
@@ -169,11 +171,11 @@ const Home = () => {
               <Button
                 variant="outline"
                 className="flex flex-col items-start h-auto px-6 py-8 text-white bg-gray-900 hover:bg-gray-800"
-                onClick={() => {navigate('/freelancers')}}
+                onClick={() => {
+                  navigate("/freelancers");
+                }}
               >
-                <h3 className="mb-2 text-lg font-semibold">
-                  Hire Talent
-                </h3>
+                <h3 className="mb-2 text-lg font-semibold">Hire Talent</h3>
                 <span className="text-sm">Freelancers →</span>
               </Button>
             </div>

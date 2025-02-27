@@ -20,7 +20,7 @@ import { useUser } from "@clerk/clerk-react";
 import { SignOutButton } from "@clerk/clerk-react";
 
 import { ICONS } from "../assets/icons/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/logo.png";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -69,6 +69,7 @@ const forFreelancers = [
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, isSignedIn } = useUser();
+  const Navigate = useNavigate();
 
   return (
     <header className="bg-white border-b-2 border-hr">
@@ -206,54 +207,66 @@ const Navbar = () => {
                     </div>
                   </MenuItem>
                   <MenuItem>
-                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
-                      <Link
-                        to="/main-profile"
-                        className="block px-4 py-2 text-sm "
-                      >
-                        My Profile
-                      </Link>
+                    <div
+                      className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between"
+                      onClick={() => Navigate("/profile")}
+                    >
+                      <div className="block px-4 py-2 text-sm ">My Profile</div>
                       <ICONS.PROFILE size={25} className="mr-3" />
                     </div>
                   </MenuItem>
                   <MenuItem>
-                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
-                      <Link
-                        to="/my-projects"
-                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                      >
+                    <div
+                      className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between"
+                      onClick={() => Navigate("/projects")}
+                    >
+                      <div className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
                         All Projects
-                      </Link>
+                      </div>
                       <ICONS.FOLDER size={25} className="mr-3" />
                     </div>
                   </MenuItem>
                   <MenuItem>
-                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
-                      <Link
-                        to="/myoffers"
-                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                      >
+                    <div
+                      className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between"
+                      onClick={() => Navigate("/my-projects")}
+                    >
+                      <div className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
+                        My Projects
+                      </div>
+                      <ICONS.FOLDER size={25} className="mr-3" />
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div
+                      className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between"
+                      onClick={() => Navigate("/myoffers")}
+                    >
+                      <div className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
                         My Offers
-                      </Link>
+                      </div>
                       <ICONS.BRIEFCASE size={25} className="mr-3" />
                     </div>
                   </MenuItem>
                   <MenuItem>
-                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
-                      <Link
-                        to="/chats"
-                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                      >
+                    <div
+                      className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between"
+                      onClick={() => Navigate("/chats")}
+                    >
+                      <div className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
                         Chat
-                      </Link>
+                      </div>
                       <ICONS.MESSAGECIRCLE size={25} className="mr-3" />
                     </div>
                   </MenuItem>
                   <MenuItem>
-                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
-                      <Link className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
+                    <div
+                      className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between"
+                      onClick={() => Navigate("/profile")}
+                    >
+                      <div className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none">
                         <SignOutButton />
-                      </Link>
+                      </div>
                       <ICONS.SIGNOUT size={25} className="mr-3" />
                     </div>
                   </MenuItem>
