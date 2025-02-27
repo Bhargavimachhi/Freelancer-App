@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Alert from '@mui/material/Alert';
 import {
   AlertCircle,
   CheckCircle2,
@@ -253,18 +254,13 @@ export default function ProposalAnalysisPage({
           </CardHeader>
           <CardContent className="pt-6">
             <div className="flex flex-col items-center">
-              <div className="relative flex items-center justify-center w-40 h-40 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 ">
-                <div className="absolute bg-white rounded-full h-36 w-36"></div>
-                <span className="relative text-5xl font-bold text-blue-500">
-                  {scoringjson.final_score}
-                </span>
-              </div>
               <div className="max-w-2xl mt-6 text-sm text-center text-muted-foreground">
                 <p>{scoringjson.reason_explanation}</p>
               </div>
             </div>
           </CardContent>
         </Card>
+        <Alert severity="warning">This is an AI-generated report that might contain errors. This functionality is designed to help clients better understand proposals.</Alert>
       </div>
     </div>
   );
