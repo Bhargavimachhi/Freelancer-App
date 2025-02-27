@@ -279,6 +279,17 @@ const Navbar = () => {
                   <MenuItem>
                     <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
                       <Link
+                        to="/myoffers"
+                        className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
+                      >
+                        My Offers
+                      </Link>
+                      <ICONS.BRIEFCASE size={25} className="mr-3" />
+                    </div>
+                  </MenuItem>
+                  <MenuItem>
+                    <div className="text-text data-[focus]:bg-gray-100 data-[focus]:outline-none flex items-center justify-between">
+                      <Link
                         to="/chats"
                         className="block px-4 py-2 text-sm text-text data-[focus]:bg-gray-100 data-[focus]:outline-none"
                       >
