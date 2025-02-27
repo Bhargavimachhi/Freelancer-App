@@ -17,7 +17,8 @@ const selectedProject = {
 async function fetchImageToGenerativePart(url, mimeType) {
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
-    const base64String = Buffer.from(arrayBuffer).toString("base64");
+    // const base64String = Buffer.from(arrayBuffer).toString("base64");
+    const base64String = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
     return {
         inlineData: {
             data: base64String,
@@ -26,7 +27,7 @@ async function fetchImageToGenerativePart(url, mimeType) {
     };
 }
 
-async function AnalyseFlowchart(link){
+export async function AnalyseFlowchart(link){
     const remoteImageData = await fetchImageToGenerativePart(
        link,
         "image/jpg"
@@ -39,16 +40,14 @@ async function AnalyseFlowchart(link){
         Project Details:
         ${JSON.stringify(selectedProject, null, 2)}.
         Give output in three points:
-        1.) The good point about the flowchart.
-        2.) The bad point about the flowchart.
-        3.) And final opinion based on the flowchart.
+       The good point about the flowchart.
+        The bad point about the flowchart.
+        And final opinion based on the flowchart.
         `,
     ]);
     return result.response.text();
 }
-const ans = await AnalyseFlowchart("https://res.cloudinary.com/dktw0yum9/image/upload/v1740495593/mr7bssoiwlvd0cm1p5vi.jpg");
-console.log(ans);
-
-
+// const ans = await AnalyseFlowchart("https://res.cloudinary.com/dktw0yum9/image/upload/v1740495593/mr7bssoiwlvd0cm1p5vi.jpg");
+// console.log(ans);
 
 

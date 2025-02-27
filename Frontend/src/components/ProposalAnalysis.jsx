@@ -25,6 +25,7 @@ import { Progress } from "@/components/ui/progress";
 import { TypeAnimation } from "react-type-animation";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
+import Markdown from 'react-markdown'
 
 const Collapsible = CollapsiblePrimitive.Root;
 
@@ -36,6 +37,7 @@ export default function ProposalAnalysisPage({
   goodpoints,
   badpoints,
   scoringjson,
+  Flowchartexplan
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
@@ -133,6 +135,23 @@ export default function ProposalAnalysisPage({
             </CardContent>
           </Card>
         </div>
+        <Card className="overflow-hidden">
+          <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-blue-500" />
+                <CardTitle>Flowchart explantion</CardTitle>
+              </div>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-6">
+            <div className="flex flex-col items-center">
+              <div className="max-w-2xl mt-6 text-sm text-center text-muted-foreground">
+                <p><Markdown>{Flowchartexplan}</Markdown></p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Bottom full-width score card */}
         <Card className="overflow-hidden">

@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import AskBadpoints from "../../../AIfunctions/AskQuestion.js";
 import { Askgoodpoints } from "../../../AIfunctions/AskQuestion.js";
 import { useUserContext } from "@/Context/UserContext.jsx";
+import {AnalyseFlowchart} from  "../../../AIfunctions/AnalyzeFlowchart.js";
 
 export const ProposalAnalysis = () => {
   const { projectId, proposalId } = useParams();
@@ -26,6 +27,7 @@ export const ProposalAnalysis = () => {
   const [scoringjson, setscoringjson] = useState(null);
   const { getScoreDetails } = useUserContext();
   const [scoringCriteria, setScoringDetails] = useState(getScoreDetails());
+  const[flowchart,setflowchart] = useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -81,6 +83,12 @@ export const ProposalAnalysis = () => {
         description: selectedProposal.description,
         answers: selectedProposal.answers,
       };
+
+      const filepath = `https://res.cloudinary.com/dktw0yum9/image/upload/v1740588194/${selectedProposal.file}.jpg`;
+      const Flowcharans = await AnalyseFlowchart(filepath);
+      setflowchart(Flowcharans);
+      // console.log("Flowchart ans",Flowcharans);
+
       const freelancerobject = {
         skills: freelancer.skills,
         aboutMe: freelancer.aboutMe,
@@ -130,6 +138,8 @@ export const ProposalAnalysis = () => {
         goodpoints={goodpoints}
         badpoints={badpoints}
         scoringjson={scoringjson}
+        Flowchartexplan={flowchart}
+        
       />
     </>
   );
