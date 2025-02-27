@@ -12,8 +12,8 @@ import { Askgoodpoints } from '../../../AIfunctions/AskQuestion.js';
 
 export const ProposalAnalysis = () => {
     const {projectId, proposalId} = useParams();
-    const [selectedProject, setSelectedProject] = useState();
-    const [selectedProposal, setSelectedProposal] = useState();
+    const [selectedProject, setSelectedProject] = useState(null);
+    const [selectedProposal, setSelectedProposal] = useState(null);
     const user = useUser();
     const [loading, setLoading] = useState(true);
     const [userId, setUserId] = useState(null);
@@ -54,7 +54,7 @@ export const ProposalAnalysis = () => {
         }
 
         try {
-          const res = await axios.get(`http://localhost:3000/user/${selectedProposal.createdBy._id}`);
+          const res = await axios.get(`http://localhost:3000/user/${selectedProposal.createdBy}`);
           const freelancer = res.data.user;
   
           const projectobject = {

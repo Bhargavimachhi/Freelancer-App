@@ -2,8 +2,6 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "./firebase";
 
 export const uploadFile = async (file, path) => {
-  console.log(file);
-  console.log(path);
   const fileType = file?.type;
   console.log(fileType);
 
@@ -23,7 +21,6 @@ export const uploadFile = async (file, path) => {
 };
 
 export const fetchFile = async (path) => {
-  console.log(path);
   const fileRef = ref(storage, path);
   const url = await getDownloadURL(fileRef);
   return url;
