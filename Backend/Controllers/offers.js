@@ -70,7 +70,16 @@ export const PayOffer = async (req,res) =>{
       },
     {new:true});
     triggerOfferUpdate(updatedoffer._id, "work_in_progress");
-    
+    // Update the freelancer pending_amount state and withdrawel state
+    const freelancer = await User.findOne({
+      _id: updatedoffer.FreelancerId
+    });
+    const newpendingamount = freelancer.pending_amount + updatedoffer.amount;
+
+    const updatedpendingamount = await User.findOneAndUpdate(updatedoffer.FreelancerId,{
+      pending_amount: newpendingamount
+    });
+
     return res.status(200).json({
       updatedoffer
     });
@@ -88,6 +97,7 @@ export const sumbitwork = async (req,res)=>{
       status:"submitted"
     },
   {new:true});
+
   triggerOfferUpdate(updatedoffer._id, "submitted");
   return res.status(200).json({
     updatedoffer
@@ -100,6 +110,18 @@ export const approvework = async (req,res)=>{
       },
     {new:true});
     triggerOfferUpdate(updatedoffer._id, "completed");
+    // 
+    const freelancer = await User.findOne({
+      _id: updatedoffer.FreelancerId
+    });
+    const newpendingamount = freelancer.pending_amount - updatedoffer.amount;
+    const newwithdrawelamount = freelancer.withdrawable_amount + updatedoffer.amount;
+
+    const updatedpendingamount = await User.findOneAndUpdate(updatedoffer.FreelancerId,{
+      pending_amount: newpendingamount,
+      withdrawable_amount:newwithdrawelamount
+    });
+
     
     return res.status(200).json({
       message:"Work approved very nice",
