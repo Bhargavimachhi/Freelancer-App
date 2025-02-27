@@ -41,6 +41,7 @@ import {
 } from "./Controllers/offers.js";
 import { payment, verify } from "./Controllers/payment.js";
 import { GiveScorceToProposal } from "./Controllers/AIFunctions.js";
+import { payouttouser } from "./Controllers/payment.js";
 const PORT = 3000;
 
 const app = express();
@@ -106,3 +107,4 @@ app.post("/getToken", getToken); // It takes in the email and gives the token fo
 app.post("/getTokenbyClerkID", getTokenbyClerkID); // It takes in the Clerk_id and gives the token for chatting
 app.post("/getProjectsbyClerkID", getProjectsbyClerkID); // Thiss sget the projects by the clerk_id
 app.post("/getprojectByID", getprojectByID);
+app.post("/Payout",payouttouser);

@@ -1,5 +1,7 @@
 import crypto from "crypto";
 import { Cashfree } from "cashfree-pg";
+import { createBeneficiary,PaytoUser } from "../payout.js";
+import {User} from "../Models/User.js";
 Cashfree.XClientId = "TEST104789643c6ca7ecadb2f1637ba846987401";
 Cashfree.XClientSecret = "cfsk_ma_test_ac00b5486fb8476e9c8a3ace1d691608_41004b67";
 Cashfree.XEnvironment = Cashfree.Environment.SANDBOX;
@@ -71,4 +73,25 @@ export const verify = async (req, res) => {
       console.log(error);
   }
 };
+
+export const payouttouser = async (req,res) =>{
+
+    const {userid,amount} = req.body;
+
+    const requser = await User.findById(userid);
+
+    const beneid = await createBeneficiary(requser.name.trim(),requser.email);
+
+    const transfer = await PaytoUser(beneid,amount);
+
+    const newwithdrawableamount = requser.withdrawable_amount - amount;
+    console.log(newwithdrawableamount);
+
+    const updateduser = await User.findByIdAndUpdate(userid,{
+        withdrawable_amount: newwithdrawableamount
+    });
+
+    return res.status(200).send(updateduser);
+
+}
 
