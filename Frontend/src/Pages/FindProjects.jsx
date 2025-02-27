@@ -68,7 +68,7 @@ const FindProjects = () => {
             </h1>
             <button
               className="p-2 text-white border rounded-lg border-btn bg-btn"
-              onClick={() => navigate("/my-projects/create-project")}
+              onClick={() => navigate("/create-project")}
             >
               Create Project
             </button>

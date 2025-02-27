@@ -8,7 +8,6 @@ import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
 import { TextField, InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import CreateProjectSection from "@/components/CreateProjectButton";
 import { useUserContext } from "@/Context/UserContext";
 
 const MyProjects = () => {
@@ -73,7 +72,12 @@ const MyProjects = () => {
             <h1 className="float-left text-4xl font-bold tracking-tight">
               Your Projects :
             </h1>
-            <CreateProjectSection />
+            <button
+              className="p-2 text-white border rounded-lg border-btn bg-btn"
+              onClick={() => navigate("/create-project")}
+            >
+              Create Project
+            </button>
           </div>
 
           <TextField

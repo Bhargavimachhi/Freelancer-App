@@ -121,7 +121,7 @@ const App = () => {
             <Route path="/my-projects" element={<MyProjects />} />
             <Route path="/projects" element={<FindProjects />} />
             <Route
-              path="/my-projects/create-project"
+              path="/create-project"
               element={<CreateProject />}
             />
             <Route path="/project/:id" element={<ProjectDetailPage />} />
