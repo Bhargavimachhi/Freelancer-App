@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Alert from '@mui/material/Alert';
+import Alert from "@mui/material/Alert";
 import {
   AlertCircle,
   CheckCircle2,
@@ -25,7 +25,7 @@ import { Progress } from "@/components/ui/progress";
 import { TypeAnimation } from "react-type-animation";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
-import Markdown from 'react-markdown'
+import Markdown from "react-markdown";
 
 const Collapsible = CollapsiblePrimitive.Root;
 
@@ -37,7 +37,7 @@ export default function ProposalAnalysisPage({
   goodpoints,
   badpoints,
   scoringjson,
-  Flowchartexplan
+  Flowchartexplan,
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
@@ -69,22 +69,22 @@ export default function ProposalAnalysisPage({
               </CollapsibleTrigger>
             </div>
             <CollapsibleContent className="space-y-2 ">
-                <div className="bg-gray-100 p-4 rounded-lg space-y-2 w-[1200px]">
-                  <div className="text-sm text-black">
-                    <TypeAnimation
-                      splitter={(str) => str.split(/(?= )/)}
-                      sequence={[thinkingprocess, 3000, ""]}
-                      speed={{ type: "keyStrokeDelayInMs", value: 30 }}
-                      omitDeletionAnimation={true}
-                      style={{
-                        fontSize: "1em",
-                        display: "block",
-                        minHeight: "200px",
-                      }}
-                      repeat={Infinity}
-                    />
-                  </div>
+              <div className="bg-gray-100 p-4 rounded-lg space-y-2 w-[1200px]">
+                <div className="text-sm text-black">
+                  <TypeAnimation
+                    splitter={(str) => str.split(/(?= )/)}
+                    sequence={[thinkingprocess, 3000, ""]}
+                    speed={{ type: "keyStrokeDelayInMs", value: 30 }}
+                    omitDeletionAnimation={true}
+                    style={{
+                      fontSize: "1em",
+                      display: "block",
+                      minHeight: "200px",
+                    }}
+                    repeat={Infinity}
+                  />
                 </div>
+              </div>
             </CollapsibleContent>
           </div>
         </Collapsible>
@@ -135,23 +135,27 @@ export default function ProposalAnalysisPage({
             </CardContent>
           </Card>
         </div>
-        <Card className="overflow-hidden">
-          <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-blue-500" />
-                <CardTitle>Flowchart explantion</CardTitle>
+        {Flowchartexplan != '' && (
+          <Card className="overflow-hidden">
+            <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
+              <div className="flex pt-3">
+                <div className="flex gap-2">
+                  <Trophy className="w-5 h-5 text-blue-500" />
+                  <CardTitle>Flowchart explantion</CardTitle>
+                </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-6">
-            <div className="flex flex-col items-center">
-              <div className="max-w-2xl mt-6 text-sm text-center text-muted-foreground">
-                <p><Markdown>{Flowchartexplan}</Markdown></p>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="flex flex-col">
+                <div className="max-w-2xl ml-3 mb-4 text-sm text-muted-foreground">
+                  <p>
+                    <Markdown>{Flowchartexplan}</Markdown>
+                  </p>
+                </div>
               </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Bottom full-width score card */}
         <Card className="overflow-hidden">
@@ -273,13 +277,16 @@ export default function ProposalAnalysisPage({
           </CardHeader>
           <CardContent className="pt-6">
             <div className="flex flex-col items-center">
-              <div className="max-w-2xl mt-6 text-sm text-center text-muted-foreground">
+              <div className="max-w-2xl text-sm text-center text-muted-foreground">
                 <p>{scoringjson.reason_explanation}</p>
               </div>
             </div>
           </CardContent>
         </Card>
-        <Alert severity="warning">This is an AI-generated report that might contain errors. This functionality is designed to help clients better understand proposals.</Alert>
+        <Alert severity="warning">
+          This is an AI-generated report that might contain errors. This
+          functionality is designed to help clients better understand proposals.
+        </Alert>
       </div>
     </div>
   );
