@@ -54,7 +54,7 @@ export const ICONS = {
   EDIT: Edit,
   BOOKMARK: Bookmark,
   PLUS: Plus,
-  FOLDER: FolderOpenDot,
+  FOLDER: FolderOpenDot,  
 
   //Social Icons
   FACEBOOK: Facebook,

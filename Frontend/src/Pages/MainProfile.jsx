@@ -12,12 +12,18 @@ import Education from "@/components/Profile/Education";
 import Project from "@/components/Profile/Project";
 import Skills from "@/components/Profile/Skills";
 import Reviews from "@/components/Profile/Reviews";
+import Navigate from "@/helpers/Navigate";
 
 export default function MainProfile() {
   const { user } = useUser();
 
   return (
     <div>
+      <Navigate
+        name={"My Profile"}
+        item={user?.fullName}
+        path={"main-profile"}
+      />
       {/* Profile Info */}
       <div className="p-4 mx-auto max-w-7xl">
         <div className="flex flex-col items-center justify-start gap-2 sm:items-start sm:flex-row">
