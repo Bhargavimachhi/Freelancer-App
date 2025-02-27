@@ -17,14 +17,14 @@ export const getProject = async (req, res) => {
     return res.status(500).json({ message: "Internal Server Error", err });
   }
 };
-
 export const createProject = async (req, res) => {
   const {
     title,
     description,
     experienceLevel,
     price,
-    tags,
+    tags, // Receive skills as tags
+    milestones,
     questions,
     projectFile,
     Clerk_id,
@@ -42,19 +42,21 @@ export const createProject = async (req, res) => {
       description,
       experienceLevel,
       price,
-      tags,
+      tags, // Store skills as tags in DB
       questions,
+      milestones,
       file: projectFile,
-      createdBy: requser._id,
+      createdBy: requser?._id,
     });
 
     const savedProject = await project.save();
     requser.createdProjects.push(savedProject._id);
     await requser.save();
 
-    return res
-      .status(200)
-      .json({ message: "Project Created", project: savedProject });
+    return res.status(200).json({
+      message: "Project Created",
+      project: savedProject,
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({ message: "Error Occurred !!!", err });
@@ -85,8 +87,8 @@ export const getAllProposalsOfProject = async (req, res) => {
     });
 };
 
-export const hireFreelancerForProject = async(req, res) => {
-  const { pId, fId} = req.params;
+export const hireFreelancerForProject = async (req, res) => {
+  const { pId, fId } = req.params;
   const project = await Project.findById(pId);
 
   if (!project) {
@@ -98,10 +100,9 @@ export const hireFreelancerForProject = async(req, res) => {
   project
     .save()
     .then(() => {
-      res.status(200).json({ message: "success"});
+      res.status(200).json({ message: "success" });
     })
     .catch((err) => {
       res.status(500).json({ message: "Error Occurred !!!" });
     });
-
-}
+};

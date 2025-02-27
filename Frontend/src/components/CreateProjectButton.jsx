@@ -119,7 +119,7 @@ export default function CreateProjectSection() {
         const res = await axios.post("http://localhost:3000/project/add", updatedProjectData);
 
         if (res.data.message === "Project Created") {
-            setIsDialogOpen(false);
+            // setIsDialogOpen(false);
             alert("Project Created Successfully");
             setProjectData(initialProjectData);
         }
@@ -130,7 +130,7 @@ export default function CreateProjectSection() {
 
   return (
     <>
-      {/* <h1 className="text-3xl font-bold mb-8">Dashboard</h1> */}
+      {/* <h1 className="mb-8 text-3xl font-bold">Dashboard</h1> */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <Button size="lg" className={`flex w-full md:w-auto float-right text-white mr-5 bg-blue-600 hover:bg-blue-700`}>

@@ -9,6 +9,7 @@ import Navigate from "@/helpers/Navigate";
 import { TextField, InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import CreateProjectSection from "@/components/CreateProjectButton";
+import { Button } from "@/components/ui/button";
 
 const FindProjects = () => {
   const { user, isLoaded } = useUser();
@@ -65,7 +66,12 @@ const FindProjects = () => {
             <h1 className="float-left text-4xl font-bold tracking-tight">
               Projects For You:
             </h1>
-            <CreateProjectSection />
+            <button
+              className="p-2 text-white border rounded-lg border-btn bg-btn"
+              onClick={() => navigate("/my-projects/create-project")}
+            >
+              Create Project
+            </button>
           </div>
 
           <TextField

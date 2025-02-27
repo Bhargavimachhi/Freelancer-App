@@ -13,6 +13,7 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
   const { user } = useUser();
   const { getUserDetails, userData } = useUserContext();
   const [isOpen, setIsOpen] = useState(false);
+
   const [skills, setSkills] = useState([]);
   const [input, setInput] = useState("");
 
@@ -73,7 +74,6 @@ const SkillsModal = ({ editSkills, setEditSkills }) => {
   const removeSkill = (skill) => {
     setSkills(skills.filter((s) => s !== skill));
   };
-
   return (
     <>
       <div className="font-bold text-center text-white rounded-lg">
