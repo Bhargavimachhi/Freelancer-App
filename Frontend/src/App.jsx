@@ -111,8 +111,8 @@ const App = () => {
             />
 
             {/* profile page */}
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/main-profile" element={<MainProfile />} />
+            <Route path="/edit-profile" element={<Profile />} />
+            <Route path="/profile" element={<MainProfile />} />
 
             {/* chat page */}
             <Route path="/chats" element={<Chatpage />} />
