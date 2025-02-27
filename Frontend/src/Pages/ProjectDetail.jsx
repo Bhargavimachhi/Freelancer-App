@@ -55,6 +55,8 @@ const ProjectDetailPage = () => {
   const [answers, setAnswers] = useState([]);
   const [deliveryTimes, setDeliveryTimes] = useState([]);
 
+  const [projectUrl, setProjectUrl] = useState(null);
+
   useEffect(() => {
     if (isLoaded && user) {
       setUserId(user.id);
@@ -71,7 +73,15 @@ const ProjectDetailPage = () => {
           }
         );
         setproject(res.data.project);
-        console.log(res.data.project);
+
+        try {
+          const url = await fetchFile(`project/${res.data.project._id}/projectfile.jpg`);
+          console.log(url);
+          setProjectUrl(url);
+        }
+        catch (err) {
+          console.log(err);
+        }
 
         res = await axios.get(
           `http://localhost:3000/user/${res.data.project.createdBy}`
@@ -93,6 +103,7 @@ const ProjectDetailPage = () => {
         setLoading(false);
       }
     };
+
     fetchproject();
 
     // return () => chatClient.disconnectUser();
@@ -126,8 +137,6 @@ const ProjectDetailPage = () => {
     }
   };
   const openPDF = async (publicId) => {
-   
-    console.log("We are inside");
         const path = `images/${publicId}`
         const url = await fetchFile(path);
         window.open(url,"_blank");
@@ -247,7 +256,7 @@ const ProjectDetailPage = () => {
                       </div>
                     )}
 
-                    {project?.file && (
+                    {projectUrl && (
                       <div className="mb-6">
                         <h3 className="mb-2 text-lg font-semibold text-gray-800">
                           Attachments
@@ -255,12 +264,12 @@ const ProjectDetailPage = () => {
                         <Button
                           variant="outline"
                           onClick={() => {
-                            openPDF(project.file);
+                            window.location.href = projectUrl;
                           }}
                           className="flex items-center justify-start gap-2 px-4 py-2 rounded-lg border-btn text-text"
                         >
                           <span className="text-lg">📄</span>
-                          <span>{project.file.slice(0, 20)}</span>
+                          <span>Project description</span>
                         </Button>
                       </div>
                     )}
