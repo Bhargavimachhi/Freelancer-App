@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 
 export function ProfileData() {
   const { userData } = useUserContext();
-  console.log(userData);
   const {user} = useUser();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [withdrawAmount, setWithdrawAmount] = useState("");
