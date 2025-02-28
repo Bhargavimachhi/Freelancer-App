@@ -35,7 +35,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
-import { fetchFile } from '../../upload.js';
+import { fetchFile } from "../../upload.js";
 
 const ProjectDetailPage = () => {
   const navi = useNavigate();
@@ -55,8 +55,8 @@ const ProjectDetailPage = () => {
   const [bidAmount, setBidAmount] = useState("");
   const [answers, setAnswers] = useState([]);
   const [deliveryTimes, setDeliveryTimes] = useState([]);
-  const [publicid,setpublicid] = useState("");
-const [Image,setImage] = useState(null);
+  const [publicid, setpublicid] = useState("");
+  const [Image, setImage] = useState(null);
   const [projectUrl, setProjectUrl] = useState(null);
 
   useEffect(() => {
@@ -77,11 +77,12 @@ const [Image,setImage] = useState(null);
         setproject(res.data.project);
 
         try {
-          const url = await fetchFile(`project/${res.data.project._id}/projectfile.jpg`);
+          const url = await fetchFile(
+            `project/${res.data.project._id}/projectfile.jpg`
+          );
           console.log(url);
           setProjectUrl(url);
-        }
-        catch (err) {
+        } catch (err) {
           console.log(err);
         }
 
@@ -116,29 +117,29 @@ const [Image,setImage] = useState(null);
     }
   };
   const uploadImage = async (publicid) => {
-      
-      const data = new FormData();
-      data.append("file", Image);
-      data.append("upload_preset", "Freelancing website");
-      data.append("cloud_name", "dktw0yum9");
-      data.append("public_id",publicid);
-  
-      try {
-        const response = await axios.post("https://api.cloudinary.com/v1_1/dktw0yum9/image/upload", data);
-        seturl(response.data.url);
-        return response.data.url;
-      } catch (err) {
-        return null;
-      }
-  
-  
-    };
+    const data = new FormData();
+    data.append("file", Image);
+    data.append("upload_preset", "Freelancing website");
+    data.append("cloud_name", "dktw0yum9");
+    data.append("public_id", publicid);
+
+    try {
+      const response = await axios.post(
+        "https://api.cloudinary.com/v1_1/dktw0yum9/image/upload",
+        data
+      );
+      seturl(response.data.url);
+      return response.data.url;
+    } catch (err) {
+      return null;
+    }
+  };
 
   const handleSubmit = async () => {
     const publicid = user.id + project.title;
     const uploadedImageUrl = await uploadImage(publicid);
     setpublicid(publicid);
-   
+
     try {
       const res = await axios.post(
         `http://localhost:3000/project/${projectid}/add-proposal`,
@@ -147,7 +148,7 @@ const [Image,setImage] = useState(null);
           price: bidAmount,
           answers: answers,
           Clerk_id: userId,
-          file:publicid
+          file: publicid,
         }
       );
 
@@ -167,9 +168,9 @@ const [Image,setImage] = useState(null);
     }
   };
   const openPDF = async (publicId) => {
-        const path = `images/${publicId}`
-        const url = await fetchFile(path);
-        window.open(url,"_blank");
+    const path = `images/${publicId}`;
+    const url = await fetchFile(path);
+    window.open(url, "_blank");
   };
 
   if (loading) {
@@ -367,9 +368,10 @@ const [Image,setImage] = useState(null);
                 <Button
                   size="lg"
                   className="w-full px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                  onClick={() => setIsProposalDialogOpen(true)}
+                  // onClick={() => setIsProposalDialogOpen(true)}
+                  onClick={() => navi(`/project/${projectid}/create-proposal`)}
                 >
-                  Submit a Proposal
+                  Send a Proposal
                 </Button>
               </CardFooter>
             </Card>
@@ -418,10 +420,17 @@ const [Image,setImage] = useState(null);
                       </div>
                     </div>
                   </div>
-                   <div>
-                                <Label htmlFor="file">Flowchart to solve this problem</Label>
-                                <Input id="file" name="file" type="file" onChange={handleFileChange} />
-                              </div>
+                  <div>
+                    <Label htmlFor="file">
+                      Flowchart to solve this problem
+                    </Label>
+                    <Input
+                      id="file"
+                      name="file"
+                      type="file"
+                      onChange={handleFileChange}
+                    />
+                  </div>
                   {project.milestones.length > 0 && (
                     <div className="space-y-2">
                       <Label>Milestones</Label>

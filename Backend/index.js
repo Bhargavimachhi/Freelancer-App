@@ -109,4 +109,4 @@ app.post("/getToken", getToken); // It takes in the email and gives the token fo
 app.post("/getTokenbyClerkID", getTokenbyClerkID); // It takes in the Clerk_id and gives the token for chatting
 app.post("/getProjectsbyClerkID", getProjectsbyClerkID); // Thiss sget the projects by the clerk_id
 app.post("/getprojectByID", getprojectByID);
-app.post("/Payout",payouttouser);
+app.post("/Payout", payouttouser);
