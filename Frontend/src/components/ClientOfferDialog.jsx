@@ -14,6 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Download } from "lucide-react";
 import { load } from "@cashfreepayments/cashfree-js";
 import Pusher from "pusher-js";
+import { useNavigate } from "react-router-dom";
 
 export const ClientOfferDialog = ({
   offer,
@@ -24,6 +25,7 @@ export const ClientOfferDialog = ({
 }) => {
   const [cashfree, setCashfree] = useState(null);
   const [offerState, setOfferState] = useState(offer.status);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setOfferState(offer.status);
@@ -58,6 +60,8 @@ export const ClientOfferDialog = ({
   }, []);
 
   if (!offer) return null;
+
+  console.log(offer);
 
   const statusColors = {
     pending: "bg-yellow-500",
@@ -187,16 +191,16 @@ export const ClientOfferDialog = ({
                   </h3>
                   <p className="mb-2 text-gray-700">{offer.submission.note}</p>
                   <div className="flex flex-wrap gap-2">
-                    {offer.submission.files.map((file) => (
+                    {offer.submission.files.map((file, index) => (
                       <Button
-                        key={file.public_id}
+                        key={file?.public_id}
                         variant="outline"
                         size="sm"
                         className="text-blue-600 border border-blue-500 hover:bg-blue-100"
-                        onClick={() => window.open(file.url)}
+                        onClick={() => console.log(file?.url)}
                       >
                         <Download className="w-4 h-4 mr-2" />
-                        Download File
+                        Download File for Milestone {index + 1}
                       </Button>
                     ))}
                   </div>

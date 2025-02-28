@@ -108,6 +108,7 @@ const FreelancerOfferDialog = ({
     }
     await uploadFile(files[index], `/project/${project._id}/${freelancer._id}/${index}`);
     const fileUrl = await fetchFile(`/project/${project._id}/${freelancer._id}/${index}`);
+    console.log(fileUrl);
     try {
       let res = await axios.post(`http://localhost:3000/offer/${offer._id}/submit-work`, {
         fileUrl,
