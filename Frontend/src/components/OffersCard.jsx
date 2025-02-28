@@ -80,6 +80,7 @@ const OfferCard = ({ offer }) => {
     work_in_progress: "bg-purple-500",
     submitted: "bg-orange-500",
     completed: "bg-green-500",
+    collaborator_approval_pending: "bg-yellow-500"
   };
 
   const handlePayment = async (offerId) => {
