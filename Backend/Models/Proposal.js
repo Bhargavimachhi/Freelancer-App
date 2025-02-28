@@ -10,7 +10,7 @@ let proposalSchema = new mongoose.Schema({
     },
     helpedBy : {
         type : mongoose.Schema.Types.ObjectId,
-        required : true,
+        // required : true,
     },
     project : {
         type : mongoose.Schema.Types.ObjectId,
