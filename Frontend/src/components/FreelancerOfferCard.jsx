@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Wallet } from "lucide-react";
+import { Loader, Wallet } from "lucide-react";
 
 import Pusher from "pusher-js";
 import { useState, useEffect } from "react";
@@ -13,10 +13,12 @@ export function OfferCard({ offer }) {
   const [project, setProject] = useState(null);
   const [client, setclient] = useState(null);
   const [freelancer, setFreelancer] = useState(null);
+  const [collaborator, setCollaborator] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [offerState, setOfferState] = useState(offer.status);
 
   useEffect(() => {
+    console.log(offer);
     const pusher = new Pusher("97f4daf56e0efc37b28d", {
       cluster: "ap2",
     });
@@ -69,9 +71,23 @@ export function OfferCard({ offer }) {
       }
     };
 
+    const fetchCollaborator = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3000/user/${offer.CollaboratorId}`
+        );
+        setCollaborator(res.data.user);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
+    };
+
     fetchUser();
     fetchProject();
     fetchFreelancer();
+    if(offer.CollaboratorId) {
+      fetchCollaborator();
+    }
   }, [offer.ProjectId, offer.clientId]);
   const statusColors = {
     pending: "bg-yellow-500",
@@ -116,6 +132,9 @@ export function OfferCard({ offer }) {
                   <h3 className="mb-1 text-lg font-semibold">
                     {project.title}
                   </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {project.decription}
+                  </p>
                   <p className="text-sm text-muted-foreground">
                     by {client.name}
                   </p>

@@ -48,6 +48,7 @@ let proposalSchema = new mongoose.Schema({
 
 export const proposalSchemaValidation = joi.object({
     createdBy : joi.required(),
+    helpedBy : ObjectId(),
     project : joi.required(),
     description : joi.string().required(),
     price : joi.number().required(),

@@ -104,6 +104,12 @@ const ProjectDetailPage = () => {
             `http://localhost:3000/user/${data[i].createdBy}`
           );
           data[i]["createdBy"] = res.data.user;
+          if (data[i].helpedBy) {
+            res = await axios.get(
+              `http://localhost:3000/user/${data[i].helpedBy}`
+            );
+            data[i]["helpedBy"] = res.data.user;
+          }
         }
         setProposals(data);
         setLoading(false);
@@ -190,13 +196,15 @@ const ProjectDetailPage = () => {
   };
 
   const handleHiring = async (data) => {
+    console.log(data);
     toast.loading("Starting the process..");
-    const res = await axios.post("http://localhost:3000/CreateOffer", data);
-    if (res.data.newOffer) {
+    let res = await axios.post("http://localhost:3000/CreateOffer", data);
+    res = await axios.get(`http://localhost:3000/offer/${res.data.newOffer._id}/pending`);
+    // if (res.data.newOffer) {
       toast.dismiss();
       toast.success("New Offer is created..");
       navi("/myoffers");
-    }
+    // }
   };
 
   return (
@@ -538,7 +546,8 @@ const ProjectDetailPage = () => {
                       <CardHeader className="flex items-start justify-start">
                         <div>
                           <h3 className="text-lg font-semibold text-text">
-                            {proposal.createdBy.name}
+                            By {proposal.createdBy.name}{" "}
+                            {proposal.helpedBy && `& ${proposal.helpedBy.name}`}
                           </h3>
                         </div>
                       </CardHeader>
@@ -566,23 +575,48 @@ const ProjectDetailPage = () => {
                           <div>
                             <p className="flex items-center gap-1 text-sm">
                               <span className="font-semibold text-text">
-                                Rating :
+                                Rating of {proposal.createdBy.name} :
                               </span>
                               <span className="font-bold text-btn">
                                 ⭐ {proposal.createdBy.rating}/5
                               </span>
                             </p>
                           </div>
+                          {proposal.helpedBy && (
+                            <div>
+                              <p className="flex items-center gap-1 text-sm">
+                                <span className="font-semibold text-text">
+                                  Rating of {proposal.helpedBy.name} :
+                                </span>
+                                <span className="font-bold text-btn">
+                                  ⭐ {proposal.helpedBy.rating}/5
+                                </span>
+                              </p>
+                            </div>
+                          )}
                           <div>
                             <p className="flex items-center gap-1 text-sm">
                               <span className="font-semibold text-text">
-                                Completed Projects :
+                                Completed Projects of {proposal.createdBy.name}:
                               </span>
                               <span className="font-bold text-btn">
                                 {proposal.createdBy.createdProjects.length}
                               </span>
                             </p>
                           </div>
+                          {proposal.helpedBy && (
+                            <div>
+                              <p className="flex items-center gap-1 text-sm">
+                                <span className="font-semibold text-text">
+                                  Completed Projects of {proposal.helpedBy.name}
+                                  :
+                                </span>
+                                <span className="font-bold text-btn">
+                                  {proposal.helpedBy.createdProjects.length}
+                                </span>
+                              </p>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                       <CardFooter className="flex flex-col items-start gap-3 sm:justify-end sm:flex-row sm:items-center">
@@ -619,6 +653,7 @@ const ProjectDetailPage = () => {
                             handleHiring({
                               clientId: project.createdBy,
                               FreelancerId: proposal.createdBy._id,
+                              CollaboratorId: proposal.helpedBy ? proposal.helpedBy._id : null,
                               ProjectId: projectid,
                               amount: proposal.price,
                             })
@@ -646,7 +681,9 @@ const ProjectDetailPage = () => {
                           <CardHeader className="flex items-start justify-start">
                             <div>
                               <h3 className="text-lg font-semibold text-text">
-                                {proposal.createdBy.name}
+                                By {proposal.createdBy.name}{" "}
+                                {proposal.helpedBy &&
+                                  `& ${proposal.helpedBy.name}`}
                               </h3>
                             </div>
                           </CardHeader>
@@ -674,23 +711,49 @@ const ProjectDetailPage = () => {
                               <div>
                                 <p className="flex items-center gap-1 text-sm">
                                   <span className="font-semibold text-text">
-                                    Rating :
+                                    Rating of {proposal.createdBy.name} :
                                   </span>
                                   <span className="font-bold text-btn">
                                     ⭐ {proposal.createdBy.rating}/5
                                   </span>
                                 </p>
                               </div>
+                              {proposal.helpedBy && (
+                                <div>
+                                  <p className="flex items-center gap-1 text-sm">
+                                    <span className="font-semibold text-text">
+                                      Rating of {proposal.helpedBy.name} :
+                                    </span>
+                                    <span className="font-bold text-btn">
+                                      ⭐ {proposal.helpedBy.rating}/5
+                                    </span>
+                                  </p>
+                                </div>
+                              )}
                               <div>
                                 <p className="flex items-center gap-1 text-sm">
                                   <span className="font-semibold text-text">
-                                    Completed Projects :
+                                    Completed Projects of{" "}
+                                    {proposal.createdBy.name}:
                                   </span>
                                   <span className="font-bold text-btn">
                                     {proposal.createdBy.createdProjects.length}
                                   </span>
                                 </p>
                               </div>
+                              {proposal.helpedBy && (
+                                <div>
+                                  <p className="flex items-center gap-1 text-sm">
+                                    <span className="font-semibold text-text">
+                                      Completed Projects of{" "}
+                                      {proposal.helpedBy.name}:
+                                    </span>
+                                    <span className="font-bold text-btn">
+                                      {proposal.helpedBy.createdProjects.length}
+                                    </span>
+                                  </p>
+                                </div>
+                              )}
                             </div>
                           </CardContent>
                           <CardFooter className="flex flex-col items-start gap-3 sm:justify-end sm:flex-row sm:items-center">

@@ -5,30 +5,29 @@ import { User } from "../Models/User.js";
 import { GiveScorceToProposalUsingParameters } from "./AIFunctions.js";
 
 export const addProposalToProject = async (req, res) => {
-  const { id } = req.params;
-  const { Clerk_id } = req.body;
-  const project = await Project.findById(id);
-  const requser = await User.findOne({ Clerk_id: Clerk_id });
+    const { id } = req.params; 
+    const { Clerk_id, helpedBy } = req.body;
+    const project = await Project.findById(id);
+    const requser = await User.findOne({ Clerk_id: Clerk_id });
+    
+    if (!requser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+  
+    if (!project) {
+      return res.status(403).json({ message: "Project do not exist" });
+    }
 
-  if (!requser) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  if (!project) {
-    return res.status(403).json({ message: "Project do not exist" });
-  }
-
-  const newprojectdata = {
-    createdBy: requser._id,
-    description: req.body.description,
-    price: req.body.price,
-    answers: req.body.answers,
-    project: id,
-    milestonesRequiredTime: req.body.milestonesRequiredTime,
-    file: req.body.file,
-  };
-
-  console.log(newprojectdata);
+    const newprojectdata = {
+      createdBy: requser._id,
+      helpedBy: helpedBy,
+      description: req.body.description,
+      price: req.body.price,
+      answers: req.body.answers,
+      project : id,
+      milestonesRequiredTime : req.body.milestonesRequiredTime,
+      file:req.body.file,
+    };
 
   const { error } = proposalSchemaValidation.validate(newprojectdata);
   // console.log(error);
