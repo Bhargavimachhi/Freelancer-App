@@ -18,6 +18,7 @@ import axios from "axios";
 import emailjs from "emailjs-com";
 import { useUserContext } from "@/Context/UserContext";
 import { useUser } from "@clerk/clerk-react";
+import { fetchFile, uploadFile } from "../../upload.js";
 
 const FreelancerOfferDialog = ({
   offer,
@@ -28,7 +29,7 @@ const FreelancerOfferDialog = ({
   freelancer,
 }) => {
   const { user } = useUser();
-  const [files, setFiles] = useState([]);
+  const [files, setFiles] = useState(Array(project.milestones.length).fill(null));
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [offerState, setOfferState] = useState(offer.status);
@@ -71,13 +72,15 @@ const FreelancerOfferDialog = ({
 
   const submitCollaborationProposal = async () => {
     try {
-      const user = await axios.get(`http://localhost:3000/user/${offer.FreelancerId}`);
+      const user = await axios.get(
+        `http://localhost:3000/user/${offer.FreelancerId}`
+      );
       const res = await axios.post(
         `http://localhost:3000/project/${offer.ProjectId}/add-proposal`,
         {
-          Clerk_id : user.data.user.Clerk_id,
+          Clerk_id: user.data.user.Clerk_id,
           helpedBy: offer.CollaboratorId,
-          project : offer.ProjectId,
+          project: offer.ProjectId,
           description: offer.description,
           price: offer.amount,
         }
@@ -86,12 +89,37 @@ const FreelancerOfferDialog = ({
       await axios.get(`http://localhost:3000/offer/${offer._id}/remove`);
 
       // Show alert
-      
     } catch (error) {
       console.log(error);
       toast.error("Failed to submit proposal. Please try again.");
     }
   };
+
+  const handleFileChange = (index, event) => {
+    const newFiles = [...files];
+    newFiles[index] = event.target.files[0];
+    setFiles(newFiles);
+  };
+
+  const handleSubmit = async(index) => {
+    if(!files[index]) {
+      toast.error("Upload file");
+      return;
+    }
+    await uploadFile(files[index], `/project/${project._id}/${freelancer._id}/${index}`);
+    const fileUrl = await fetchFile(`/project/${project._id}/${freelancer._id}/${index}`);
+    try {
+      let res = await axios.post(`http://localhost:3000/offer/${offer._id}/submit-work`, {
+        fileUrl,
+        index
+      })
+      toast.success("File Uploaded successfully");
+    }
+    catch (err) {
+      console.log(err);
+      toast.error("Failed to submit file");
+    }
+  }
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -138,7 +166,6 @@ const FreelancerOfferDialog = ({
         const res = await axios.put(
           `http://localhost:3000/${offer._id}/accept`
         );
-        console.log(res.data);
         toast.success("You have accepted the offer");
 
         onClose();
@@ -255,9 +282,7 @@ const FreelancerOfferDialog = ({
                         <Input
                           type="file"
                           multiple
-                          onChange={(e) =>
-                            setFiles(Array.from(e.target.files || []))
-                          }
+                          onChange={(e)=>handleFileChange(index, e)}
                           className="mb-2"
                         />
                         <Textarea
@@ -265,7 +290,13 @@ const FreelancerOfferDialog = ({
                           value={note}
                           onChange={(e) => setNote(e.target.value)}
                         />
-                        <Button>Submit Work</Button>
+                        <Button
+                          onClick={(e) => {
+                            handleSubmit(index)
+                          }}
+                        >
+                          Submit Work
+                        </Button>
                       </div>
                     </>
                   );
