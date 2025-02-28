@@ -26,7 +26,17 @@ import toast from "react-hot-toast";
 
 export const CustomizedAiScoring = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({skillMatch : 40, experienceLevel : 30, answeringCapability : 25, pricing: 5});
+  const score = JSON.parse(localStorage.getItem("score"));
+  const [formData, setFormData] = useState(
+    score
+      ? score
+      : {
+          skillMatch: 40,
+          experienceLevel: 30,
+          answeringCapability: 25,
+          pricing: 5,
+        }
+  );
 
   const handleSubmit = () => {
     let total =
@@ -35,12 +45,11 @@ export const CustomizedAiScoring = () => {
       Number(formData.experienceLevel) +
       Number(formData.pricing);
 
-    if(total != 100) {
-        toast.error("Criteria total should be 100");
-    }
-    else {
-        setFormData(formData);
-        toast.success("Ai Scoring Criteria Set Successfully");
+    if (total != 100) {
+      toast.error("Criteria total should be 100");
+    } else {
+      localStorage.setItem("score", JSON.stringify(formData));
+      toast.success("Ai Scoring Criteria Set Successfully");
     }
   };
 
@@ -77,7 +86,10 @@ export const CustomizedAiScoring = () => {
                     value={formData.skillMatch}
                     className="border-solid border-[2px] border-purple-100"
                     onChange={(e) => {
-                      setFormData({ ...formData, skillMatch: e.target.value });
+                      setFormData({
+                        ...formData,
+                        skillMatch: Number(e.target.value),
+                      });
                     }}
                   />
                 </div>
@@ -105,7 +117,7 @@ export const CustomizedAiScoring = () => {
                     onChange={(e) => {
                       setFormData({
                         ...formData,
-                        experienceLevel: e.target.value,
+                        experienceLevel: Number(e.target.value),
                       });
                     }}
                   />
@@ -134,7 +146,7 @@ export const CustomizedAiScoring = () => {
                     onChange={(e) => {
                       setFormData({
                         ...formData,
-                        answeringCapability: e.target.value,
+                        answeringCapability: Number(e.target.value),
                       });
                     }}
                   />
@@ -161,7 +173,10 @@ export const CustomizedAiScoring = () => {
                     className="border-solid border-[2px] border-yellow-100"
                     value={formData.pricing}
                     onChange={(e) => {
-                      setFormData({ ...formData, pricing: e.target.value });
+                      setFormData({
+                        ...formData,
+                        pricing: Number(e.target.value),
+                      });
                     }}
                   />
                 </div>

@@ -136,7 +136,7 @@ export function OfferCard({ offer }) {
                     {project.decription}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    by {client.name}
+                    Offered by {client.name}
                   </p>
                 </div>
                 <div className="flex flex-col items-end gap-2">
