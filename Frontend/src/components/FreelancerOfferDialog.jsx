@@ -16,6 +16,7 @@ import Pusher from "pusher-js";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import axios from "axios";
 import emailjs from "emailjs-com";
+import { useUserContext } from "@/Context/UserContext";
 import { useUser } from "@clerk/clerk-react";
 
 const FreelancerOfferDialog = ({
@@ -31,6 +32,7 @@ const FreelancerOfferDialog = ({
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [offerState, setOfferState] = useState(offer.status);
+  const { user } = useUserContext();
 
   useEffect(() => {
     setOfferState(offer.status);
@@ -67,7 +69,9 @@ const FreelancerOfferDialog = ({
     completed: "bg-green-500",
   };
 
-  console.log(project);
+  const submitCollaborationProposal = async () => {
+    toast.success("Proposal Submitted");
+  };
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -266,6 +270,28 @@ const FreelancerOfferDialog = ({
                   sendEmail(e);
                   hireFreelancerForProject();
                   handleStatusUpdate("accepted");
+                }}
+              >
+                Accept Offer
+              </Button>
+              <Button
+                variant="destructive"
+                className="flex-1"
+                onClick={() => handleStatusUpdate("declined")}
+              >
+                Decline Offer
+              </Button>
+            </div>
+          )}
+
+          {offerState === "collaborator_approval_pending" && offer?.CollaboratorId == user?._id && (
+            <div className="flex gap-2">
+              <Button
+                className="flex-1"
+                onClick={(e) => {
+                  sendEmail(e);
+                  hireFreelancerForProject();
+                  submitCollaborationProposal();
                 }}
               >
                 Accept Offer
