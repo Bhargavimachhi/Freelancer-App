@@ -12,21 +12,24 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function addUser() {
-      const userData = {
-        Clerk_id: user?.id,
-        name: user?.firstName,
-        email: user?.primaryEmailAddress.emailAddress,
-      };
+    // console.log(user.primaryEmailAddress.emailAddress);
+    if (user) {
+      async function addUser() {
+        const userData = {
+          Clerk_id: user?.id,
+          name: user?.firstName,
+          email: user?.primaryEmailAddress?.emailAddress,
+        };
 
-      try {
-        await axios.post("http://localhost:3000/user/add", userData);
-      } catch (error) {
-        console.error("Error:", error);
+        try {
+          await axios.post("http://localhost:3000/user/add", userData);
+        } catch (error) {
+          console.error("Error:", error);
+        }
       }
+      addUser();
     }
-    addUser();
-  }, []);
+  }, [user]);
 
   return (
     <>

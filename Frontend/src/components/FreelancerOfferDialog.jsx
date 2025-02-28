@@ -32,7 +32,7 @@ const FreelancerOfferDialog = ({
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [offerState, setOfferState] = useState(offer.status);
-  const { user } = useUserContext();
+  const { userData } = useUserContext();
 
   useEffect(() => {
     setOfferState(offer.status);
