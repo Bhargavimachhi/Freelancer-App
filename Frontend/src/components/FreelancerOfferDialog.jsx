@@ -32,7 +32,7 @@ const FreelancerOfferDialog = ({
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [offerState, setOfferState] = useState(offer.status);
-  const { user } = useUserContext();
+  const { userData } = useUserContext();
 
   useEffect(() => {
     setOfferState(offer.status);
@@ -284,7 +284,7 @@ const FreelancerOfferDialog = ({
             </div>
           )}
 
-          {offerState === "collaborator_approval_pending" && offer?.CollaboratorId == user?._id && (
+          {offerState === "collaborator_approval_pending" && offer?.CollaboratorId == userData?._id && (
             <div className="flex gap-2">
               <Button
                 className="flex-1"
