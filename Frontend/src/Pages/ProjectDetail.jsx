@@ -209,7 +209,7 @@ const ProjectDetailPage = () => {
 
   return (
     <>
-      <Navigate name={"Project"} item={projectid} path={"my-projects"} />
+      <Navigate name={"Project"} item={projectid} path={"projects"} />
       <div className="container p-4 mx-auto max-w-7xl">
         {/* Main Project Card */}
         {project ? (
@@ -513,8 +513,8 @@ const ProjectDetailPage = () => {
         {/* Proposals Section */}
         {project.createdBy == userData._id && (
           <div className="p-4 rounded-lg shadow-lg bg-bg md:p-6">
-            <div className="flex justify-between items-center">
-              <h2 className="mb-6 text-2xl font-bold text-gray-800 float-left">
+            <div className="flex items-center justify-between">
+              <h2 className="float-left mb-6 text-2xl font-bold text-gray-800">
                 Proposals ({project.proposals.length})
               </h2>
               <CustomizedAiScoring className="float-right" />

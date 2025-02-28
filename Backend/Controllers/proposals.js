@@ -1,8 +1,8 @@
-import { Proposal } from '../Models/Proposal.js';
-import { proposalSchemaValidation } from '../Models/Proposal.js';
-import { Project } from '../Models/Project.js';
-import { User } from '../Models/User.js';
-import { GiveScorceToProposalUsingParameters } from './AIFunctions.js';
+import { Proposal } from "../Models/Proposal.js";
+import { proposalSchemaValidation } from "../Models/Proposal.js";
+import { Project } from "../Models/Project.js";
+import { User } from "../Models/User.js";
+import { GiveScorceToProposalUsingParameters } from "./AIFunctions.js";
 
 export const addProposalToProject = async (req, res) => {
     const { id } = req.params; 
@@ -29,43 +29,44 @@ export const addProposalToProject = async (req, res) => {
       file:req.body.file,
     };
 
-    // console.log(newprojectdata);
+  const { error } = proposalSchemaValidation.validate(newprojectdata);
+  // console.log(error);
 
-    const {error} = proposalSchemaValidation.validate(newprojectdata);
-    // console.log(error);
+  if (error) {
+    return res.status(404).json({ message: error.details[0].message });
+  }
 
-    if(error) {
-      return res.status(404).json({ message: error.details[0].message });
-    }
-    
-    const proposal = new Proposal(newprojectdata);
-    project.proposals.push(proposal._id);
+  const proposal = new Proposal(newprojectdata);
+  project.proposals.push(proposal._id);
 
-    project.save();
-  
-    proposal
-      .save()
-      .then(async() => {
-        proposal.aiScore = await GiveScorceToProposalUsingParameters(id, proposal._id.toString());
-        proposal.save();
-        res.status(200).json({ message: "Proposal Added Successfully" });
-      })
-      .catch((err) => {
-        res.status(500).json({message : "Error Occurred !!!"});
-      });
+  project.save();
+
+  proposal
+    .save()
+    .then(async () => {
+      proposal.aiScore = await GiveScorceToProposalUsingParameters(
+        id,
+        proposal._id.toString()
+      );
+      proposal.save();
+      res.status(200).json({ message: "Proposal Added Successfully" });
+    })
+    .catch((err) => {
+      res.status(500).json({ message: "Error Occurred !!!" });
+    });
 };
 
 export const getProposal = async (req, res) => {
-    try {
-        const { id } = req.params;
-        let proposal = await Proposal.findById(id);
-    
-        if (!proposal) {
-          return res.status(403).json({ message: "Proposal does not exists" });
-        }
-    
-        return res.status(200).json({message : "success", proposal});
-    } catch(err) {
-        return res.status(500).json({message : "Internal Server Error", err});
+  try {
+    const { id } = req.params;
+    let proposal = await Proposal.findById(id);
+
+    if (!proposal) {
+      return res.status(403).json({ message: "Proposal does not exists" });
     }
-}
+
+    return res.status(200).json({ message: "success", proposal });
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Server Error", err });
+  }
+};

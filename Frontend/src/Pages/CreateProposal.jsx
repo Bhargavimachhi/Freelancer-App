@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
 import Navigate from "@/helpers/Navigate.jsx";
+import LoadingPage from "@/components/LoadingPage.jsx";
 
 const CreateProposal = () => {
   const { id } = useParams();
@@ -17,12 +18,7 @@ const CreateProposal = () => {
   const [coverLetter, setCoverLetter] = useState("");
   const [bidAmount, setBidAmount] = useState("");
   const [answers, setAnswers] = useState([]);
-  const [milestones, setMilestones] = useState([]);
   const [deliveryTimes, setDeliveryTimes] = useState([]);
-
-  const [projectUrl, setProjectUrl] = useState(null);
-  const [publicid, setpublicid] = useState("");
-  const [createdBy, setCreatedBy] = useState(null);
 
   const [Image, setImage] = useState(null);
   const [project, setproject] = useState(null);
@@ -54,33 +50,16 @@ const CreateProposal = () => {
         );
         setproject(res.data.project);
 
-        try {
-          const url = await fetchFile(
-            `project/${res.data.project._id}/projectfile.jpg`
-          );
-          console.log(url);
-          setProjectUrl(url);
-        } catch (err) {
-          console.log(err);
-        }
-
-        res = await axios.get(
-          `http://localhost:3000/user/${res.data.project.createdBy}`
-        );
-        setCreatedBy(res.data.user);
-
-        // res = await axios.get(
-        //   `http://localhost:3000/project/${projectid}/proposals`
-        // );
-        // let data = res.data.proposals;
-
-        // for (let i = 0; i < data.length; i++) {
-        //   res = await axios.get(
-        //     `http://localhost:3000/user/${data[i].createdBy}`
+        // try {
+        //   const url = await fetchFile(
+        //     `project/${res.data.project._id}/projectfile.jpg`
         //   );
-        //   data[i]["createdBy"] = res.data.user;
+        //   console.log(url);
+        //   setProjectUrl(url);
+        // } catch (err) {
+        //   console.log(err);
         // }
-        // setProposals(data);
+
         setLoading(false);
       }
     };
@@ -89,8 +68,6 @@ const CreateProposal = () => {
 
     // return () => chatClient.disconnectUser();
   }, [userId]);
-
-  //   console.log(project);
 
   const uploadImage = async (publicid) => {
     const data = new FormData();
@@ -114,7 +91,6 @@ const CreateProposal = () => {
   const handleSubmit = async () => {
     const publicid = user.id + project.title;
     const uploadedImageUrl = await uploadImage(publicid);
-    setpublicid(publicid);
 
     try {
       const res = await axios.post(
@@ -123,6 +99,7 @@ const CreateProposal = () => {
           description: coverLetter,
           price: bidAmount,
           answers: answers,
+          milestonesRequiredTime: deliveryTimes,
           Clerk_id: userId,
           file: publicid,
         }
@@ -132,7 +109,6 @@ const CreateProposal = () => {
       setCoverLetter("");
       setBidAmount("");
       setAnswers([]);
-      setMilestone([]);
       setDeliveryTimes([]);
 
       // Show alert
@@ -142,18 +118,22 @@ const CreateProposal = () => {
     }
   };
 
+  if (loading) {
+    <LoadingPage />;
+  }
+
   return (
     <main>
-      <Navigate name={""} />
-      <div className="p-6 mx-auto bg-white rounded-lg shadow-md max-w-7xl">
-        <h2 className="text-2xl font-semibold">Submit a Proposal</h2>
-        <p className="text-gray-600">
+      <Navigate name={"Project"} item={project?.title} path={`project/${id}`} />
+      <div className="p-8 mx-auto bg-white max-w-7xl">
+        <h2 className="text-3xl font-bold text-gray-800">Submit a Proposal</h2>
+        <p className="mb-6 text-gray-600">
           Tell the client why you're the best fit for this project
         </p>
 
-        <div className="py-4 space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="cover-letter">
+        <div className="space-y-6">
+          <div>
+            <Label htmlFor="cover-letter" className="font-semibold">
               Describe how you will tackle this project
             </Label>
             <Textarea
@@ -162,55 +142,64 @@ const CreateProposal = () => {
               onChange={(e) => setCoverLetter(e.target.value)}
               rows={6}
               placeholder="Introduce yourself and explain why you're qualified for this project..."
+              className="border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/50"
               required
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="bid-amount">Your Bid (INR)</Label>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div>
+              <Label htmlFor="bid-amount" className="font-semibold">
+                Your Bid (INR)
+              </Label>
               <div className="relative">
-                <span className="absolute -translate-y-1/2 left-3 top-1/2">
+                <span className="absolute text-gray-500 transform -translate-y-1/2 left-3 top-1/2">
                   &#8377;
                 </span>
-                <input
+                <Input
                   id="bid-amount"
                   type="number"
                   value={bidAmount}
+                  placeholder={`Ex.₹ 1000 `}
                   onChange={(e) => setBidAmount(e.target.value)}
-                  className="w-full h-10 px-3 py-2 pl-8 border rounded-md border-input bg-background"
+                  className="pl-8 border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/50"
                   required
                 />
               </div>
             </div>
-          </div>
-
-          <div>
-            <Label htmlFor="file">Flowchart to solve this problem</Label>
-            <Input
-              id="file"
-              name="file"
-              type="file"
-              onChange={handleFileChange}
-            />
+            <div>
+              <Label htmlFor="file" className="font-semibold">
+                Upload Flowchart to Solve this Problem
+              </Label>
+              <Input
+                id="file"
+                name="file"
+                type="file"
+                onChange={handleFileChange}
+                className="border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/50"
+              />
+            </div>
           </div>
 
           {project?.milestones?.length > 0 && (
-            <div className="space-y-2">
-              <Label>Milestones</Label>
-              {project?.milestones?.map((milestone, index) => (
-                <div key={index} className="flex m-0">
-                  <Label>{`${index + 1} ${milestone}`}</Label>
-                  <input
+            <div className="space-y-4">
+              <Label className="font-semibold">Milestones</Label>
+              {project.milestones.map((milestone, index) => (
+                <div
+                  key={index}
+                  className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                >
+                  <Label>{`${index + 1}. ${milestone}`}</Label>
+                  <Input
                     type="number"
-                    placeholder="Enter Number of days needed"
-                    value={milestones[index] || ""}
+                    placeholder="Enter days needed"
+                    value={deliveryTimes[index] || ""}
                     onChange={(e) => {
-                      const newDeliveryTimes = [...milestones];
+                      const newDeliveryTimes = [...deliveryTimes];
                       newDeliveryTimes[index] = e.target.value;
-                      setMilestones(newDeliveryTimes);
+                      setDeliveryTimes(newDeliveryTimes);
                     }}
-                    className="p-2 mb-4 border rounded"
+                    className="border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/50"
                     required
                   />
                 </div>
@@ -219,11 +208,13 @@ const CreateProposal = () => {
           )}
 
           {project?.questions?.length > 0 && (
-            <div className="space-y-2">
-              <Label>Answer Screening Questions</Label>
-              {project?.questions?.map((question, index) => (
+            <div className="space-y-4">
+              <Label className="font-semibold">
+                Answer Screening Questions
+              </Label>
+              {project.questions.map((question, index) => (
                 <div key={index} className="mt-4">
-                  <p className="mb-2 font-medium">{question}</p>
+                  <p className="mb-2 font-medium text-gray-700">{question}</p>
                   <Textarea
                     rows={3}
                     placeholder="Your answer..."
@@ -233,6 +224,7 @@ const CreateProposal = () => {
                       newAnswers[index] = e.target.value;
                       setAnswers(newAnswers);
                     }}
+                    className="border-gray-300 shadow-sm focus:border-primary focus:ring focus:ring-primary/50"
                     required
                   />
                 </div>
@@ -241,8 +233,13 @@ const CreateProposal = () => {
           )}
         </div>
 
-        <div className="flex justify-end mt-4 space-x-4">
-          <Button onClick={handleSubmit}>Submit Proposal</Button>
+        <div className="flex justify-start mt-6">
+          <Button
+            onClick={handleSubmit}
+            className="px-6 py-2 text-white transition-all rounded-lg bg-btn"
+          >
+            Submit Proposal
+          </Button>
         </div>
       </div>
     </main>

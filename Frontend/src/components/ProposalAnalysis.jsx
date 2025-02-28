@@ -38,11 +38,31 @@ export default function ProposalAnalysisPage({
   badpoints,
   scoringjson,
   Flowchartexplan,
+  content1,
+  flowchartpath
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
 
   const thinkingprocess = badpoints.thinkContent + goodpoints.thinkContent;
+  const content = `## 📌 Feasibility & Complexity
+
+- **Assessment:** The provided SRS is a generic example for a requirements management tool (ReqView), not an e-commerce website. Therefore, it does not align with the project goals of developing an e-commerce website for a fashion brand. The technologies mentioned in the project details (React, Node.js, MongoDB) are not addressed in the SRS.
+- **Feasibility Level:** Low (due to misalignment with project goals)
+- **Complexity Level:** Moderate (the SRS itself describes a moderately complex application, but irrelevant to the e-commerce project)
+- **Unclear Technical Aspects:** The SRS lacks any technical details relevant to an e-commerce website, such as payment gateway integration, product catalog management, shopping cart functionality, user account management, and order processing.
+
+## ❌ Key Missing Areas
+
+1.  **E-commerce Specific Functionality:** The SRS completely lacks requirements related to core e-commerce features like product browsing, shopping cart, checkout process, payment integration, order management, and shipping.
+2.  **Security Requirements for E-commerce:** The SRS lacks specific security requirements for handling sensitive user data (e.g., credit card information, addresses) and preventing fraud, which are crucial for an e-commerce platform.
+3.  **Scalability and Performance Requirements:** The SRS doesn't address the scalability and performance requirements needed to handle a large number of users and products, which is essential for a successful e-commerce website.
+
+## ⚠️ Potential Risks & Challenges
+
+-   **Misalignment of SRS and Project Goals:** The biggest risk is using this SRS as a basis for development, as it will lead to a completely different product than intended.
+-   **Lack of E-commerce Expertise:** The SRS doesn't demonstrate any understanding of e-commerce best practices or industry standards.
+-   **Dependencies:** The project will be heavily dependent on creating a new, comprehensive SRS that accurately reflects the requirements of an e-commerce website for a fashion brand. This will be a critical path item and could cause delays if not addressed promptly.`
 
   return (
     <div className="min-h-screen bg-background">
@@ -136,26 +156,54 @@ export default function ProposalAnalysisPage({
           </Card>
         </div>
         {Flowchartexplan != '' && (
-          <Card className="overflow-hidden">
-            <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
-              <div className="flex pt-3">
-                <div className="flex gap-2">
-                  <Trophy className="w-5 h-5 text-blue-500" />
-                  <CardTitle>Flowchart explantion</CardTitle>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <div className="flex flex-col">
-                <div className="max-w-2xl ml-3 mb-4 text-sm text-muted-foreground">
-                  <p>
-                    <Markdown>{Flowchartexplan}</Markdown>
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+         <Card className="overflow-hidden">
+         <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
+           <div className="flex pt-3 justify-between">
+             <div className="flex gap-2">
+               <Trophy className="w-5 h-5 text-blue-500" />
+               <CardTitle>Flowchart explantion</CardTitle>
+             </div>
+             <Button
+               variant="outline"
+               size="sm"
+               onClick={() => window.open(flowchartpath, '_blank')}
+             >
+               Open Flowchart
+             </Button>
+           </div>
+         </CardHeader>
+         <CardContent className="pt-6">
+           <div className="flex flex-col">
+             <div className="max-w-2xl ml-3 mb-4 text-sm text-muted-foreground">
+               <p>
+                 <Markdown>{Flowchartexplan}</Markdown>
+               </p>
+             </div>
+           </div>
+         </CardContent>
+       </Card>
         )}
+
+<Card className="overflow-hidden">
+      <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
+        <div className="flex pt-3">
+          <div className="flex gap-2">
+            <CardTitle>Analysis of SRS document</CardTitle>
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <div className="flex flex-col">
+          <div className="max-w-2xl ml-3 mb-4 text-sm text-muted-foreground">
+            <p>
+              <Markdown>{content}</Markdown>
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+
+
 
         {/* Bottom full-width score card */}
         <Card className="overflow-hidden">
