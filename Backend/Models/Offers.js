@@ -12,6 +12,11 @@ let OfferSchema = mongoose.Schema({
         ref: "users",
         required:true
     },
+    CollaboratorId:{
+        type: mongoose.Schema.Types.ObjectId ,
+        ref: "users",
+        default : null
+    },
     ProjectId:{
         type: mongoose.Schema.Types.ObjectId,
         ref:"projects",

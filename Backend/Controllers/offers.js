@@ -17,10 +17,8 @@ const triggerOfferUpdate = (offerId, state) => {
 export const CreateOffer = async (req,res) =>{
 
     try{
-
-        const { clientId, FreelancerId, ProjectId, amount } = req.body;
       
-        const newOffer = new Offers({clientId, FreelancerId, ProjectId, amount});
+        const newOffer = new Offers(req.body);
         await newOffer.save();
         triggerOfferUpdate(newOffer._id, "pending");
       
