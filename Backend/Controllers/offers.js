@@ -17,14 +17,22 @@ const triggerOfferUpdate = (offerId, state) => {
 export const CreateOffer = async (req,res) =>{
 
     try{
-      
-        const newOffer = new Offers(req.body);
-        await newOffer.save();
-        triggerOfferUpdate(newOffer._id, "pending");
-      
-        return res.status(200).json({
-          newOffer
-        });
+        if(req.body.CollaboratorId) {
+          const newOffer = new Offers({...req.body, status:"collaborator_approval_pending"});
+          await newOffer.save();
+          triggerOfferUpdate(newOffer._id, "collaborator_approval_pending");
+          return res.status(200).json({
+            newOffer
+          });
+        }
+        else {
+          const newOffer = new Offers(req.body);
+          await newOffer.save();
+          triggerOfferUpdate(newOffer._id, "pending");
+          return res.status(200).json({
+            newOffer
+          });
+        }
       }
 
        catch(error){
