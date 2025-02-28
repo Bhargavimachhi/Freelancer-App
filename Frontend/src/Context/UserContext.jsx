@@ -21,7 +21,12 @@ const UserProvider = ({ children }) => {
   const { user } = useUser();
   const userclerkId = user?.id;
   // const [userData, setUserData] = useState([]);
-  const [scoringCriteria, setScoringCriteria] = useState({skillMatch : 40, experienceLevel : 30, answeringCapability : 25, pricing: 5});
+  const [scoringCriteria, setScoringCriteria] = useState({
+    skillMatch: 40,
+    experienceLevel: 30,
+    answeringCapability: 25,
+    pricing: 5,
+  });
 
   const getUserDetails = async () => {
     dispatch({ type: "SET_LOADING" });
@@ -39,13 +44,13 @@ const UserProvider = ({ children }) => {
     }
   };
 
-  const setScoreDetails = async(score) => {
+  const setScoreDetails = async (score) => {
     setScoringCriteria(score);
-  }
+  };
 
-  const getScoreDetails = async() => {
+  const getScoreDetails = async () => {
     return scoringCriteria;
-  }
+  };
 
   useEffect(() => {
     if (user) {
@@ -54,7 +59,9 @@ const UserProvider = ({ children }) => {
   }, [user]);
 
   return (
-    <UserContext.Provider value={{ ...state, getUserDetails, setScoreDetails, getScoreDetails }}>
+    <UserContext.Provider
+      value={{ ...state, getUserDetails, setScoreDetails, getScoreDetails }}
+    >
       {children}
     </UserContext.Provider>
   );

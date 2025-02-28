@@ -37,6 +37,7 @@ import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
 import { fetchFile } from "../../upload.js";
 import { useUserContext } from "@/Context/UserContext";
+import { CustomizedAiScoring } from "./CustomizedAiScoring";
 
 const ProjectDetailPage = () => {
   const navi = useNavigate();
@@ -502,9 +503,12 @@ const ProjectDetailPage = () => {
         {/* Proposals Section */}
         {project.createdBy == userData._id && (
           <div className="p-4 rounded-lg shadow-lg bg-bg md:p-6">
-            <h2 className="mb-6 text-2xl font-bold text-gray-800">
-              Proposals ({project.proposals.length})
-            </h2>
+            <div className="flex justify-between items-center">
+              <h2 className="mb-6 text-2xl font-bold text-gray-800 float-left">
+                Proposals ({project.proposals.length})
+              </h2>
+              <CustomizedAiScoring className="float-right" />
+            </div>
 
             <Tabs defaultValue="all" className="mb-8">
               <TabsList className="flex gap-2 space-x-4">
@@ -592,11 +596,11 @@ const ProjectDetailPage = () => {
                         <Button
                           variant="outline"
                           className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                          // onClick={() =>
-                          //   navi(
-                          //     `/project/${projectid}/proposal/${proposal._id}/analyze`
-                          //   )
-                          // }
+                          onClick={() =>
+                            navi(
+                              `/project/${projectid}/proposal/${proposal._id}/analyze`
+                            )
+                          }
                         >
                           AI Analysis
                         </Button>
