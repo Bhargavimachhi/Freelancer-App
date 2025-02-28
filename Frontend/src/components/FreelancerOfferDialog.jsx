@@ -284,7 +284,7 @@ const FreelancerOfferDialog = ({
             </div>
           )}
 
-          {offerState === "collaborator_approval_pending" && offer?.CollaboratorId == user?._id && (
+          {offerState === "collaborator_approval_pending" && offer?.CollaboratorId == userData?._id && (
             <div className="flex gap-2">
               <Button
                 className="flex-1"
