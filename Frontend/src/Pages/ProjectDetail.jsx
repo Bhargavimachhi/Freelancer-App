@@ -36,6 +36,7 @@ import toast from "react-hot-toast";
 import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
 import { fetchFile } from "../../upload.js";
+import { useUserContext } from "@/Context/UserContext";
 
 const ProjectDetailPage = () => {
   const navi = useNavigate();
@@ -46,6 +47,7 @@ const ProjectDetailPage = () => {
 
   const { user, isLoaded } = useUser();
   const [userId, setUserId] = useState(null);
+  const { userData } = useUserContext();
   const [project, setproject] = useState(null);
   const [proposals, setProposals] = useState([]);
   const [createdBy, setCreatedBy] = useState(null);
@@ -80,7 +82,6 @@ const ProjectDetailPage = () => {
           const url = await fetchFile(
             `project/${res.data.project._id}/projectfile.jpg`
           );
-          console.log(url);
           setProjectUrl(url);
         } catch (err) {
           console.log(err);
@@ -364,16 +365,20 @@ const ProjectDetailPage = () => {
                   </div>
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-center p-6 bg-gray-100">
-                <Button
-                  size="lg"
-                  className="w-full px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                  // onClick={() => setIsProposalDialogOpen(true)}
-                  onClick={() => navi(`/project/${projectid}/create-proposal`)}
-                >
-                  Send a Proposal
-                </Button>
-              </CardFooter>
+              {project.createdBy != userData._id && (
+                <CardFooter className="flex justify-center p-6 bg-gray-100">
+                  <Button
+                    size="lg"
+                    className="w-full px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                    // onClick={() => setIsProposalDialogOpen(true)}
+                    onClick={() =>
+                      navi(`/project/${projectid}/create-proposal`)
+                    }
+                  >
+                    Send a Proposal
+                  </Button>
+                </CardFooter>
+              )}
             </Card>
 
             <Dialog
@@ -495,232 +500,236 @@ const ProjectDetailPage = () => {
         )}
 
         {/* Proposals Section */}
-        <div className="p-4 rounded-lg shadow-lg bg-bg md:p-6">
-          <h2 className="mb-6 text-2xl font-bold text-gray-800">
-            Proposals ({project.proposals.length})
-          </h2>
+        {project.createdBy == userData._id && (
+          <div className="p-4 rounded-lg shadow-lg bg-bg md:p-6">
+            <h2 className="mb-6 text-2xl font-bold text-gray-800">
+              Proposals ({project.proposals.length})
+            </h2>
 
-          <Tabs defaultValue="all" className="mb-8">
-            <TabsList className="flex gap-2 space-x-4">
-              <TabsTrigger
-                value="all"
-                className="px-4 py-2 text-sm font-medium"
-              >
-                All Proposals
-              </TabsTrigger>
-              <TabsTrigger
-                value="shortlisted"
-                className="px-4 py-2 text-sm font-medium"
-              >
-                Shortlisted
-              </TabsTrigger>
-            </TabsList>
+            <Tabs defaultValue="all" className="mb-8">
+              <TabsList className="flex gap-2 space-x-4">
+                <TabsTrigger
+                  value="all"
+                  className="px-4 py-2 text-sm font-medium"
+                >
+                  All Proposals
+                </TabsTrigger>
+                <TabsTrigger
+                  value="shortlisted"
+                  className="px-4 py-2 text-sm font-medium"
+                >
+                  Shortlisted
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="all" className="mt-6 space-y-6">
-              {proposals.length > 0 ? (
-                proposals.map((proposal) => (
-                  <Card
-                    key={proposal._id}
-                    className="p-3 border rounded-lg shadow-md sm:p-6 border-btn"
-                  >
-                    <CardHeader className="flex items-start justify-start">
-                      <div>
-                        <h3 className="text-lg font-semibold text-text">
-                          {proposal.createdBy.name}
-                        </h3>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="text-text">
-                      <div className="flex flex-col items-start justify-start gap-2">
+              <TabsContent value="all" className="mt-6 space-y-6">
+                {proposals.length > 0 ? (
+                  proposals.map((proposal) => (
+                    <Card
+                      key={proposal._id}
+                      className="p-3 border rounded-lg shadow-md sm:p-6 border-btn"
+                    >
+                      <CardHeader className="flex items-start justify-start">
                         <div>
-                          <p className="flex flex-wrap gap-1 text-sm sm:gap-2 text-text">
-                            <span className="font-semibold">Descripton :</span>{" "}
-                            <p>{proposal.description}</p>
-                          </p>
+                          <h3 className="text-lg font-semibold text-text">
+                            {proposal.createdBy.name}
+                          </h3>
                         </div>
-                        <div>
-                          <p className="flex gap-2 text-sm font-bold text-btn">
-                            <span className="font-semibold text-text">
-                              Price :
-                            </span>
-                            <p>&#8377; {proposal.price}</p>
-                          </p>
+                      </CardHeader>
+                      <CardContent className="text-text">
+                        <div className="flex flex-col items-start justify-start gap-2">
+                          <div>
+                            <p className="flex flex-wrap gap-1 text-sm sm:gap-2 text-text">
+                              <span className="font-semibold">
+                                Descripton :
+                              </span>{" "}
+                              <p>{proposal.description}</p>
+                            </p>
+                          </div>
+                          <div>
+                            <p className="flex gap-2 text-sm font-bold text-btn">
+                              <span className="font-semibold text-text">
+                                Price :
+                              </span>
+                              <p>&#8377; {proposal.price}</p>
+                            </p>
+                          </div>
+                          <div>
+                            <p>{proposal.coverLetter}</p>
+                          </div>
+                          <div>
+                            <p className="flex items-center gap-1 text-sm">
+                              <span className="font-semibold text-text">
+                                Rating :
+                              </span>
+                              <span className="font-bold text-btn">
+                                ⭐ {proposal.createdBy.rating}/5
+                              </span>
+                            </p>
+                          </div>
+                          <div>
+                            <p className="flex items-center gap-1 text-sm">
+                              <span className="font-semibold text-text">
+                                Completed Projects :
+                              </span>
+                              <span className="font-bold text-btn">
+                                {proposal.createdBy.createdProjects.length}
+                              </span>
+                            </p>
+                          </div>
                         </div>
-                        <div>
-                          <p>{proposal.coverLetter}</p>
-                        </div>
-                        <div>
-                          <p className="flex items-center gap-1 text-sm">
-                            <span className="font-semibold text-text">
-                              Rating :
-                            </span>
-                            <span className="font-bold text-btn">
-                              ⭐ {proposal.createdBy.rating}/5
-                            </span>
-                          </p>
-                        </div>
-                        <div>
-                          <p className="flex items-center gap-1 text-sm">
-                            <span className="font-semibold text-text">
-                              Completed Projects :
-                            </span>
-                            <span className="font-bold text-btn">
-                              {proposal.createdBy.createdProjects.length}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                    <CardFooter className="flex flex-col items-start gap-3 sm:justify-end sm:flex-row sm:items-center">
-                      {!proposal.isShortListed && (
+                      </CardContent>
+                      <CardFooter className="flex flex-col items-start gap-3 sm:justify-end sm:flex-row sm:items-center">
+                        {!proposal.isShortListed && (
+                          <Button
+                            variant="outline"
+                            className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                            onClick={() => handleShortList(proposal)}
+                          >
+                            Shortlist
+                          </Button>
+                        )}
                         <Button
                           variant="outline"
                           className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                          onClick={() => handleShortList(proposal)}
+                          // onClick={() =>
+                          //   navi(
+                          //     `/project/${projectid}/proposal/${proposal._id}/analyze`
+                          //   )
+                          // }
                         >
-                          Shortlist
+                          AI Analysis
                         </Button>
-                      )}
-                      <Button
-                        variant="outline"
-                        className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                        onClick={() =>
-                          navi(
-                            `/project/${projectid}/proposal/${proposal._id}/analyze`
-                          )
-                        }
-                      >
-                        AI Analysis
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                      >
-                        Message
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                        onClick={() =>
-                          handleHiring({
-                            clientId: project.createdBy,
-                            FreelancerId: proposal.createdBy._id,
-                            ProjectId: projectid,
-                            amount: proposal.price,
-                          })
-                        }
-                      >
-                        Hire Freelancer
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                ))
-              ) : (
-                <p className="text-gray-500">No Proposals submitted yet</p>
-              )}
-            </TabsContent>
+                        <Button
+                          variant="outline"
+                          className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                        >
+                          Message
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                          onClick={() =>
+                            handleHiring({
+                              clientId: project.createdBy,
+                              FreelancerId: proposal.createdBy._id,
+                              ProjectId: projectid,
+                              amount: proposal.price,
+                            })
+                          }
+                        >
+                          Hire Freelancer
+                        </Button>
+                      </CardFooter>
+                    </Card>
+                  ))
+                ) : (
+                  <p className="text-gray-500">No Proposals submitted yet</p>
+                )}
+              </TabsContent>
 
-            <TabsContent value="shortlisted" className="mt-6 space-y-6">
-              {proposals.length > 0 ? (
-                proposals.map(
-                  (proposal) =>
-                    proposal.isShortListed && (
-                      <Card
-                        key={proposal._id}
-                        className="p-3 border rounded-lg shadow-md sm:p-6 border-btn"
-                      >
-                        <CardHeader className="flex items-start justify-start">
-                          <div>
-                            <h3 className="text-lg font-semibold text-text">
-                              {proposal.createdBy.name}
-                            </h3>
-                          </div>
-                        </CardHeader>
-                        <CardContent className="text-text">
-                          <div className="flex flex-col items-start justify-start gap-2">
+              <TabsContent value="shortlisted" className="mt-6 space-y-6">
+                {proposals.length > 0 ? (
+                  proposals.map(
+                    (proposal) =>
+                      proposal.isShortListed && (
+                        <Card
+                          key={proposal._id}
+                          className="p-3 border rounded-lg shadow-md sm:p-6 border-btn"
+                        >
+                          <CardHeader className="flex items-start justify-start">
                             <div>
-                              <p className="flex flex-wrap gap-1 text-sm sm:gap-2 text-text">
-                                <span className="font-semibold">
-                                  Descripton :
-                                </span>{" "}
-                                <p>{proposal.description}</p>
-                              </p>
+                              <h3 className="text-lg font-semibold text-text">
+                                {proposal.createdBy.name}
+                              </h3>
                             </div>
-                            <div>
-                              <p className="flex gap-2 text-sm font-bold text-btn">
-                                <span className="font-semibold text-text">
-                                  Price :
-                                </span>
-                                <p>&#8377; {proposal.price}</p>
-                              </p>
+                          </CardHeader>
+                          <CardContent className="text-text">
+                            <div className="flex flex-col items-start justify-start gap-2">
+                              <div>
+                                <p className="flex flex-wrap gap-1 text-sm sm:gap-2 text-text">
+                                  <span className="font-semibold">
+                                    Descripton :
+                                  </span>{" "}
+                                  <p>{proposal.description}</p>
+                                </p>
+                              </div>
+                              <div>
+                                <p className="flex gap-2 text-sm font-bold text-btn">
+                                  <span className="font-semibold text-text">
+                                    Price :
+                                  </span>
+                                  <p>&#8377; {proposal.price}</p>
+                                </p>
+                              </div>
+                              <div>
+                                <p>{proposal.coverLetter}</p>
+                              </div>
+                              <div>
+                                <p className="flex items-center gap-1 text-sm">
+                                  <span className="font-semibold text-text">
+                                    Rating :
+                                  </span>
+                                  <span className="font-bold text-btn">
+                                    ⭐ {proposal.createdBy.rating}/5
+                                  </span>
+                                </p>
+                              </div>
+                              <div>
+                                <p className="flex items-center gap-1 text-sm">
+                                  <span className="font-semibold text-text">
+                                    Completed Projects :
+                                  </span>
+                                  <span className="font-bold text-btn">
+                                    {proposal.createdBy.createdProjects.length}
+                                  </span>
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p>{proposal.coverLetter}</p>
-                            </div>
-                            <div>
-                              <p className="flex items-center gap-1 text-sm">
-                                <span className="font-semibold text-text">
-                                  Rating :
-                                </span>
-                                <span className="font-bold text-btn">
-                                  ⭐ {proposal.createdBy.rating}/5
-                                </span>
-                              </p>
-                            </div>
-                            <div>
-                              <p className="flex items-center gap-1 text-sm">
-                                <span className="font-semibold text-text">
-                                  Completed Projects :
-                                </span>
-                                <span className="font-bold text-btn">
-                                  {proposal.createdBy.createdProjects.length}
-                                </span>
-                              </p>
-                            </div>
-                          </div>
-                        </CardContent>
-                        <CardFooter className="flex flex-col items-start gap-3 sm:justify-end sm:flex-row sm:items-center">
-                          <Button
-                            variant="outline"
-                            className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                            onClick={() =>
-                              navi(
-                                `/project/${projectid}/proposal/${proposal._id}/analyze`
-                              )
-                            }
-                          >
-                            AI Analysis
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                          >
-                            Message
-                          </Button>
-                          <Button
-                            variant="outline"
-                            className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
-                            onClick={() =>
-                              handleHiring({
-                                clientId: project.createdBy,
-                                FreelancerId: proposal.createdBy._id,
-                                ProjectId: projectid,
-                                amount: proposal.price,
-                              })
-                            }
-                          >
-                            Hire Freelancer
-                          </Button>
-                        </CardFooter>
-                      </Card>
-                    )
-                )
-              ) : (
-                <p className="text-gray-500">No Shortlisted candidates yet</p>
-              )}
-            </TabsContent>
-          </Tabs>
-        </div>
+                          </CardContent>
+                          <CardFooter className="flex flex-col items-start gap-3 sm:justify-end sm:flex-row sm:items-center">
+                            <Button
+                              variant="outline"
+                              className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                              onClick={() =>
+                                navi(
+                                  `/project/${projectid}/proposal/${proposal._id}/analyze`
+                                )
+                              }
+                            >
+                              AI Analysis
+                            </Button>
+                            <Button
+                              variant="outline"
+                              className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                            >
+                              Message
+                            </Button>
+                            <Button
+                              variant="outline"
+                              className="px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                              onClick={() =>
+                                handleHiring({
+                                  clientId: project.createdBy,
+                                  FreelancerId: proposal.createdBy._id,
+                                  ProjectId: projectid,
+                                  amount: proposal.price,
+                                })
+                              }
+                            >
+                              Hire Freelancer
+                            </Button>
+                          </CardFooter>
+                        </Card>
+                      )
+                  )
+                ) : (
+                  <p className="text-gray-500">No Shortlisted candidates yet</p>
+                )}
+              </TabsContent>
+            </Tabs>
+          </div>
+        )}
 
         {/* Submit Proposal Dialog */}
       </div>
