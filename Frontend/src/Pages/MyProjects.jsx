@@ -114,7 +114,9 @@ const MyProjects = () => {
               </motion.div>
             ))
           ) : (
-            <p className="text-lg text-gray-600">You have not generated any projects yet...</p>
+            <p className="text-lg text-gray-600">
+              You have not generated any projects yet...
+            </p>
           )}
         </motion.div>
       </main>

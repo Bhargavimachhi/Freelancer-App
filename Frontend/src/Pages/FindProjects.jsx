@@ -36,16 +36,14 @@ const FindProjects = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-        try {
-          const res = await axios.get(
-            `http://localhost:3000/projects`
-          );
-          setProjects(res.data.projects);
-        } catch (error) {
-          console.error("Error fetching projects:", error);
-        } finally {
-          setLoading(false);
-        }
+      try {
+        const res = await axios.get(`http://localhost:3000/projects`);
+        setProjects(res.data.projects);
+      } catch (error) {
+        console.error("Error fetching projects:", error);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchProjects();
