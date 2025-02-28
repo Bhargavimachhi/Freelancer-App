@@ -117,7 +117,7 @@ const OfferCard = ({ offer }) => {
                   <h3 className="mb-1 text-xl font-semibold text-gray-900">
                     {project.title}
                   </h3>
-                  <p className="text-sm text-gray-500">by {freelancer.name}</p>
+                  <p className="text-sm text-gray-500">Proposal Submitted by {freelancer.name}</p>
                 </div>
                 {/* Status Badges */}
                 <div className="flex flex-col gap-2 mt-3 sm:items-end sm:mt-0">

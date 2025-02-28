@@ -352,14 +352,14 @@ const ProjectDetailPage = () => {
                         </div>
 
                         <div className="space-y-2 text-sm text-gray-700">
-                          {createdBy?.rating && (
+                          {/* {createdBy?.rating && (
                             <div className="flex justify-between">
                               <span>Rating:</span>
                               <span className="font-medium">
                                 ⭐ {createdBy.rating}/5
                               </span>
                             </div>
-                          )}
+                          )} */}
 
                           {createdBy?.projectsPosted && (
                             <div className="flex justify-between">
