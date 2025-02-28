@@ -17,6 +17,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import axios from "axios";
 import emailjs from "emailjs-com";
 import { useUserContext } from "@/Context/UserContext";
+import { useUser } from "@clerk/clerk-react";
 
 const FreelancerOfferDialog = ({
   offer,
@@ -26,6 +27,7 @@ const FreelancerOfferDialog = ({
   client,
   freelancer,
 }) => {
+  const { user } = useUser();
   const [files, setFiles] = useState([]);
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -35,6 +37,7 @@ const FreelancerOfferDialog = ({
   useEffect(() => {
     setOfferState(offer.status);
   }, [offer.status]);
+
   useEffect(() => {
     const pusher = new Pusher("97f4daf56e0efc37b28d", {
       cluster: "ap2",
@@ -159,7 +162,7 @@ const FreelancerOfferDialog = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl bg-white">
         <DialogHeader>
-          <DialogTitle className="flex justify-between items-center">
+          <DialogTitle className="flex items-center justify-between">
             <span>Offer Details</span>
             <Badge className={statusColors[offerState]}>
               {offerState.replace(/_/g, " ")}
@@ -170,26 +173,26 @@ const FreelancerOfferDialog = ({
         <div className="space-y-6">
           <div className="grid gap-4">
             <div>
-              <h3 className="font-semibold mb-2">Project</h3>
+              <h3 className="mb-2 font-semibold">Project</h3>
               <p>{project.title}</p>
-              <p className="text-sm text-muted-foreground mt-1">
+              <p className="mt-1 text-sm text-muted-foreground">
                 {project.description}
               </p>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-2">Client</h3>
+              <h3 className="mb-2 font-semibold">Client</h3>
               <p>{client.name}</p>
             </div>
 
             <div>
-              <h3 className="font-semibold mb-2">Offer Amount</h3>
+              <h3 className="mb-2 font-semibold">Offer Amount</h3>
               <p className="text-lg font-medium">{offer.amount}</p>
             </div>
 
             {offerState === "accepted" && (
               <Alert>
-                <Wallet className="h-4 w-4" />
+                <Wallet className="w-4 h-4" />
                 <AlertDescription>
                   Waiting for client to make the payment. You will be notified
                   once the payment is received.
@@ -200,8 +203,8 @@ const FreelancerOfferDialog = ({
             {offer.submission &&
               (offerState === "submitted" || offerState === "completed") && (
                 <div>
-                  <h3 className="font-semibold mb-2">Submission</h3>
-                  <p className="text-sm mb-2">{offer.submission.note}</p>
+                  <h3 className="mb-2 font-semibold">Submission</h3>
+                  <p className="mb-2 text-sm">{offer.submission.note}</p>
                   <div className="flex flex-wrap gap-2">
                     {offer.submission.files.map((file) => (
                       <Button
@@ -220,20 +223,33 @@ const FreelancerOfferDialog = ({
 
             {offerState === "work_in_progress" && (
               <div className="space-y-4">
-                <div>
-                  <h3 className="font-semibold mb-2">Submit Work</h3>
-                  <Input
-                    type="file"
-                    multiple
-                    onChange={(e) => setFiles(Array.from(e.target.files || []))}
-                    className="mb-2"
-                  />
-                  <Textarea
-                    placeholder="Add a note about your submission..."
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                  />
-                </div>
+                {project?.milestones?.map((milestone, index) => {
+                  return (
+                    <>
+                      <h1>
+                        {" "}
+                        <span>Milestone {index + 1} :</span> {milestone}
+                      </h1>
+                      <div>
+                        {/* <h3 className="mb-2 font-semibold">Submit Work</h3> */}
+                        <Input
+                          type="file"
+                          multiple
+                          onChange={(e) =>
+                            setFiles(Array.from(e.target.files || []))
+                          }
+                          className="mb-2"
+                        />
+                        <Textarea
+                          placeholder="Add a note about your submission..."
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}
+                        />
+                        <Button>Submit Work</Button>
+                      </div>
+                    </>
+                  );
+                })}
                 <Button
                   onClick={handleSubmission}
                   disabled={!files.length || isSubmitting}

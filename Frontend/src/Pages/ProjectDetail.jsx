@@ -18,6 +18,7 @@ import {
 } from "../components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Avatar, AvatarFallback, AvatarImage } from "../components/ui/avatar";
+import CollaborationDialog from "@/components/CollabarteButton";
 import {
   Dialog,
   DialogContent,
@@ -378,6 +379,7 @@ const ProjectDetailPage = () => {
                   >
                     Send a Proposal
                   </Button>
+                  <CollaborationDialog project={project}/>
                 </CardFooter>
               )}
             </Card>
@@ -490,6 +492,8 @@ const ProjectDetailPage = () => {
                     Cancel
                   </Button>
                   <Button onClick={handleSubmit}>Submit Proposal</Button>
+                
+                  
                 </DialogFooter>
               </DialogContent>
             </Dialog>

@@ -107,13 +107,13 @@ export function OfferCard({ offer }) {
       {project && client ? (
         <>
           <Card
-            className="cursor-pointer hover:shadow-lg transition-shadow mt-5"
+            className="mt-5 transition-shadow cursor-pointer hover:shadow-lg"
             onClick={() => setIsDialogOpen(true)}
           >
             <CardContent className="p-6">
-              <div className="flex justify-between items-start mb-4">
+              <div className="flex items-start justify-between mb-4">
                 <div>
-                  <h3 className="font-semibold text-lg mb-1">
+                  <h3 className="mb-1 text-lg font-semibold">
                     {project.title}
                   </h3>
                   <p className="text-sm text-muted-foreground">
@@ -135,8 +135,8 @@ export function OfferCard({ offer }) {
                   )}
                 </div>
               </div>
-              <div className="flex justify-between items-center">
-                <p className="font-medium text-lg">{offer.amount}</p>
+              <div className="flex items-center justify-between">
+                <p className="text-lg font-medium">{offer.amount}</p>
               </div>
             </CardContent>
           </Card>

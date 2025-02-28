@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import { useUser } from "@clerk/clerk-react";
 import axios from "axios";
+import Navigate from "@/helpers/Navigate.jsx";
 
 const CreateProposal = () => {
   const { id } = useParams();
@@ -140,106 +141,109 @@ const CreateProposal = () => {
   };
 
   return (
-    <div className="max-w-2xl p-6 mx-auto bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold">Submit a Proposal</h2>
-      <p className="text-gray-600">
-        Tell the client why you're the best fit for this project
-      </p>
+    <main>
+      <Navigate name={""}/>
+      <div className="p-6 mx-auto bg-white rounded-lg shadow-md max-w-7xl">
+        <h2 className="text-2xl font-semibold">Submit a Proposal</h2>
+        <p className="text-gray-600">
+          Tell the client why you're the best fit for this project
+        </p>
 
-      <div className="py-4 space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="cover-letter">
-            Describe how you will tackle this project
-          </Label>
-          <Textarea
-            id="cover-letter"
-            value={coverLetter}
-            onChange={(e) => setCoverLetter(e.target.value)}
-            rows={6}
-            placeholder="Introduce yourself and explain why you're qualified for this project..."
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
+        <div className="py-4 space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="bid-amount">Your Bid (INR)</Label>
-            <div className="relative">
-              <span className="absolute -translate-y-1/2 left-3 top-1/2">
-                &#8377;
-              </span>
-              <input
-                id="bid-amount"
-                type="number"
-                value={bidAmount}
-                onChange={(e) => setBidAmount(e.target.value)}
-                className="w-full h-10 px-3 py-2 pl-8 border rounded-md border-input bg-background"
-                required
-              />
+            <Label htmlFor="cover-letter">
+              Describe how you will tackle this project
+            </Label>
+            <Textarea
+              id="cover-letter"
+              value={coverLetter}
+              onChange={(e) => setCoverLetter(e.target.value)}
+              rows={6}
+              placeholder="Introduce yourself and explain why you're qualified for this project..."
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="bid-amount">Your Bid (INR)</Label>
+              <div className="relative">
+                <span className="absolute -translate-y-1/2 left-3 top-1/2">
+                  &#8377;
+                </span>
+                <input
+                  id="bid-amount"
+                  type="number"
+                  value={bidAmount}
+                  onChange={(e) => setBidAmount(e.target.value)}
+                  className="w-full h-10 px-3 py-2 pl-8 border rounded-md border-input bg-background"
+                  required
+                />
+              </div>
             </div>
           </div>
+
+          <div>
+            <Label htmlFor="file">Flowchart to solve this problem</Label>
+            <Input
+              id="file"
+              name="file"
+              type="file"
+              onChange={handleFileChange}
+            />
+          </div>
+
+          {project?.milestones?.length > 0 && (
+            <div className="space-y-2">
+              <Label>Milestones</Label>
+              {project?.milestones?.map((milestone, index) => (
+                <div key={index} className="flex m-0">
+                  <Label>{`${index + 1} ${milestone}`}</Label>
+                  <input
+                    type="number"
+                    placeholder="Enter Number of days needed"
+                    value={deliveryTimes[index] || ""}
+                    onChange={(e) => {
+                      const newDeliveryTimes = [...deliveryTimes];
+                      newDeliveryTimes[index] = e.target.value;
+                      setAnswers(newDeliveryTimes);
+                    }}
+                    className="p-2 mb-4 border rounded"
+                    required
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {project?.questions?.length > 0 && (
+            <div className="space-y-2">
+              <Label>Answer Screening Questions</Label>
+              {project?.questions?.map((question, index) => (
+                <div key={index} className="mt-4">
+                  <p className="mb-2 font-medium">{question}</p>
+                  <Textarea
+                    rows={3}
+                    placeholder="Your answer..."
+                    value={answers[index] || ""}
+                    onChange={(e) => {
+                      const newAnswers = [...answers];
+                      newAnswers[index] = e.target.value;
+                      setAnswers(newAnswers);
+                    }}
+                    required
+                  />
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
-        <div>
-          <Label htmlFor="file">Flowchart to solve this problem</Label>
-          <Input
-            id="file"
-            name="file"
-            type="file"
-            onChange={handleFileChange}
-          />
+        <div className="flex justify-end mt-4 space-x-4">
+          <Button onClick={handleSubmit}>Submit Proposal</Button>
         </div>
-
-        {project?.milestones?.length > 0 && (
-          <div className="space-y-2">
-            <Label>Milestones</Label>
-            {project?.milestones?.map((milestone, index) => (
-              <div key={index} className="flex m-0">
-                <Label>{`${index + 1} ${milestone}`}</Label>
-                <input
-                  type="number"
-                  placeholder="Enter Number of days needed"
-                  value={deliveryTimes[index] || ""}
-                  onChange={(e) => {
-                    const newDeliveryTimes = [...deliveryTimes];
-                    newDeliveryTimes[index] = e.target.value;
-                    setAnswers(newDeliveryTimes);
-                  }}
-                  className="p-2 mb-4 border rounded"
-                  required
-                />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {project?.questions?.length > 0 && (
-          <div className="space-y-2">
-            <Label>Answer Screening Questions</Label>
-            {project?.questions?.map((question, index) => (
-              <div key={index} className="mt-4">
-                <p className="mb-2 font-medium">{question}</p>
-                <Textarea
-                  rows={3}
-                  placeholder="Your answer..."
-                  value={answers[index] || ""}
-                  onChange={(e) => {
-                    const newAnswers = [...answers];
-                    newAnswers[index] = e.target.value;
-                    setAnswers(newAnswers);
-                  }}
-                  required
-                />
-              </div>
-            ))}
-          </div>
-        )}
       </div>
-
-      <div className="flex justify-end mt-4 space-x-4">
-        <Button onClick={handleSubmit}>Submit Proposal</Button>
-      </div>
-    </div>
+    </main>
   );
 };
 
