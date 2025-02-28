@@ -45,7 +45,7 @@ const Offers = () => {
         </>
       ) : (
         <>
-          <h1> No offers</h1>
+          <h1> No jobs</h1>
         </>
       )}
     </>

@@ -44,6 +44,10 @@ let OfferSchema = mongoose.Schema({
     type: String,
     default: null,
   },
+  freelancerStack: {
+    type: Number,
+    default: 100,
+  },
 });
 
 export const Offers = mongoose.model("Offers", OfferSchema);

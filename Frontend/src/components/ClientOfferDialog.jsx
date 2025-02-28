@@ -208,7 +208,7 @@ export const ClientOfferDialog = ({
           {offerState === "accepted" && (
             <Button
               className="flex items-center justify-center w-full py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              // onClick={handleClick}
+              onClick={handleClick}
             >
               <Wallet className="w-5 h-5 mr-2" />
               Pay Now ₹{offer.amount}

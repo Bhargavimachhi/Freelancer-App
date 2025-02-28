@@ -29,6 +29,8 @@ import {
   Users,
   X,
   Youtube,
+  NotebookPen,
+  FolderKey 
 } from "lucide-react";
 
 export const ICONS = {
@@ -62,4 +64,6 @@ export const ICONS = {
   TWITTER: Twitter,
   INSTAGRAM: Instagram,
   YOUTUBE: Youtube,
+  NOTEBOOKPEN: NotebookPen,
+  FOLDERKEY: FolderKey
 };

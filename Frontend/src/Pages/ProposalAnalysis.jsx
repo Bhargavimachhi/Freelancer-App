@@ -14,6 +14,7 @@ import AskBadpoints from "../../../AIfunctions/AskQuestion.js";
 import { Askgoodpoints } from "../../../AIfunctions/AskQuestion.js";
 import { useUserContext } from "@/Context/UserContext.jsx";
 import { AnalyseFlowchart } from "../../../AIfunctions/AnalyzeFlowchart.js";
+import {GiveAnalysisofSRS} from "../../../AIfunctions/PDFFucntion.js";
 
 export const ProposalAnalysis = () => {
   const { projectId, proposalId } = useParams();
@@ -28,6 +29,7 @@ export const ProposalAnalysis = () => {
   const { getScoreDetails } = useUserContext();
   const [scoringCriteria, setScoringDetails] = useState(getScoreDetails());
   const [flowchart, setflowchart] = useState("");
+  const [SRScontent,setSRScontent] = useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -122,10 +124,16 @@ export const ProposalAnalysis = () => {
         scoringCriteria.answeringCapabilities,
         scoringCriteria.pricing
       );
+      const content = await GiveAnalysisofSRS(
+        projectobject,
+        "https://firebasestorage.googleapis.com/v0/b/videohosting-86bc3.appspot.com/o/images%2FExample%20pdf.pdf?alt=media&token=ddffda0e-23ff-4c87-8ccd-67ff0eec579d"
+      );
+
 
       setgoodpoints(ans);
       setbadpoints(ans2);
       setscoringjson(ans3);
+      // setSRScontent(content);
     } catch (error) {
       console.error("Error comparing features:", error);
     } finally {
@@ -144,6 +152,7 @@ export const ProposalAnalysis = () => {
         badpoints={badpoints}
         scoringjson={scoringjson}
         Flowchartexplan={flowchart}
+        content={SRScontent}
       />
     </>
   );

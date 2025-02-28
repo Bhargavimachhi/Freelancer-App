@@ -11,6 +11,7 @@ import {
   getUser,
   getUserUsingClerkId,
   shortlistUser,
+  getUserUsingEmail
 } from "./Controllers/User.js";
 
 import { getSkills } from "./Controllers/skills.js";
@@ -64,6 +65,7 @@ app.listen(PORT, () => {
 app.post("/user/add", addUser);
 app.post("/user/:id/edit", editUser);
 app.get("/user/:id", getUser);
+app.get("/user/email/:email", getUserUsingEmail);
 app.get("/user/clerk/:id", getUserUsingClerkId);
 app.post("/user/:id/edit-properties", editPropertiesOfUser);
 app.get("/user/:id/projects", getAllProjectsOfUser);

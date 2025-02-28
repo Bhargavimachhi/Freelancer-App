@@ -36,15 +36,32 @@ export async function AnalyseFlowchart(link){
     
     const result = await model.generateContent([
         remoteImageData,
-        `You are a flowchart expert. Based on the flowchart submitted in the image. Analyse if the flowchart is the right approach to solve this project or not.
-        Project Details:
-        ${JSON.stringify(selectedProject, null, 2)}.
-        Give output in three points:
-       The good point about the flowchart.
-        The bad point about the flowchart.
-        And final opinion based on the flowchart.
-        `,
+        `You are an expert in flowchart analysis and software architecture. Analyze the flowchart provided in the image and evaluate whether it is the right approach for the given project.
+    
+        **Project Details:**  
+        ${JSON.stringify(selectedProject, null, 2)}
+    
+        Provide the output in structured **Markdown format** with the following sections:
+    
+        ### ✅ Strengths of the Flowchart  
+        - List the **good aspects** of the flowchart.  
+        - Mention well-structured logic, efficiency, or clarity.  
+    
+        ### ❌ Weaknesses of the Flowchart  
+        - List the **flaws or missing components** in the flowchart.  
+        - Highlight inefficiencies, missing steps, or unclear logic.  
+    
+        ### 📌 Suggested Improvements  
+        - Provide **actionable suggestions** to enhance the flowchart.  
+        - Recommend better structuring, missing elements, or alternative approaches.  
+    
+        ### 🏁 Final Verdict  
+        - Give a **concise opinion** on whether the flowchart is appropriate for this project.  
+        
+    
+        Keep the response precise, professional, and useful for decision-making.`
     ]);
+    
     return result.response.text();
 }
 // const ans = await AnalyseFlowchart("https://res.cloudinary.com/dktw0yum9/image/upload/v1740495593/mr7bssoiwlvd0cm1p5vi.jpg");
