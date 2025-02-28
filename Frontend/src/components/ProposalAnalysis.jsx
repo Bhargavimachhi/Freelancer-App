@@ -38,7 +38,8 @@ export default function ProposalAnalysisPage({
   badpoints,
   scoringjson,
   Flowchartexplan,
-  content1
+  content1,
+  flowchartpath
 }) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(true);
@@ -155,25 +156,32 @@ export default function ProposalAnalysisPage({
           </Card>
         </div>
         {Flowchartexplan != '' && (
-          <Card className="overflow-hidden">
-            <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
-              <div className="flex pt-3">
-                <div className="flex gap-2">
-                  <Trophy className="w-5 h-5 text-blue-500" />
-                  <CardTitle>Flowchart explantion</CardTitle>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-6">
-              <div className="flex flex-col">
-                <div className="max-w-2xl ml-3 mb-4 text-sm text-muted-foreground">
-                  <p>
-                    <Markdown>{Flowchartexplan}</Markdown>
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+         <Card className="overflow-hidden">
+         <CardHeader className="pb-4 bg-gradient-to-r from-blue-500/10 to-blue-500/5">
+           <div className="flex pt-3 justify-between">
+             <div className="flex gap-2">
+               <Trophy className="w-5 h-5 text-blue-500" />
+               <CardTitle>Flowchart explantion</CardTitle>
+             </div>
+             <Button
+               variant="outline"
+               size="sm"
+               onClick={() => window.open(flowchartpath, '_blank')}
+             >
+               Open Flowchart
+             </Button>
+           </div>
+         </CardHeader>
+         <CardContent className="pt-6">
+           <div className="flex flex-col">
+             <div className="max-w-2xl ml-3 mb-4 text-sm text-muted-foreground">
+               <p>
+                 <Markdown>{Flowchartexplan}</Markdown>
+               </p>
+             </div>
+           </div>
+         </CardContent>
+       </Card>
         )}
 
 <Card className="overflow-hidden">

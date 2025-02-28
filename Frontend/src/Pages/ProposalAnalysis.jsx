@@ -30,6 +30,7 @@ export const ProposalAnalysis = () => {
   const [scoringCriteria, setScoringDetails] = useState(getScoreDetails());
   const [flowchart, setflowchart] = useState("");
   const [SRScontent,setSRScontent] = useState("");
+  const[Flowcharturl,setflowcharturl]= useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -87,6 +88,7 @@ export const ProposalAnalysis = () => {
       };
 
       const filepath = `https://res.cloudinary.com/dktw0yum9/image/upload/v1740588194/${selectedProposal.file}.jpg`;
+      setflowcharturl(filepath);
       try {
         const Flowcharans = await AnalyseFlowchart(filepath);
         if (Flowcharans) {
@@ -124,10 +126,10 @@ export const ProposalAnalysis = () => {
         scoringCriteria.answeringCapabilities,
         scoringCriteria.pricing
       );
-      const content = await GiveAnalysisofSRS(
-        projectobject,
-        "https://firebasestorage.googleapis.com/v0/b/videohosting-86bc3.appspot.com/o/images%2FExample%20pdf.pdf?alt=media&token=ddffda0e-23ff-4c87-8ccd-67ff0eec579d"
-      );
+      // const content = await GiveAnalysisofSRS(
+      //   projectobject,
+      //   "https://firebasestorage.googleapis.com/v0/b/videohosting-86bc3.appspot.com/o/images%2FExample%20pdf.pdf?alt=media&token=ddffda0e-23ff-4c87-8ccd-67ff0eec579d"
+      // );
 
 
       setgoodpoints(ans);
@@ -153,6 +155,7 @@ export const ProposalAnalysis = () => {
         scoringjson={scoringjson}
         Flowchartexplan={flowchart}
         content={SRScontent}
+        flowchartpath={Flowcharturl}
       />
     </>
   );
