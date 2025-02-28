@@ -13,7 +13,6 @@ const Offers = () => {
   useEffect(() => {
     if (isLoaded && user) {
       setuserid(user.id);
-      console.log(user.id);
     }
   }, [isLoaded, user]);
 

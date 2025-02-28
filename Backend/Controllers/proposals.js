@@ -6,7 +6,7 @@ import { GiveScorceToProposalUsingParameters } from './AIFunctions.js';
 
 export const addProposalToProject = async (req, res) => {
     const { id } = req.params; 
-    const { Clerk_id } = req.body;
+    const { Clerk_id, helpedBy } = req.body;
     const project = await Project.findById(id);
     const requser = await User.findOne({ Clerk_id: Clerk_id });
     
@@ -20,6 +20,7 @@ export const addProposalToProject = async (req, res) => {
 
     const newprojectdata = {
       createdBy: requser._id,
+      helpedBy: helpedBy,
       description: req.body.description,
       price: req.body.price,
       answers: req.body.answers,

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { FileUp, Download, Wallet } from "lucide-react";
+import { FileUp, Download, Wallet, Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import Pusher from "pusher-js";
 
@@ -70,7 +70,27 @@ const FreelancerOfferDialog = ({
   };
 
   const submitCollaborationProposal = async () => {
-    toast.success("Proposal Submitted");
+    try {
+      const user = await axios.get(`http://localhost:3000/user/${offer.FreelancerId}`);
+      const res = await axios.post(
+        `http://localhost:3000/project/${offer.ProjectId}/add-proposal`,
+        {
+          Clerk_id : user.data.user.Clerk_id,
+          helpedBy: offer.CollaboratorId,
+          project : offer.ProjectId,
+          description: offer.description,
+          price: offer.amount,
+        }
+      );
+      toast.success("Proposal submitted to client!");
+      await axios.get(`http://localhost:3000/offer/${offer._id}/remove`);
+
+      // Show alert
+      
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to submit proposal. Please try again.");
+    }
   };
 
   const sendEmail = (e) => {
@@ -267,7 +287,6 @@ const FreelancerOfferDialog = ({
               <Button
                 className="flex-1"
                 onClick={(e) => {
-                  sendEmail(e);
                   hireFreelancerForProject();
                   handleStatusUpdate("accepted");
                 }}
@@ -284,27 +303,35 @@ const FreelancerOfferDialog = ({
             </div>
           )}
 
-          {offerState === "collaborator_approval_pending" && offer?.CollaboratorId == userData?._id && (
-            <div className="flex gap-2">
-              <Button
-                className="flex-1"
-                onClick={(e) => {
-                  sendEmail(e);
-                  hireFreelancerForProject();
-                  submitCollaborationProposal();
-                }}
-              >
-                Accept Offer
-              </Button>
-              <Button
-                variant="destructive"
-                className="flex-1"
-                onClick={() => handleStatusUpdate("declined")}
-              >
-                Decline Offer
-              </Button>
-            </div>
-          )}
+          {offerState === "collaborator_approval_pending" &&
+            offer?.CollaboratorId == userData?._id && (
+              <div className="flex gap-2">
+                <Button
+                  className="flex-1"
+                  onClick={(e) => {
+                    sendEmail(e);
+                    submitCollaborationProposal();
+                  }}
+                >
+                  Accept Offer
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="flex-1"
+                  onClick={() => handleStatusUpdate("declined")}
+                >
+                  Decline Offer
+                </Button>
+              </div>
+            )}
+
+          {offer.status === "collaborator_approval_pending" &&
+            offer?.CollaboratorId != userData?._id && (
+              <Badge variant="outline" className="flex items-center gap-1">
+                <Loader className="w-3 h-3" />
+                Waiting for Collaborator to Accept Offer
+              </Badge>
+            )}
         </div>
       </DialogContent>
     </Dialog>
