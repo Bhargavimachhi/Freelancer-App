@@ -92,8 +92,6 @@ const CreateProject = () => {
       tags: skills, // ✅ Include selected skills
     };
 
-    console.log(finalProjectData);
-
     try {
       const res = await axios.post(
         "http://localhost:3000/project/add",
@@ -101,7 +99,7 @@ const CreateProject = () => {
       );
 
       if (res.data.message === "Project Created") {
-        alert("Project Created Successfully");
+        toast.success("Project Created Successfully");
         setProjectData({
           title: "",
           description: "",

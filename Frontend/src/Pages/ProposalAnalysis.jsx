@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import AskBadpoints from "../../../AIfunctions/AskQuestion.js";
 import { Askgoodpoints } from "../../../AIfunctions/AskQuestion.js";
 import { useUserContext } from "@/Context/UserContext.jsx";
-import {AnalyseFlowchart} from  "../../../AIfunctions/AnalyzeFlowchart.js";
+import { AnalyseFlowchart } from "../../../AIfunctions/AnalyzeFlowchart.js";
 
 export const ProposalAnalysis = () => {
   const { projectId, proposalId } = useParams();
@@ -27,7 +27,7 @@ export const ProposalAnalysis = () => {
   const [scoringjson, setscoringjson] = useState(null);
   const { getScoreDetails } = useUserContext();
   const [scoringCriteria, setScoringDetails] = useState(getScoreDetails());
-  const[flowchart,setflowchart] = useState("");
+  const [flowchart, setflowchart] = useState("");
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -85,9 +85,14 @@ export const ProposalAnalysis = () => {
       };
 
       const filepath = `https://res.cloudinary.com/dktw0yum9/image/upload/v1740588194/${selectedProposal.file}.jpg`;
-      const Flowcharans = await AnalyseFlowchart(filepath);
-      setflowchart(Flowcharans);
-      // console.log("Flowchart ans",Flowcharans);
+      try {
+        const Flowcharans = await AnalyseFlowchart(filepath);
+        if (Flowcharans) {
+          setflowchart(Flowcharans);
+        }
+      } catch (err) {
+        console.log(err);
+      }
 
       const freelancerobject = {
         skills: freelancer.skills,
@@ -139,7 +144,6 @@ export const ProposalAnalysis = () => {
         badpoints={badpoints}
         scoringjson={scoringjson}
         Flowchartexplan={flowchart}
-        
       />
     </>
   );

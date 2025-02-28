@@ -36,22 +36,20 @@ const FindProjects = () => {
 
   useEffect(() => {
     const fetchProjects = async () => {
-      if (userId) {
         try {
           const res = await axios.get(
-            `http://localhost:3000/user/${userId}/projects`
+            `http://localhost:3000/projects`
           );
-          setProjects(res.data);
+          setProjects(res.data.projects);
         } catch (error) {
           console.error("Error fetching projects:", error);
         } finally {
           setLoading(false);
         }
-      }
     };
 
     fetchProjects();
-  }, [userId]);
+  }, []);
 
   if (loading) {
     return <LoadinPage />;
@@ -68,7 +66,7 @@ const FindProjects = () => {
             </h1>
             <button
               className="p-2 text-white border rounded-lg border-btn bg-btn"
-              onClick={() => navigate("/my-projects/create-project")}
+              onClick={() => navigate("/create-project")}
             >
               Create Project
             </button>

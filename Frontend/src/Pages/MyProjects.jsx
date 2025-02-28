@@ -8,7 +8,6 @@ import LoadinPage from "@/components/LoadingPage";
 import Navigate from "@/helpers/Navigate";
 import { TextField, InputAdornment } from "@mui/material";
 import { Search } from "@mui/icons-material";
-import CreateProjectSection from "@/components/CreateProjectButton";
 import { useUserContext } from "@/Context/UserContext";
 
 const MyProjects = () => {
@@ -42,13 +41,7 @@ const MyProjects = () => {
           const res = await axios.get(
             `http://localhost:3000/user/${userId}/projects`
           );
-          let data = [];
-          for(let i=0; i<res.data.length; i++) {
-            if(res.data[i].createdBy === userData._id) {
-                data.push(res.data[i]);
-            }
-          }
-          setProjects(data);
+          setProjects(res.data);
         } catch (error) {
           console.error("Error fetching projects:", error);
         } finally {
@@ -73,7 +66,12 @@ const MyProjects = () => {
             <h1 className="float-left text-4xl font-bold tracking-tight">
               Your Projects :
             </h1>
-            <CreateProjectSection />
+            <button
+              className="p-2 text-white border rounded-lg border-btn bg-btn"
+              onClick={() => navigate("/create-project")}
+            >
+              Create Project
+            </button>
           </div>
 
           <TextField
