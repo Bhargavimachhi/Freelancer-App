@@ -69,28 +69,29 @@ const CreateProposal = () => {
     // return () => chatClient.disconnectUser();
   }, [userId]);
 
-  const uploadImage = async (publicid) => {
+  const uploadImage = async () => {
     const data = new FormData();
     data.append("file", Image);
     data.append("upload_preset", "Freelancing website");
     data.append("cloud_name", "dktw0yum9");
-    data.append("public_id", publicid);
+    
 
     try {
       const response = await axios.post(
         "https://api.cloudinary.com/v1_1/dktw0yum9/image/upload",
         data
       );
-      seturl(response.data.url);
-      return response.data.url;
+      console.log(response.data);
+      
+      return response.data.public_id;
     } catch (err) {
-      return null;
+      console.log(err);
     }
   };
 
   const handleSubmit = async () => {
-    const publicid = user.id + project.title;
-    const uploadedImageUrl = await uploadImage(publicid);
+   
+    const publicid = await uploadImage();
 
     try {
       const res = await axios.post(
