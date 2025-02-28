@@ -42,6 +42,21 @@ export const getUser = async (req, res) => {
   }
 };
 
+export const getUserUsingEmail = async(req, res) => {
+  try {
+    const { email } = req.params;
+    let user = await User.findOne({ email: email });
+
+    if (!user) {
+      return res.status(403).json({ message: "User does not exists" });
+    }
+
+    return res.status(200).json({ message: "success", user });
+  } catch (err) {
+    res.status(500).json({ message: "Internal Server Error", err });
+  }
+}
+
 export const getUserUsingClerkId = async (req, res) => {
   try {
     const { id } = req.params;
