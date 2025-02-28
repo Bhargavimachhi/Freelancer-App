@@ -371,7 +371,7 @@ const ProjectDetailPage = () => {
                 <CardFooter className="flex justify-center p-6 bg-gray-100">
                   <Button
                     size="lg"
-                    className="w-full px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
+                    className="w-full px-4 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700 mr-4"
                     // onClick={() => setIsProposalDialogOpen(true)}
                     onClick={() =>
                       navi(`/project/${projectid}/create-proposal`)
