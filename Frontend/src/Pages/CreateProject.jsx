@@ -17,6 +17,7 @@ import { uploadFile } from "../../upload.js";
 import { Cloudinary } from "@cloudinary/url-gen";
 import Navigate from "@/helpers/Navigate";
 import { skills as allSkills } from "../../data/skills";
+import toast from "react-hot-toast";
 
 const CreateProject = () => {
   const { user, isLoaded } = useUser();
