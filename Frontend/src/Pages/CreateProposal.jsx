@@ -17,6 +17,7 @@ const CreateProposal = () => {
   const [coverLetter, setCoverLetter] = useState("");
   const [bidAmount, setBidAmount] = useState("");
   const [answers, setAnswers] = useState([]);
+  const [milestones, setMilestones] = useState([]);
   const [deliveryTimes, setDeliveryTimes] = useState([]);
 
   const [projectUrl, setProjectUrl] = useState(null);
@@ -131,6 +132,7 @@ const CreateProposal = () => {
       setCoverLetter("");
       setBidAmount("");
       setAnswers([]);
+      setMilestone([]);
       setDeliveryTimes([]);
 
       // Show alert
@@ -142,7 +144,7 @@ const CreateProposal = () => {
 
   return (
     <main>
-      <Navigate name={""}/>
+      <Navigate name={""} />
       <div className="p-6 mx-auto bg-white rounded-lg shadow-md max-w-7xl">
         <h2 className="text-2xl font-semibold">Submit a Proposal</h2>
         <p className="text-gray-600">
@@ -202,11 +204,11 @@ const CreateProposal = () => {
                   <input
                     type="number"
                     placeholder="Enter Number of days needed"
-                    value={deliveryTimes[index] || ""}
+                    value={milestones[index] || ""}
                     onChange={(e) => {
-                      const newDeliveryTimes = [...deliveryTimes];
+                      const newDeliveryTimes = [...milestones];
                       newDeliveryTimes[index] = e.target.value;
-                      setAnswers(newDeliveryTimes);
+                      setMilestones(newDeliveryTimes);
                     }}
                     className="p-2 mb-4 border rounded"
                     required

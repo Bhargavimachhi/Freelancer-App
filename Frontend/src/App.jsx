@@ -76,17 +76,16 @@ const App = () => {
               element={<CreateProposal />}
             />
             <Route path="/project/:id" element={<ProjectDetailPage />} />
-            
+
             {/* AI Analysis Page */}
             <Route
               path="/project/:projectId/proposal/:proposalId/analyze"
               element={<ProposalAnalysis />}
             />
-            
+
             {/* Offers Routes */}
             <Route path="/myoffers" element={<MyOffers />} />
             <Route path="/jobs" element={<Offers />} />
-            
 
             {/* <Route path="/Roomenter" element={<Roomname />} />
             <Route path="/Meeting/:roomId" element={<Meetingpage />} /> */}
