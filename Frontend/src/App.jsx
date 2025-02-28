@@ -59,58 +59,6 @@ const App = () => {
 
             {/* Other pages */}
             <Route exact path="/hire" element={<Hire />} />
-            <Route path="/loading" element={<LoadinPage />} />
-
-            {/* onboarding pages */}
-
-            {/*1 */}
-            <Route exact path="/create-profile" element={<Welcome />} />
-            {/* 2 */}
-            <Route
-              exact
-              path="/create-profile/resume-upload"
-              element={<ResumeUploader />}
-            />
-            {/* 3 */}
-            <Route
-              exact
-              path="/create-profile/categories"
-              element={<Categories />}
-            />
-            {/* 4 */}
-            <Route
-              exact
-              path="/create-profile/skills"
-              element={<SkillSelector />}
-            />
-            {/* 5 */}
-            <Route
-              exact
-              path="/create-profile/language"
-              element={<Language />}
-            />
-            {/* 6 */}
-            <Route exact path="/create-profile/role" element={<Role />} />
-            {/* 7 */}
-            <Route
-              exact
-              path="/create-profile/work-experience"
-              element={<WorkExperience />}
-            />
-            {/* 8 */}
-            <Route
-              exact
-              path="/create-profile/education"
-              element={<Education />}
-            />
-            {/* 9 */}
-            <Route exact path="/create-profile/bio" element={<Bio />} />
-            {/* 10 */}
-            <Route
-              exact
-              path="/create-profile/hourly-rate"
-              element={<HourlyRate />}
-            />
 
             {/* profile page */}
             <Route path="/edit-profile" element={<Profile />} />
@@ -119,6 +67,7 @@ const App = () => {
             {/* chat page */}
             <Route path="/chats" element={<Chatpage />} />
 
+            {/* Project Routes */}
             <Route path="/my-projects" element={<MyProjects />} />
             <Route path="/projects" element={<FindProjects />} />
             <Route path="/create-project" element={<CreateProject />} />
@@ -126,21 +75,24 @@ const App = () => {
               path="/project/:id/create-proposal"
               element={<CreateProposal />}
             />
-
             <Route path="/project/:id" element={<ProjectDetailPage />} />
-            <Route path="/myproject/:id" element={<MyProjectDetail />} />
-
-            {/* 404 page */}
-            <Route path="*" element={<NotFound />} />
-            <Route path="/myoffers" element={<MyOffers />} />
-            <Route path="/jobs" element={<Offers />} />
-            <Route path="/Analyze" element={<AIFeature />} />
+            
+            {/* AI Analysis Page */}
             <Route
               path="/project/:projectId/proposal/:proposalId/analyze"
               element={<ProposalAnalysis />}
             />
-            <Route path="/Roomenter" element={<Roomname />} />
-            <Route path="/Meeting/:roomId" element={<Meetingpage />} />
+            
+            {/* Offers Routes */}
+            <Route path="/myoffers" element={<MyOffers />} />
+            <Route path="/jobs" element={<Offers />} />
+            
+
+            {/* <Route path="/Roomenter" element={<Roomname />} />
+            <Route path="/Meeting/:roomId" element={<Meetingpage />} /> */}
+
+            {/* 404 page */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Main>
       </ThemeProvider>

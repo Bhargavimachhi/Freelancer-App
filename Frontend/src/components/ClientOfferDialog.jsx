@@ -73,7 +73,6 @@ export const ClientOfferDialog = ({
   const handleAcceptSubmission = async () => {
     try {
       const res = await axios.put(`http://localhost:3000/${offer._id}/approve`);
-      console.log(res.data);
       alert("Approved the work.. Marking project has complete.");
       onClose();
       window.location.reload();
@@ -84,13 +83,11 @@ export const ClientOfferDialog = ({
 
   const getSessionId = async () => {
     try {
-      console.log(offer.amount);
       let res = await axios.post("http://localhost:3000/payment", {
         amount: offer.amount,
       });
 
       if (res.data && res.data.payment_session_id) {
-        console.log(res.data);
         setOrderId(res.data.order_id);
         return res.data.payment_session_id;
       }
@@ -106,7 +103,6 @@ export const ClientOfferDialog = ({
 
       if (res && res.data) {
         const res = await axios.put(`http://localhost:3000/${offer._id}/pay`);
-        console.log(res.data);
         alert("Payment is done..");
         onClose();
         window.location.reload();
@@ -124,9 +120,7 @@ export const ClientOfferDialog = ({
       };
 
       cashfree.checkout(checkoutOptions).then(async (res) => {
-        console.log("payment initialized");
         const res2 = await axios.put(`http://localhost:3000/${offer._id}/pay`);
-        console.log(res2.data);
         alert("Payment is done..");
         onClose();
         window.location.reload();
@@ -214,7 +208,7 @@ export const ClientOfferDialog = ({
           {offerState === "accepted" && (
             <Button
               className="flex items-center justify-center w-full py-3 text-white bg-blue-600 rounded-md hover:bg-blue-700"
-              onClick={handleClick}
+              // onClick={handleClick}
             >
               <Wallet className="w-5 h-5 mr-2" />
               Pay Now ₹{offer.amount}
