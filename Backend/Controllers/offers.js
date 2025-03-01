@@ -1,4 +1,5 @@
 import { Offers } from "../Models/Offers.js";
+import { Project } from "../Models/Project.js";
 import { User } from "../Models/User.js";
 import Pusher from "pusher";
 
@@ -14,12 +15,18 @@ const triggerOfferUpdate = (offerId, state) => {
 };
 
 export const CreateOffer = async (req, res) => {
+  const project = await Project.findById(req.body.ProjectId);
+
+  if(!project) {
+    return res.status(404).json({ message: "Project do not exist"});
+  }
   try {
     if (req.body.CollaboratorId) {
       const newOffer = new Offers({
         ...req.body,
         status: "collaborator_approval_pending",
       });
+      newOffer.submission.files = Array(project.milestones.length).fill(null);
       await newOffer.save();
       triggerOfferUpdate(newOffer._id, "collaborator_approval_pending");
       return res.status(200).json({
@@ -27,6 +34,7 @@ export const CreateOffer = async (req, res) => {
       });
     } else {
       const newOffer = new Offers(req.body);
+      newOffer.submission.files = Array(project.milestones.length).fill(null);
       await newOffer.save();
       triggerOfferUpdate(newOffer._id, "pending");
       return res.status(200).json({
@@ -60,18 +68,17 @@ export const MakeOfferInPending = async (req, res) => {
   triggerOfferUpdate(offer._id, "accepted");
 
   return res.status(200).json({
-    offer
+    offer,
   });
 };
 
-export const deleteOffer = async(req, res) => {
+export const deleteOffer = async (req, res) => {
   try {
-    await Offers.findByIdAndDelete(req.params.offerId)
+    await Offers.findByIdAndDelete(req.params.offerId);
+  } catch (err) {
+    return res.status(500).json({ message: "Internal Server Error" });
   }
-  catch(err) {
-    return res.status(500).json({message:"Internal Server Error"});
-  }
-}
+};
 
 export const DeclineOffer = async (req, res) => {
   const updatedoffer = await Offers.findByIdAndUpdate(
@@ -113,6 +120,21 @@ export const PayOffer = async (req, res) => {
   return res.status(200).json({
     updatedoffer,
   });
+};
+
+export const submitWorkOfOffer = async (req, res) => {
+  try {
+    const { fileUrl, index } = req.body;
+    const { id } = req.params;
+    const offer = await Offers.findById(id);
+    console.log(offer);
+    offer.submission.files[index] = { publicid: fileUrl, url: fileUrl };
+    await offer.save();
+    return res.status(200).json({ message: "success" });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 export const sumbitwork = async (req, res) => {

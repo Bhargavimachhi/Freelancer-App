@@ -24,6 +24,7 @@ const MyOffers = () => {
           `http://localhost:3000/client/${userid}/offers`
         );
         setoffers(res.data.alloffers);
+        console.log(res.data.alloffers);
       }
     };
     getoffers();

@@ -42,6 +42,7 @@ import {
   getAllOffersOfFreelancer,
   MakeOfferInPending,
   deleteOffer,
+  submitWorkOfOffer,
 } from "./Controllers/offers.js";
 import { payment, verify } from "./Controllers/payment.js";
 import { GiveScorceToProposal } from "./Controllers/AIFunctions.js";
@@ -95,6 +96,7 @@ app.post("/checkifuserexists", checkIfUserExists);
 app.post("/CreateOffer", CreateOffer);
 app.get("/offer/:offerId/pending", MakeOfferInPending);
 app.get("/offer/:offerId/remove", deleteOffer);
+app.post("/offer/:id/submit-work", submitWorkOfOffer);
 app.put("/:offerId/accept", AcceptOffer);
 app.put("/:offerId/decline", DeclineOffer);
 app.put("/:offerId/pay", PayOffer);
