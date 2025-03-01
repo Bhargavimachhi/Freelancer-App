@@ -24,8 +24,10 @@ import {
 import { Star, Users, UserPlus, Check } from "lucide-react";
 import toast from "react-hot-toast";
 import { useUserContext } from "@/Context/UserContext";
+import { useUser } from "@clerk/clerk-react";
 
 export default function CollaborationDialog({ project }) {
+  const { user } = useUser();
   const [stakePercentage, setStakePercentage] = useState(0);
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState("");
@@ -50,6 +52,12 @@ export default function CollaborationDialog({ project }) {
       toast.error("Enter Description");
       return;
     }
+
+    if (email == user?.primaryEmailAddress?.emailAddress) {
+      toast.error("Invalid Email !!");
+      return;
+    }
+
     try {
       let res;
       try {
@@ -71,7 +79,7 @@ export default function CollaborationDialog({ project }) {
         description: description,
         status: "collaborator_approval_pending",
         freelancerStack: stakePercentage,
-        amount: amount
+        amount: amount,
       });
       toast.success("Offer Generated to collaborator");
     } catch (err) {
@@ -85,7 +93,7 @@ export default function CollaborationDialog({ project }) {
       <DialogTrigger asChild>
         <Button
           size="lg"
-          className="w-full px-6 py-3 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700 mr-4"
+          className="w-full px-6 py-3 mr-4 font-medium text-white rounded-lg shadow-md bg-btn md:w-auto hover:bg-blue-700"
         >
           Collaborate
         </Button>
@@ -96,7 +104,7 @@ export default function CollaborationDialog({ project }) {
         </DialogHeader>
 
         <Tabs defaultValue="overview" className="mt-4">
-          <TabsList className="grid grid-cols-4 mb-4 items-stretch">
+          <TabsList className="grid items-stretch grid-cols-4 mb-4">
             <TabsTrigger value="overview" className="mr-5">
               Overview
             </TabsTrigger>
@@ -110,14 +118,14 @@ export default function CollaborationDialog({ project }) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <h3 className="font-medium mb-1">{project.title}</h3>
+                  <h3 className="mb-1 font-medium">{project.title}</h3>
                   <p className="text-sm text-muted-foreground">
                     {project.description}
                   </p>
                 </div>
 
                 <div>
-                  <h3 className="font-medium mb-1">Skills Required</h3>
+                  <h3 className="mb-1 font-medium">Skills Required</h3>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {project.tags.map((tag, index) => {
                       return (
@@ -169,7 +177,7 @@ export default function CollaborationDialog({ project }) {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
+                  <Users className="w-5 h-5" />
                   Add Contributor
                 </CardTitle>
                 <CardDescription>
@@ -201,7 +209,7 @@ export default function CollaborationDialog({ project }) {
                     </Label>
                     <select
                       id="payment-method"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="flex w-full h-10 px-3 py-2 text-sm border rounded-md border-input bg-background ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <option value="profit-share">Profit Share</option>
                       <option value="fixed-payment">Fixed Payment</option>
