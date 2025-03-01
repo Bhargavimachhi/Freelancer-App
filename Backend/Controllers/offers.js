@@ -17,8 +17,8 @@ const triggerOfferUpdate = (offerId, state) => {
 export const CreateOffer = async (req, res) => {
   const project = await Project.findById(req.body.ProjectId);
 
-  if(!project) {
-    return res.status(404).json({ message: "Project do not exist"});
+  if (!project) {
+    return res.status(404).json({ message: "Project do not exist" });
   }
   try {
     if (req.body.CollaboratorId) {
@@ -129,6 +129,7 @@ export const submitWorkOfOffer = async (req, res) => {
     const offer = await Offers.findById(id);
     console.log(offer);
     offer.submission.files[index] = { publicid: fileUrl, url: fileUrl };
+    console.log(offer);
     await offer.save();
     return res.status(200).json({ message: "success" });
   } catch (err) {
