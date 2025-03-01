@@ -10,11 +10,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Download } from "lucide-react";
 import { load } from "@cashfreepayments/cashfree-js";
 import Pusher from "pusher-js";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { fetchFile } from "../../upload.js";
+import LoadingPage from "./LoadingPage";
 
 export const ClientOfferDialog = ({
   offer,
@@ -25,9 +27,35 @@ export const ClientOfferDialog = ({
 }) => {
   const [cashfree, setCashfree] = useState(null);
   const [offerState, setOfferState] = useState(offer.status);
+  const [loading, setLoading] = useState(true);
+  const [urls, setUrls] = useState(Array(project.milestones.length).fill(null));
   const navigate = useNavigate();
 
   useEffect(() => {
+    const fetchUrls = async() => {
+      try {
+        for(let i=0; i<project.milestones.length; i++) {
+          try {
+            const path = `/project/${project._id}/${i}`;
+            let url = await fetchFile(`/project/${project._id}/${freelancer._id}/${i}`);
+            let data = urls;
+            data[i] = url;
+            setUrls(data);
+          } catch(err) {
+            const path = `/project/${project._id}/${offer._id}/${i}`;
+            let data = urls;
+            data[i] = null;
+            setUrls(data);
+          }
+          
+        }
+        setLoading(false);
+      }
+      catch(err) {
+        console.log(err);
+      }
+    }
+    fetchUrls();  
     setOfferState(offer.status);
   }, [offer.status]);
   useEffect(() => {
@@ -61,8 +89,6 @@ export const ClientOfferDialog = ({
 
   if (!offer) return null;
 
-  console.log(offer);
-
   const statusColors = {
     pending: "bg-yellow-500",
     accepted: "bg-blue-500",
@@ -77,7 +103,7 @@ export const ClientOfferDialog = ({
   const handleAcceptSubmission = async () => {
     try {
       const res = await axios.put(`http://localhost:3000/${offer._id}/approve`);
-      alert("Approved the work.. Marking project has complete.");
+      toast.success("Approved the work.. Marking project has complete.");
       onClose();
       window.location.reload();
     } catch (error) {
@@ -107,7 +133,7 @@ export const ClientOfferDialog = ({
 
       if (res && res.data) {
         const res = await axios.put(`http://localhost:3000/${offer._id}/pay`);
-        alert("Payment is done..");
+        toast.success("Payment is done..");
         onClose();
         window.location.reload();
       }
@@ -125,7 +151,7 @@ export const ClientOfferDialog = ({
 
       cashfree.checkout(checkoutOptions).then(async (res) => {
         const res2 = await axios.put(`http://localhost:3000/${offer._id}/pay`);
-        alert("Payment is done..");
+        toast.success("Payment is done..");
         onClose();
         window.location.reload();
 
@@ -135,6 +161,10 @@ export const ClientOfferDialog = ({
       console.log("this is the error ", error);
     }
   };
+
+  if(loading) {
+    return <p>Loading...</p>
+  }
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -191,17 +221,19 @@ export const ClientOfferDialog = ({
                   </h3>
                   <p className="mb-2 text-gray-700">{offer.submission.note}</p>
                   <div className="flex flex-wrap gap-2">
-                    {offer.submission.files.map((file, index) => (
+                    {urls.map((url, index) => url ? (
                       <Button
-                        key={file?.public_id}
+                        key={url}
                         variant="outline"
                         size="sm"
                         className="text-blue-600 border border-blue-500 hover:bg-blue-100"
-                        onClick={() => console.log(file?.url)}
+                        onClick={() => window.open(url)}
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Download File for Milestone {index + 1}
                       </Button>
+                    ) : (
+                      <></>
                     ))}
                   </div>
                 </div>

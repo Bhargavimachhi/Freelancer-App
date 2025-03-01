@@ -29,7 +29,9 @@ const FreelancerOfferDialog = ({
   freelancer,
 }) => {
   const { user } = useUser();
-  const [files, setFiles] = useState(Array(project.milestones.length).fill(null));
+  const [files, setFiles] = useState(
+    Array(project.milestones.length).fill(null)
+  );
   const [note, setNote] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [offerState, setOfferState] = useState(offer.status);
@@ -101,26 +103,35 @@ const FreelancerOfferDialog = ({
     setFiles(newFiles);
   };
 
-  const handleSubmit = async(index) => {
-    if(!files[index]) {
+  const handleSubmit = async (index) => {
+    if (!files[index]) {
       toast.error("Upload file");
       return;
     }
-    await uploadFile(files[index], `/project/${project._id}/${freelancer._id}/${index}`);
-    const fileUrl = await fetchFile(`/project/${project._id}/${freelancer._id}/${index}`);
+    toast.loading("Uploading file");
+    await uploadFile(
+      files[index],
+      `/project/${project._id}/${freelancer._id}/${index}`
+    );
+    const fileUrl = await fetchFile(
+      `/project/${project._id}/${freelancer._id}/${index}`
+    );
     console.log(fileUrl);
     try {
-      let res = await axios.post(`http://localhost:3000/offer/${offer._id}/submit-work`, {
-        fileUrl,
-        index
-      })
+      let res = await axios.post(
+        `http://localhost:3000/offer/${offer._id}/submit-work`,
+        {
+          fileUrl,
+          index,
+        }
+      );
+      toast.dismiss();
       toast.success("File Uploaded successfully");
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
       toast.error("Failed to submit file");
     }
-  }
+  };
 
   const sendEmail = (e) => {
     e.preventDefault();
@@ -195,7 +206,7 @@ const FreelancerOfferDialog = ({
         notes: note,
       });
       console.log(res.data);
-      alert("You have sumbited your work");
+      toast.success("You have sumbited your work");
 
       onClose();
       window.location.reload();
@@ -256,10 +267,10 @@ const FreelancerOfferDialog = ({
                   <div className="flex flex-wrap gap-2">
                     {offer.submission.files.map((file) => (
                       <Button
-                        key={file.public_id}
+                        key={file?.public_id}
                         variant="outline"
                         size="sm"
-                        onClick={() => window.open(file.url)}
+                        onClick={() => window.open(file?.url)}
                       >
                         <Download className="w-4 h-4 mr-2" />
                         Download File
@@ -283,7 +294,7 @@ const FreelancerOfferDialog = ({
                         <Input
                           type="file"
                           multiple
-                          onChange={(e)=>handleFileChange(index, e)}
+                          onChange={(e) => handleFileChange(index, e)}
                           className="mb-2"
                         />
                         <Textarea
@@ -293,7 +304,7 @@ const FreelancerOfferDialog = ({
                         />
                         <Button
                           onClick={(e) => {
-                            handleSubmit(index)
+                            handleSubmit(index);
                           }}
                         >
                           Submit Work
